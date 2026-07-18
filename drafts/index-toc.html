@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ — 育てる機械図鑑</title>
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 60px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:34px 0 12px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.9rem; letter-spacing:.12em; margin:8px 0 2px}
+  .cover .cap{font-size:.78rem; color:var(--sub); margin-top:12px}
+
+  .shelf{margin:26px 0}
+  .shelf h2{font-size:.85rem; letter-spacing:.2em; color:var(--acc); margin:26px 0 10px;
+    display:flex; align-items:center; gap:10px}
+  .shelf h2::after{content:""; flex:1; border-top:1px dashed var(--line)}
+  .shelf ol{list-style:none}
+  .shelf li{border-bottom:1px dashed var(--line)}
+  .shelf li a, .shelf li .row{display:flex; align-items:baseline; gap:10px; padding:10px 4px;
+    font-size:.9rem; color:inherit; text-decoration:none}
+  .shelf li a{border-radius:8px}
+  .shelf li a:active{background:#fff}
+  .shelf .no{font-family:ui-monospace,monospace; color:var(--acc); font-size:.78rem; width:26px; flex:none}
+  .shelf li.soon .row{color:#b6bcc2}
+  .shelf li.soon .no{color:#cfc4ae}
+  .shelf .tag{margin-left:auto; font-size:.66rem; color:var(--sub); flex:none}
+  .shelf .tag.new{color:var(--acc); border:1px solid var(--acc); border-radius:999px; padding:0 8px}
+  .shelf .tag.read{color:#4e6b49}
+  .howto{font-size:.74rem; color:var(--sub); margin-top:18px; padding:8px 10px; background:#fff;
+    border-radius:8px; border:1px solid var(--line)}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover kyoka">
+    <div class="series">育てる機械図鑑</div>
+    <h1>エンジンのなかみ</h1>
+    <div class="cap">外がわから、内がわへ。ぜんたいから、細部へ。</div>
+  </div>
+
+  <div class="shelf" id="shelf"></div>
+
+  <div class="howto">この図鑑は、話が進むほど自然に深くなっていきます。本文だけなら3分、「よりみち」を開くと10分。読んだ話には ✓ がつきます（この端末だけの記録です）。</div>
+</div>
+
+<script>
+const SHELF = [
+  { vol:"第1巻 ロケット編", episodes:[
+    { no:"01", title:"ロケットは、すてながら とんでいく", href:"episodes/01.html" },
+    { no:"02", title:"うしろに投げると、まえにすすむ",     href:"episodes/02.html" },
+    { no:"03", title:"燃料のえらびかた — 固体と液体" },
+    { no:"04", title:"エンジンサイクル読み比べ" },
+    { no:"05", title:"ターボポンプ — 心臓部の流体機械" },
+    { no:"06", title:"ノズルと燃焼室" },
+    { no:"07", title:"切り離しの機構学" },
+    { no:"08", title:"音とふるえ — 爆音・振動・POGO" },
+    { no:"09", title:"実機カタログ — H3・Falcon 9・LE-9" },
+  ]},
+  // 読み切り（EX）や第2巻 飛行機編は、ここにブロックを1つ足すだけ
+];
+
+const root = document.getElementById("shelf");
+for (const vol of SHELF) {
+  if (!vol.episodes.length) continue;
+  const h = document.createElement("h2");
+  h.className = "kyoka"; h.textContent = vol.vol;
+  root.appendChild(h);
+  const ol = document.createElement("ol");
+  for (const ep of vol.episodes) {
+    const li = document.createElement("li");
+    const isUp = !!ep.href;
+    const read = isUp && localStorage.getItem("read:" + ep.no);
+    if (!isUp) li.className = "soon";
+    const inner = isUp ? document.createElement("a") : document.createElement("span");
+    inner.className = "row";
+    if (isUp) inner.href = ep.href;
+    const tag = isUp ? (read ? '<span class="tag read">よんだ ✓</span>' : '<span class="tag new">よめるよ</span>')
+                     : '<span class="tag">じゅんびちゅう</span>';
+    inner.innerHTML = '<span class="no">' + ep.no + '</span><span class="kyoka">' + ep.title + '</span>' + tag;
+    li.appendChild(inner);
+    ol.appendChild(li);
+  }
+  root.appendChild(ol);
+}
+</script>
+</body>
+</html>

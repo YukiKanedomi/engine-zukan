@@ -4,6 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>エンジンのなかみ 01 — ロケットは、すてながら とんでいく</title>
+<link rel="icon" href="favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+<link rel="apple-touch-icon" href="apple-touch-icon.png" />
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
 <style>
   :root{
     --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
@@ -52,7 +58,11 @@
   .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
   .partcard p{font-size:.88rem; margin-top:6px}
   .hint{font-size:.72rem; color:var(--acc); text-align:center}
-  .stroke{fill:none; stroke:var(--ink); stroke-width:2.4; stroke-linecap:round; stroke-linejoin:round; filter:url(#wob)}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .eqfig{background:#fff; border:1px dashed var(--line); border-radius:10px; padding:14px 6px 10px; margin:6px 0 0; text-align:center}
+  .eqfig .eqline{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem}
+  .eqfig .term{cursor:pointer; padding:3px 6px; border-radius:8px; border-bottom:3px solid; transition:background .15s}
+  .eqfig .term.sel{background:#fdf3e7}
 
   details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
   details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
@@ -112,25 +122,22 @@
 
     <div class="fig">
       <svg width="340" height="330" viewBox="0 0 340 330">
-        <defs>
-          <filter id="wob">
-            <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="7" result="n"/>
-            <feDisplacementMap in="SourceGraphic" in2="n" scale="3"/>
-          </filter>
-        </defs>
         <g id="p-fair" class="hot">
           <path class="shape stroke" style="fill:var(--sand)" d="M140 46 Q170 -6 200 46 L200 108 L140 108 Z"/>
         </g>
         <g id="p-s2" class="hot">
-          <rect class="shape stroke" style="fill:var(--blue)" x="140" y="108" width="60" height="74" rx="4"/>
+          <rect class="shape stroke" style="fill:var(--blue)" x="140" y="108" width="60" height="74" rx="3"/>
         </g>
         <g id="p-s1" class="hot">
-          <rect class="shape stroke" style="fill:#eef1f4" x="140" y="182" width="60" height="112" rx="4"/>
-          <path class="shape stroke" d="M140 294 L122 322 L140 313 M200 294 L218 322 L200 313"/>
+          <rect class="shape stroke" style="fill:#eef1f4" x="140" y="182" width="60" height="112" rx="3"/>
+          <path class="shape stroke" d="M140 294 L124 320 L140 312 Z M200 294 L216 320 L200 312 Z"/>
         </g>
-        <text x="228" y="80" font-size="13" fill="#77808a">← フェアリング</text>
-        <text x="228" y="150" font-size="13" fill="#77808a">← 2段目</text>
-        <text x="228" y="240" font-size="13" fill="#77808a">← 1段目</text>
+        <line x1="210" y1="76" x2="224" y2="76" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="210" y1="145" x2="224" y2="145" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="210" y1="236" x2="224" y2="236" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="228" y="80" font-size="13" fill="#77808a">フェアリング</text>
+        <text x="228" y="150" font-size="13" fill="#77808a">2段目</text>
+        <text x="228" y="240" font-size="13" fill="#77808a">1段目</text>
       </svg>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
@@ -145,8 +152,29 @@
     <details class="side">
       <summary><span class="badge">よりみち</span>この理屈を1本の式で書くと</summary>
       <div class="inner">
-        <div class="eq">Δv = v<sub>e</sub> · ln( m<sub>0</sub> / m<sub>f</sub> )</div>
-        <p>ツィオルコフスキーのロケット方程式です。v<sub>e</sub> は噴射速度、m<sub>0</sub>/m<sub>f</sub> は燃やす前後の質量比。対数（ln）が入っているのがポイントで、<b>推進剤を2倍積んでも速度は2倍になりません</b>。質量比10でも Δv は噴射速度の約2.3倍止まり。軌道投入には損失込みでおよそ9.5km/s必要なので、1段だけではどうしても届かない——多段式が「工夫」ではなく「必然」であることが、この式から見えてきます。</p>
+        <div class="eqfig">
+          <div class="eqline">Δv =
+            <span class="term" id="e-ve" style="border-color:var(--blue)">v<sub>e</sub></span> ·
+            <span class="term" id="e-ln" style="border-color:var(--acc)">ln</span>(
+            <span class="term" id="e-mr" style="border-color:var(--sand)">m<sub>0</sub> / m<sub>f</sub></span> )
+          </div>
+          <div class="hint" style="margin-top:6px">▲ 式の項をタップすると、その項の解説にかわります</div>
+        </div>
+        <div class="partcard" id="eqcard" style="min-height:100px; margin-top:12px">
+          <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="eqcard-name"></span></div>
+          <p id="eqcard-text"></p>
+        </div>
+        <p>ツィオルコフスキーのロケット方程式です。軌道投入には損失込みでおよそ9.5km/s必要なので、1段だけではどうしても届かない——多段式が「工夫」ではなく「必然」であることが、この式から見えてきます。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>2段式は、どれだけ得なのか</summary>
+      <div class="inner">
+        <p>架空のロケットで数字を入れて比べてみます。条件は同じ: 噴射速度 秒速3.0km、離陸100t（推進剤85t・構造12t・衛星3t）。</p>
+        <p>【1段式】燃やす前100t → 燃やした後15t。<br>Δv = 3.0 × ln(100/15) ≈ <b>秒速5.7km</b></p>
+        <p>【2段式】まず1段目のぶん（推進剤60t）を燃やして 100t→40t で +2.75km/s。ここで空になった1段目の構造8tを<b>捨てて</b>32tに。次に2段目のぶん（推進剤25t）を燃やして 32t→7t で +4.56km/s。<br>合計 ≈ <b>秒速7.3km</b></p>
+        <p>積み荷も推進剤も構造の総量も同じなのに、<b>途中で捨てるだけで秒速1.6kmの差</b>。実機にはさらに重力損失や空気抵抗が乗るので、この差が「軌道に届くか届かないか」を分けます。</p>
       </div>
     </details>
 
@@ -191,6 +219,25 @@ function render(){
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();
+
+const TERMS = {
+  "e-ve": { name:"ve — 噴射速度", color:"var(--blue)",
+    t:"エンジンがガスを後ろに投げる速さです。ケロシンで秒速3km級、水素なら4km級。これを上げる工夫こそが燃焼とノズルの設計で、次の第2話の主役です。" },
+  "e-ln": { name:"ln — 対数のからくり", color:"var(--acc)",
+    t:"増やした推進剤は「その推進剤を運ぶための推進剤」まで要求するので、効き目は対数でしか伸びません。質量比を10にしてもΔvは噴射速度の約2.3倍止まり。ここが1段式の壁です。" },
+  "e-mr": { name:"m0/mf — 質量比", color:"var(--sand)",
+    t:"燃やす前の質量÷燃やした後の質量です。切り離しとは、空になったタンクを捨てて分母のmfを軽くし、この比を稼ぎ直す発明——本文の「捨てると得」の正体です。" }
+};
+let curT = "e-ve";
+function renderT(){
+  const p = TERMS[curT];
+  document.getElementById("eqcard-name").textContent = p.name;
+  document.querySelector("#eqcard .dot").style.background = p.color;
+  document.getElementById("eqcard-text").textContent = p.t;
+  for (const id of Object.keys(TERMS)) document.getElementById(id).classList.toggle("sel", id === curT);
+}
+for (const id of Object.keys(TERMS)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
 </script>
 </body>
 </html>

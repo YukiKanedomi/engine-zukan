@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- 育てる機械図鑑「エンジンのなかみ」アイコンマスター。full-bleed不透明・角丸なし(OS任せ) -->
+  <rect width="512" height="512" fill="#fdf9f0"/>
+  <g stroke="#3a4550" stroke-width="10" stroke-linecap="round" stroke-linejoin="round">
+    <!-- 炎 -->
+    <path fill="#f0b285" d="M226 366 Q216 402 240 432 Q250 410 256 438 Q262 410 272 432 Q296 402 286 366 Q256 380 226 366 Z"/>
+    <!-- 左右のフィン -->
+    <path fill="#9cc0d4" d="M192 272 C156 288 142 320 144 356 C170 342 190 334 202 328 Z"/>
+    <path fill="#9cc0d4" d="M320 272 C356 288 370 320 368 356 C342 342 322 334 310 328 Z"/>
+    <!-- 胴体（ぷっくり） -->
+    <path fill="#fffdf6" d="M256 76 C202 76 178 148 178 238 C178 310 202 362 256 362 C310 362 334 310 334 238 C334 148 310 76 256 76 Z"/>
+    <!-- ノーズコーン -->
+    <path fill="#9cc0d4" d="M256 76 C224 76 202 102 191 144 Q256 128 321 144 C310 102 288 76 256 76 Z"/>
+    <!-- おしりの帯 -->
+    <path fill="#f6d9b8" d="M190 330 Q256 344 322 330 L318 352 Q256 366 194 352 Z"/>
+    <!-- まどと顔 -->
+    <circle cx="256" cy="228" r="58" fill="#fffdf6" stroke="#9cc0d4" stroke-width="16"/>
+    <circle cx="256" cy="228" r="58" fill="none"/>
+  </g>
+  <g fill="#3a4550">
+    <circle cx="233" cy="224" r="8"/>
+    <circle cx="279" cy="224" r="8"/>
+  </g>
+  <path d="M244 248 Q256 257 268 248" fill="none" stroke="#3a4550" stroke-width="7" stroke-linecap="round"/>
+</svg>

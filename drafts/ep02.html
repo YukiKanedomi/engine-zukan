@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 02 — うしろに投げると、まえにすすむ</title>
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:34px 0 12px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.9rem; letter-spacing:.12em; margin:8px 0 2px}
+  .cover .vol{display:inline-block; font-size:.85rem; border:1.5px solid var(--acc); color:var(--acc);
+    border-radius:999px; padding:1px 16px; margin-top:8px}
+  .cover .cap{font-size:.78rem; color:var(--sub); margin-top:12px}
+
+  .toc{margin:22px 0 30px}
+  .toc h2{font-size:.8rem; letter-spacing:.3em; color:var(--acc); margin-bottom:10px}
+  .toc ol{list-style:none}
+  .toc li{display:flex; align-items:baseline; gap:10px; padding:8px 4px; border-bottom:1px dashed var(--line); font-size:.9rem}
+  .toc li .no{font-family:ui-monospace,monospace; color:var(--acc); font-size:.78rem; width:26px; flex:none}
+  .toc li.now{background:#fff; border-radius:8px; border:1.5px solid var(--ink); padding:8px 10px}
+  .toc li.soon{color:#b6bcc2}
+  .toc li.soon .no{color:#cfc4ae}
+  .toc li .tag{margin-left:auto; font-size:.66rem; color:var(--sub); flex:none}
+  .toc li.now .tag{color:var(--acc)}
+  .toc .howto{font-size:.74rem; color:var(--sub); margin-top:10px; padding:8px 10px; background:#fff;
+    border-radius:8px; border:1px solid var(--line)}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:120px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .eqfig{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:18px 8px 12px;
+    margin:22px 0 8px; text-align:center; box-shadow:3px 3px 0 var(--line)}
+  .eqfig .eqline{font-family:"Georgia","Times New Roman",serif; font-size:1.25rem}
+  .eqfig .term{cursor:pointer; padding:3px 7px; border-radius:8px; border-bottom:3px solid; transition:background .15s}
+  .eqfig .term.sel{background:#fdf3e7}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  table.vals{width:100%; border-collapse:collapse; font-size:.82rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 8px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.74rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc)}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager .off{opacity:.45}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="cover kyoka">
+    <div class="series">育てる機械図鑑</div>
+    <h1>エンジンのなかみ</h1>
+    <div class="vol">第1巻 ロケット編</div>
+    <div class="cap">外がわから、内がわへ。ぜんたいから、細部へ。</div>
+  </div>
+
+  <div class="toc">
+    <h2>もくじ</h2>
+    <ol>
+      <li><span class="no">01</span><span class="kyoka">ロケットは、すてながら とんでいく</span><span class="tag">だい1わ</span></li>
+      <li class="now"><span class="no">02</span><span class="kyoka">うしろに投げると、まえにすすむ</span><span class="tag">▶ このページ</span></li>
+      <li class="soon"><span class="no">03</span>燃料のえらびかた — 固体と液体<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">04</span>エンジンサイクル読み比べ<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">05</span>ターボポンプ — 心臓部の流体機械<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">06</span>ノズルと燃焼室<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">07</span>切り離しの機構学<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">08</span>音とふるえ — 爆音・振動・POGO<span class="tag">じゅんびちゅう</span></li>
+      <li class="soon"><span class="no">09</span>実機カタログ — H3・Falcon 9・LE-9<span class="tag">じゅんびちゅう</span></li>
+    </ol>
+    <div class="howto">この図鑑は、話が進むほど自然に深くなっていきます。本文だけなら3分、「よりみち」を開くと10分。数式やサイクル線図は中盤の章から本格的に登場します。</div>
+  </div>
+
+  <div class="story">
+    <div class="ep">だい2わ ── 推力の章</div>
+    <h1 class="kyoka">うしろに投げると、まえにすすむ</h1>
+
+    <p class="body">宇宙は真空です。押し返してくれる空気も、蹴る地面もありません。それなのに、ロケットはなぜ前に進めるのでしょう。「空気を後ろに押して進む」とよく誤解されますが、じつは空気はいりません。<b>手もとの重いものを後ろに投げれば、自分は前に進む</b>——スケートボードに乗ってボールを投げると体が後ろに下がる、あの理屈だけで飛んでいます。</p>
+
+    <p class="body">ロケットが投げているのは、自分で積んできた推進剤です。燃焼室で燃やして高温高圧のガスにし、ノズルで一気に加速して、<b>毎秒数百kgものガスを秒速2.5〜4.5kmで投げ続ける</b>。この「投げ続ける」の反作用が推力です。</p>
+
+    <div class="fig">
+      <svg width="340" height="330" viewBox="0 0 340 330">
+        <path class="stroke" d="M170 62 L170 20 M170 20 L160 34 M170 20 L180 34" style="stroke:var(--acc)"/>
+        <text x="184" y="30" font-size="13" fill="#c47a4f">推力</text>
+        <g id="p-cham" class="hot">
+          <path class="shape stroke" style="fill:var(--sand)" d="M138 78 Q138 62 154 62 L186 62 Q202 62 202 78 L202 142 L138 142 Z"/>
+        </g>
+        <g id="p-noz" class="hot">
+          <path class="shape stroke" style="fill:var(--blue)" d="M138 142 Q156 152 157 170 Q158 190 138 214 Q124 232 120 252 L220 252 Q216 232 202 214 Q182 190 183 170 Q184 152 202 142 Z"/>
+        </g>
+        <g id="p-jet" class="hot">
+          <path class="shape stroke" style="fill:#f0b285" d="M138 258 Q152 282 146 306 Q160 296 164 312 Q170 296 176 312 Q180 296 194 306 Q188 282 202 258 Q170 272 138 258"/>
+        </g>
+        <line x1="210" y1="102" x2="224" y2="102" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="210" y1="192" x2="224" y2="192" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="210" y1="286" x2="224" y2="286" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="228" y="106" font-size="13" fill="#77808a">燃焼室</text>
+        <text x="228" y="196" font-size="13" fill="#77808a">ノズル</text>
+        <text x="228" y="290" font-size="13" fill="#77808a">噴きだすガス</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">では、推力の大きさは何で決まるのでしょう。答えはシンプルで、<b>「毎秒どれだけの質量を投げるか」×「どれだけ速く投げるか」</b>。たくさん投げたければ大きなポンプと太いエンジンが要ります（量の勝負）。速く投げたければ燃焼とノズルの工夫が要ります（速さの勝負）。この関係は、じつは1本の式にまとまっています。</p>
+
+    <div class="eqfig">
+      <div class="eqline">F =
+        <span class="term" id="t-mdot" style="border-color:var(--acc)">ṁ</span> ·
+        <span class="term" id="t-ve" style="border-color:var(--blue)">v<sub>e</sub></span> +
+        <span class="term" id="t-press" style="border-color:var(--sand)">(p<sub>e</sub> − p<sub>0</sub>)·A<sub>e</sub></span>
+      </div>
+      <div class="hint" style="margin-top:8px">▲ 式の項をタップすると、その項の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="eqcard">
+      <div class="pname"><span class="dot" style="background:var(--acc)"></span><span id="eqcard-name"></span></div>
+      <p id="eqcard-text"></p>
+    </div>
+
+    <p class="body">このうち「投げる速さ」には、専用の物差しがあります。それが<b>比推力（ひすいりょく、Isp）</b>。いわばロケットの燃費で、不思議なことに単位は「秒」です。意味はこう覚えるのが早い——<b>推進剤1kgで、1kg分の重さを支え続けられる秒数</b>。長く支えられるほど、同じ推進剤でたくさん仕事ができる、良い燃費のエンジンです。</p>
+
+    <table class="vals">
+      <tr><th>エンジン（推進剤）</th><th>比推力（真空）</th></tr>
+      <tr><td>固体ブースタ</td><td class="num">250〜280 秒</td></tr>
+      <tr><td>Merlin 1D（ケロシン）</td><td class="num">311 秒</td></tr>
+      <tr><td>LE-9（水素・H3の1段目）</td><td class="num">425 秒</td></tr>
+      <tr><td>RS-25（水素・スペースシャトル）</td><td class="num">452 秒</td></tr>
+    </table>
+
+    <p class="body">水素が飛び抜けて良いのは、軽い分子ほど同じ温度で速く飛び出せるから。ただし第1話を思い出してください——1段目に必要なのは、機体を地面から引き剥がす<b>力そのもの（推力）</b>でした。比推力が良くても力が細ければ持ち上がりません。<b>「量の勝負」の1段目と「速さの勝負」の上段</b>。エンジン選びはいつもこの綱引きです。</p>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>海面と真空で推力が変わるわけ</summary>
+      <div class="inner">
+        <p>「圧力のおまけ」(p<sub>e</sub> − p<sub>0</sub>)·A<sub>e</sub> の外気圧 p<sub>0</sub> は、高度とともに下がっていきます。つまり<b>同じエンジンでも、昇るほど推力が増える</b>——Merlin 1Dの比推力が海面282秒・真空311秒と2つ書かれるのはこのためです。設計では狙いの高度でちょうど p<sub>e</sub> = p<sub>0</sub> になるようにノズルの広げ方を決めます（<b>適正膨張</b>といいます）。真空向けの上段エンジンのノズルが大きなラッパ状だったのは（第1話）、p<sub>0</sub> = 0 の世界でできるだけ膨張させて速さを稼ぐため。では地上用エンジンで欲張って広げすぎると何が起きるか——それは第6話のお楽しみです。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>なぜ「秒」が燃費になるのか</summary>
+      <div class="inner">
+        <div class="eq">Isp = F / (ṁ·g<sub>0</sub>) = v<sub>e</sub> / g<sub>0</sub></div>
+        <p>推力を推進剤の<b>重量</b>流量（質量流量×重力加速度）で割った量が比推力です。力を力で割るので単位が消え、時間だけが残る——これが「秒」の正体。実質は投げる速さ v<sub>e</sub> を 9.8 で割っただけの数なので、<b>比推力425秒 ≒ 秒速4.2kmで投げている</b>と読み替えられます。第1話のロケット方程式 Δv = v<sub>e</sub>·ln(m<sub>0</sub>/m<sub>f</sub>) の v<sub>e</sub> がまさにこれで、比推力が良いほど同じ質量比でも遠くへ行けます。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>推力の式は、新しい物理ではなく<b>検査体積の運動量収支そのもの</b>です。エンジンを検査体積で囲むと、出口面から出ていく運動量流束 ṁv<sub>e</sub> と、出口面に働く圧力の不釣り合い (p<sub>e</sub>−p<sub>0</sub>)A<sub>e</sub> の和が、機体への反力＝推力。教科書のダクト流れの運動量定理が、そのまま実機の性能式になっています。p<sub>e</sub>=p<sub>0</sub> が最適（適正膨張）で、ずれると過膨張・不足膨張になる——ここはノズル内の圧縮性流れの話として第6話でじっくりやります。そしてこの ṁ を作り出す装置こそターボポンプ（第5話）。あなたの主戦場は「推力の第1項の供給係」です。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>03 燃料のえらびかた</b>: 「投げる速さ」は、何を燃やすかでほとんど決まります。固体と液体、それぞれの得意と不得意を見ていきます。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.2–3<br>
+      ・NASA Glenn Research Center, "Rocket Thrust Equation" / "Specific Impulse"（パブリックドメイン）<br>
+      ・JAXA H3ロケット・LE-9 公開資料（比推力425秒・推力1471kN）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <span>← 01 すてながら とんでいく</span>
+  <span>つぎ: 03 燃料のえらびかた →<small style="opacity:.6">（じゅんびちゅう）</small></span>
+</div>
+
+<script>
+const PARTS = {
+  "p-cham": { name:"燃焼室", color:"var(--sand)",
+    t:"推進剤を燃やして、高温高圧のガスを作る部屋です。中の圧力は100気圧を超えるものも（LE-9で約100気圧、RS-25は約200気圧）。ガスは部屋の壁を四方八方に押しますが、下にだけ出口が開いているので、そこだけ押し返しがない。この押し合いの差し引きで残る上向きの力——それが推力の源です。" },
+  "p-noz": { name:"ノズル", color:"var(--blue)",
+    t:"いちばん細いくびれ（スロート）で流れはちょうど音速に達し、そこから先はラッパ状に広がるほど加速するという、ふだんの直感と逆の世界に入ります。圧力と温度を「速さ」に変換する装置で、ここの出来が「投げる速さ」を決めます。詳しくは第6話で。" },
+  "p-jet": { name:"噴きだすガス", color:"#f0b285",
+    t:"最終的に秒速2.5〜4.5kmで投げ出されるガスです。毎秒数百kg——お風呂1〜2杯ぶんの水に相当する質量を、ライフル弾の何倍もの速さで投げ続けていると思ってください。この「毎秒投げる量×投げる速さ」が推力の正体。空気は何も手伝っていません。" }
+};
+let cur = "p-cham";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const TERMS = {
+  "t-mdot": { name:"ṁ — 毎秒投げる量", color:"var(--acc)",
+    t:"ターボポンプが毎秒エンジンに送り込む推進剤の質量です。H3のLE-9ならおよそ毎秒350kg（推力1471kN÷(425秒×g)から逆算）——2秒たらずでお風呂が満杯になる勢い。これを増やすには太い配管と強いポンプが要ります。「量の勝負」の項で、第5話の主役はこの供給係です。" },
+  "t-ve": { name:"ve — 投げる速さ", color:"var(--blue)",
+    t:"ノズル出口でのガスの速さです。燃焼ガスの温度が高いほど、分子が軽いほど、そしてノズルの出来が良いほど速くなります。水素エンジンで秒速4km級。「速さの勝負」の項で、じつは比推力の正体もこれ（9.8で割っただけ）。詳しくはすぐ下で。" },
+  "t-press": { name:"(pe − p0)·Ae — 圧力のおまけ", color:"var(--sand)",
+    t:"ノズル出口の圧力 pe が外気圧 p0 と釣り合わない分だけ、出口面積 Ae を押す力が足し引きされます。外気圧は高度で変わるので、同じエンジンでも地上と真空で推力が違う理由がこれ。宇宙では p0 = 0 になって、すこし得をします。くわしくは下の「よりみち」へ。" }
+};
+let curT = "t-mdot";
+function renderT(){
+  const p = TERMS[curT];
+  document.getElementById("eqcard-name").textContent = p.name;
+  document.querySelector("#eqcard .dot").style.background = p.color;
+  document.getElementById("eqcard-text").textContent = p.t;
+  for (const id of Object.keys(TERMS)) document.getElementById(id).classList.toggle("sel", id === curT);
+}
+for (const id of Object.keys(TERMS)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
+</script>
+</body>
+</html>
