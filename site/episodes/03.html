@@ -69,7 +69,7 @@
 
   .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
   .next b{color:var(--acc)}
-  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
     display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
@@ -90,7 +90,7 @@
   <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/ch03.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
 
   <div class="story">
-    <div class="ep">だい3わ ── 燃料の章</div>
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep03.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">だい3わ ── 燃料の章</div>
     <h1 class="kyoka">かたい燃料、ながれる燃料</h1>
 
     <p class="body">ロケットの燃料には、大きくふたつの流儀があります。酸化剤ごと固めた塊に直接火をつける<b>固体</b>と、タンクからポンプでくみ上げて燃やす<b>液体</b>。H3ロケットはこの両方を使う欲張りな構成で、真ん中の液体エンジン（LE-9）のわきに、固体ブースタ（SRB-3）を注文に合わせて2本・4本とたすき掛けにします（軽い衛星なら付けない形態も）。</p>
@@ -182,7 +182,7 @@
     </details>
 
     <details class="side note">
-      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
         <p>固体の質量流量は ṁ = ρ·A<sub>b</sub>·r で決まります。ρ は推進薬密度、A<sub>b</sub> は燃焼面積、r は燃焼速度。そして r は室圧の関数 <b>r = a·p<sup>n</sup></b>（サン・ロベールの法則）。つまり固体モータは「ポンプが流量を決める」世界ではなく、<b>幾何（燃焼面積の推移）と圧力フィードバックが流量を決める世界</b>です。単純な準定常モデルでは、指数 n が1未満なら圧力擾乱は自己減衰（静的安定）、1を超えると暴走——ただしこれだけで音響的な燃焼不安定まで安心できるわけではありません。ここが内部弾道学の入口。第5話からは逆に、流量を機械で支配する世界（ターボポンプ）に入ります。</p>
       </div>
@@ -196,8 +196,9 @@
       <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Static_Test_Firing_DM-2_for_Solid_Rocket_Booster_-_GPN-2000-000053.jpg" style="color:inherit">NASA（パブリックドメイン）</a></div>
     </div>
 
-    <div class="next">つぎの話 → <b>04 ポンプを回す3つの知恵</b>: 液体エンジンの心臓部・ターボポンプを「何で回すか」。ガス発生器、二段燃焼、そしてH3のエキスパンダーブリード。設計思想の読み比べです。</div>
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>04 ポンプを回す3つの知恵</b>: 液体エンジンの心臓部・ターボポンプを「何で回すか」。ガス発生器、二段燃焼、そしてH3のエキスパンダーブリード。設計思想の読み比べです。</div>
 
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
     <div class="src">
       <b>出典・もっと知りたい人へ</b><br>
       ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.12–13<br>

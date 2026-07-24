@@ -64,7 +64,7 @@
 
   .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
   .next b{color:var(--acc)}
-  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
     display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
@@ -84,7 +84,7 @@
   <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/ch08.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
 
   <div class="story">
-    <div class="ep">だい8わ ── 振動の章</div>
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep08.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">だい8わ ── 振動の章</div>
     <h1 class="kyoka">爆音とふるえを、てなずける</h1>
 
     <p class="body">ロケットの音は「大きな音」ではありません。<b>構造を壊しにくる物理的な力</b>です。発射台の近くでは音圧レベルは200dBに迫り、いっぽう積み荷の衛星が耐えられるのはおよそ145dBまで。測る場所も条件も違う数字ですが、dBは対数なので、55dBの差は<b>音のエネルギーにして数十万倍</b>。この途方もないギャップを距離と設計で埋めるのが、今回の主役たちです。ふるえの出どころは大きく3つ——図をタップしてください。</p>
@@ -171,7 +171,7 @@
     </details>
 
     <details class="side note">
-      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
         <p>POGOは典型的な<b>流体—構造連成の自励振動</b>で、周波数はおおむね5〜50Hz。実測ではペイロード位置で17g、エンジンで34gに達した例があります。系のゲインを稼いでしまう主犯はポンプで、インデューサのキャビテーション気泡が「柔らかさ（コンプライアンス）」として働き、供給系の固有振動数を運転中に動かします（第5話の伏線回収です）。処方箋は<b>ポンプ入口にアキュムレータ＝気体バネを挿す</b>こと。Titan IIは窒素入りスタンドパイプ、Saturn VはLOXプリバルブの空洞にヘリウムを充填して即席のアキュムレータにしました。解析は供給系・構造・エンジンを伝達関数でつないだ閉ループの安定判別で、設計基準はNASA SP-8055にまとまっています。まさに流体屋が主担当の章です。</p>
       </div>
@@ -185,8 +185,9 @@
       <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Artemis_II_Water_Deluge_Test_(KSC-20231024-PH-KLS01_0153).jpg" style="color:inherit">NASA / Kim Shiflett（パブリックドメイン）</a></div>
     </div>
 
-    <div class="next">つぎの話 → <b>09 じっさいの機体で、答え合わせ</b>: 最終話。H3とFalcon 9を並べて、8話ぶんの言葉——サイクル、ポンプ、ノズル、分離、振動——で実機を読み解きます。</div>
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>09 じっさいの機体で、答え合わせ</b>: 最終話。H3とFalcon 9を並べて、8話ぶんの言葉——サイクル、ポンプ、ノズル、分離、振動——で実機を読み解きます。</div>
 
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
     <div class="src">
       <b>出典・もっと知りたい人へ</b><br>
       ・NASA SP-8055, <i>Prevention of Coupled Structure-Propulsion Instability (Pogo)</i><br>

@@ -67,7 +67,7 @@
 
   .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
   .next b{color:var(--acc)}
-  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
     display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
@@ -87,7 +87,7 @@
   <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/ch04.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
 
   <div class="story">
-    <div class="ep">だい4わ ── サイクルの章</div>
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep04.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">だい4わ ── サイクルの章</div>
     <h1 class="kyoka">ポンプを回す3つの知恵</h1>
 
     <p class="body">第2話で、燃焼室の圧力は100気圧を超えると言いました。そこへ毎秒数百kgの推進剤を<b>押し込み続ける</b>には、ポンプに途方もない動力が要ります——スペースシャトルの燃料ポンプで約77,000馬力。機関車百両分の力を、どこから調達するか。<b>この動力の工面のしかたを「サイクル」と呼びます</b>。</p>
@@ -175,7 +175,7 @@
     </details>
 
     <details class="side note">
-      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
         <p>エキスパンダーサイクルは<b>作動流体が推進剤そのものになったランキンサイクルの親戚</b>です。ボイラの役は燃焼室・ノズルの冷却溝。ここで問題になるのが熱回収のスケーリングで、幾何相似の一次近似では<b>回収熱は濡れ面積（∝L²）、必要動力は流量（∝L³）に比例</b>——エンジンを大きくするほど熱が足りなくなり、閉エキスパンダーはRL10級で頭打ちになります。LE-9のブリード化は「全量を回すのを諦め、少量のガスに大きな膨張比で仕事をさせる」ことでこの壁を回避した設計です。タービン膨張比を稼げるのは背圧を捨てられる開サイクルの特権——第2話の圧力項の話が、ここでは設計自由度として効いてきます。</p>
       </div>
@@ -189,8 +189,9 @@
       <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:NASA_Stennis_Teams_Install_New_Production_RS-25_Engine_for_Upcoming_Hot_Fire_(SSC-20250211-s00129).jpg" style="color:inherit">NASA Stennis / Danny Nowlin（パブリックドメイン）</a></div>
     </div>
 
-    <div class="next">つぎの話 → <b>05 心臓部、毎分4万回転</b>: サイクルが「回し方」なら、次は回される主役。あなたの主戦場、ターボポンプの中に潜ります。インデューサ、キャビテーション、そして数万馬力。</div>
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>05 心臓部、毎分4万回転</b>: サイクルが「回し方」なら、次は回される主役。あなたの主戦場、ターボポンプの中に潜ります。インデューサ、キャビテーション、そして数万馬力。</div>
 
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
     <div class="src">
       <b>出典・もっと知りたい人へ</b><br>
       ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.6<br>

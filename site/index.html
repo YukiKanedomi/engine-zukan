@@ -32,10 +32,11 @@
   .shelf h2::after{content:""; flex:1; border-top:1px dashed var(--line)}
   .shelf ol{list-style:none}
   .shelf li{border-bottom:1px dashed var(--line)}
-  .shelf li a, .shelf li .row{display:flex; align-items:baseline; gap:10px; padding:10px 4px;
+  .shelf li a, .shelf li .row{display:flex; align-items:center; gap:10px; padding:8px 4px;
     font-size:.9rem; color:inherit; text-decoration:none}
   .shelf li a{border-radius:8px}
   .shelf li a:active{background:#fff}
+  .shelf .ico{width:34px; height:34px; border-radius:50%; border:1.5px solid var(--line); flex:none}
   .shelf .no{font-family:ui-monospace,monospace; color:var(--acc); font-size:.78rem; width:26px; flex:none}
   .shelf li.soon .row{color:#b6bcc2}
   .shelf li.soon .no{color:#cfc4ae}
@@ -60,26 +61,26 @@
 <script>
 const SHELF = [
   { vol:"第1巻 ロケット編", episodes:[
-    { no:"01", title:"ロケットは、すてながら とんでいく", href:"episodes/01.html" },
-    { no:"02", title:"うしろに投げると、まえにすすむ",     href:"episodes/02.html" },
-    { no:"03", title:"かたい燃料、ながれる燃料",           href:"episodes/03.html" },
-    { no:"04", title:"ポンプを回す3つの知恵",             href:"episodes/04.html" },
-    { no:"05", title:"心臓部、毎分4万回転",               href:"episodes/05.html" },
-    { no:"06", title:"しぼって、ひろげて、はやくする",     href:"episodes/06.html" },
-    { no:"07", title:"バネと火薬の、わかれの作法",         href:"episodes/07.html" },
-    { no:"08", title:"爆音とふるえを、てなずける",         href:"episodes/08.html" },
-    { no:"09", title:"じっさいの機体で、答え合わせ",       href:"episodes/09.html" },
+    { no:"01", title:"ロケットは、すてながら とんでいく", href:"episodes/01.html", ico:"ep01" },
+    { no:"02", title:"うしろに投げると、まえにすすむ",     href:"episodes/02.html", ico:"ep02" },
+    { no:"03", title:"かたい燃料、ながれる燃料",           href:"episodes/03.html", ico:"ep03" },
+    { no:"04", title:"ポンプを回す3つの知恵",             href:"episodes/04.html", ico:"ep04" },
+    { no:"05", title:"心臓部、毎分4万回転",               href:"episodes/05.html", ico:"ep05" },
+    { no:"06", title:"しぼって、ひろげて、はやくする",     href:"episodes/06.html", ico:"ep06" },
+    { no:"07", title:"バネと火薬の、わかれの作法",         href:"episodes/07.html", ico:"ep07" },
+    { no:"08", title:"爆音とふるえを、てなずける",         href:"episodes/08.html", ico:"ep08" },
+    { no:"09", title:"じっさいの機体で、答え合わせ",       href:"episodes/09.html", ico:"ep09" },
   ]},
   { vol:"えほんの たな（EX）", episodes:[
-    { no:"EX1", title:"ロケットは どうして とべるの？", href:"ex/ehon-01/index.html" },
-    { no:"EX2", title:"エンジンの なかは どうなってるの？", href:"ex/ehon-02/index.html" },
-    { no:"EX3", title:"ロケットの ごはんは なあに？", href:"ex/ehon-03/index.html" },
-    { no:"EX4", title:"ポンプは だれが まわすの？", href:"ex/ehon-04/index.html" },
-    { no:"EX5", title:"ロケットの しんぞうの おと", href:"ex/ehon-05/index.html" },
-    { no:"EX6", title:"らっぱは なんで ひろがってるの？", href:"ex/ehon-06/index.html" },
-    { no:"EX7", title:"じょうずな ばいばい", href:"ex/ehon-07/index.html" },
-    { no:"EX8", title:"おおきな おとと、みずの まほう", href:"ex/ehon-08/index.html" },
-    { no:"EX9", title:"いつか、そらの むこうへ", href:"ex/ehon-09/index.html" },
+    { no:"EX1", title:"ロケットは どうして とべるの？", href:"ex/ehon-01/index.html", ico:"book" },
+    { no:"EX2", title:"エンジンの なかは どうなってるの？", href:"ex/ehon-02/index.html", ico:"book" },
+    { no:"EX3", title:"ロケットの ごはんは なあに？", href:"ex/ehon-03/index.html", ico:"book" },
+    { no:"EX4", title:"ポンプは だれが まわすの？", href:"ex/ehon-04/index.html", ico:"book" },
+    { no:"EX5", title:"ロケットの しんぞうの おと", href:"ex/ehon-05/index.html", ico:"book" },
+    { no:"EX6", title:"らっぱは なんで ひろがってるの？", href:"ex/ehon-06/index.html", ico:"book" },
+    { no:"EX7", title:"じょうずな ばいばい", href:"ex/ehon-07/index.html", ico:"book" },
+    { no:"EX8", title:"おおきな おとと、みずの まほう", href:"ex/ehon-08/index.html", ico:"book" },
+    { no:"EX9", title:"いつか、そらの むこうへ", href:"ex/ehon-09/index.html", ico:"book" },
   ]},
   // 第2巻 飛行機編は、ここにブロックを1つ足すだけ
 ];
@@ -102,7 +103,8 @@ for (const vol of SHELF) {
     if (isUp) inner.href = ep.href;
     const tag = isUp ? (read ? '<span class="tag read">よんだ ✓</span>' : '<span class="tag new">よめるよ</span>')
                      : '<span class="tag">じゅんびちゅう</span>';
-    inner.innerHTML = '<span class="no">' + ep.no + '</span><span class="kyoka">' + ep.title + '</span>' + tag;
+    inner.innerHTML = (ep.ico ? '<img class="ico" src="assets/icons/' + ep.ico + '.jpg" alt="" loading="lazy">' : '')
+      + '<span class="no">' + ep.no + '</span><span class="kyoka">' + ep.title + '</span>' + tag;
     li.appendChild(inner);
     ol.appendChild(li);
   }

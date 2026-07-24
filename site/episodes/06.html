@@ -78,7 +78,7 @@
 
   .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
   .next b{color:var(--acc)}
-  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
     display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
@@ -98,7 +98,7 @@
   <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/ch06.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
 
   <div class="story">
-    <div class="ep">だい6わ ── ノズルと燃焼室の章</div>
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep06.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">だい6わ ── ノズルと燃焼室の章</div>
     <h1 class="kyoka">しぼって、ひろげて、はやくする</h1>
 
     <p class="body">ターボポンプ（第5話）が全力で送り込んだ推進剤の終着点が、ここです。燃焼室の中は<b>約3,000℃・100気圧超</b>——鉄の沸点に迫り、たいていの構造金属が融けてしまう温度です。それなのにエンジンは何分も平気で燃え続ける。今回は「速さを作る形」と「溶けない工夫」の話です。</p>
@@ -219,7 +219,7 @@
     </details>
 
     <details class="side note">
-      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
         <div class="eq">dA / A = ( M² − 1 ) · du / u</div>
         <p>「しぼって、ひろげて」の正体はこの面積—マッハ数関係です。M&lt;1では面積を絞ると加速、M&gt;1では広げると加速——符号がM=1で反転するので、加速し続けるには<b>音速点に面積の最小（スロート）を置くしかない</b>。ノズルの砂時計形は圧縮性流れの数学がそのまま金属になった形です。過膨張の剥離は実務でも急所で、非対称に剥がれると横向きの荷重（サイドロード）が立ち、起動・停止の過渡で機体を蹴ります。ベルの輪郭を特性曲線法で設計するのは、短い長さで軸方向の運動量を最大化するため——地上で使うノズルでは、その上で剥離余裕を別途確認します。第2話の圧力項 (p<sub>e</sub>−p<sub>0</sub>)A<sub>e</sub> の設計現場がここです。</p>
@@ -234,8 +234,9 @@
       <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Shuttle_Main_Engine_Test_Firing.jpg" style="color:inherit">NASA Stennis（パブリックドメイン）</a></div>
     </div>
 
-    <div class="next">つぎの話 → <b>07 バネと火薬の、わかれの作法</b>: 第1話の「すてる」を機構で支える人たち。分離ボルト、クランプバンド、そして無重力でタンクの液を沈める小さな知恵。</div>
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>07 バネと火薬の、わかれの作法</b>: 第1話の「すてる」を機構で支える人たち。分離ボルト、クランプバンド、そして無重力でタンクの液を沈める小さな知恵。</div>
 
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
     <div class="src">
       <b>出典・もっと知りたい人へ</b><br>
       ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.3・8<br>

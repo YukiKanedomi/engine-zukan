@@ -101,7 +101,7 @@
 
   .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
   .next b{color:var(--acc)}
-  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
     display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
@@ -121,7 +121,7 @@
   <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/ch02.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
 
   <div class="story">
-    <div class="ep">だい2わ ── 推力の章</div>
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep02.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">だい2わ ── 推力の章</div>
     <h1 class="kyoka">うしろに投げると、まえにすすむ</h1>
 
     <p class="body">宇宙は真空です。押し返してくれる空気も、蹴る地面もありません。それなのに、ロケットはなぜ前に進めるのでしょう。「空気を後ろに押して進む」とよく誤解されますが、じつは空気はいりません。<b>手もとの重いものを後ろに投げれば、自分は前に進む</b>——スケートボードに乗ってボールを投げると体が後ろに下がる、あの理屈だけで飛んでいます。</p>
@@ -212,7 +212,7 @@
     </div>
 
     <details class="side note">
-      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
         <p>推力の式は、新しい物理ではなく<b>検査体積の運動量収支そのもの</b>です。エンジンを検査体積で囲むと、出口面から出ていく運動量流束 ṁv<sub>e</sub> と、出口面に働く圧力の不釣り合い (p<sub>e</sub>−p<sub>0</sub>)A<sub>e</sub> の和が、機体への反力＝推力。教科書のダクト流れの運動量定理が、そのまま実機の性能式になっています。p<sub>e</sub>=p<sub>0</sub> が最適（適正膨張）で、ずれると過膨張・不足膨張になる——ここはノズル内の圧縮性流れの話として第6話でじっくりやります。そしてこの ṁ を作り出す装置こそターボポンプ（第5話）。あなたの主戦場は「推力の第1項の供給係」です。</p>
       </div>
@@ -226,8 +226,9 @@
       <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:F-1_Engine_Test_Firing.jpg" style="color:inherit">NASA（パブリックドメイン）</a></div>
     </div>
 
-    <div class="next">つぎの話 → <b>03 燃料のえらびかた</b>: 「投げる速さ」は、何を燃やすかでほとんど決まります。固体と液体、それぞれの得意と不得意を見ていきます。</div>
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>03 燃料のえらびかた</b>: 「投げる速さ」は、何を燃やすかでほとんど決まります。固体と液体、それぞれの得意と不得意を見ていきます。</div>
 
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
     <div class="src">
       <b>出典・もっと知りたい人へ</b><br>
       ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.2–3<br>
