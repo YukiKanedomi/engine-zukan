@@ -1,42 +1,63 @@
 <!doctype html>
 <html lang="ja"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>ロケットは どうして とべるの？</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>__TITLE__</title>
+<link rel="icon" href="../../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+<meta name="theme-color" content="#20242c" />
 <style>
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-  html,body{height:100%;background:#20242c;font-family:"UD Digi Kyokasho NP-R","Yu Gothic",sans-serif}
+  html,body{height:100%;background:#20242c;font-family:"UD Digi Kyokasho NP-R","Yu Gothic",sans-serif;touch-action:manipulation}
   .stage{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;overflow:hidden}
   .book{position:relative;width:min(96vw,144vh);aspect-ratio:3/2;border-radius:14px;overflow:hidden;
-    box-shadow:0 18px 60px rgba(0,0,0,.55);background:#f3ead9}
-  .pg{position:absolute;inset:0;opacity:0;transition:opacity .5s ease;pointer-events:none}
+    box-shadow:0 18px 60px rgba(0,0,0,.55);background:#f3ead9;cursor:pointer;user-select:none;-webkit-user-select:none}
+  .pg{position:absolute;inset:0;opacity:0;transition:opacity .45s ease;pointer-events:none}
   .pg.on{opacity:1}
-  .pg img{width:100%;height:100%;object-fit:cover;display:block}
-  .nav{position:absolute;top:0;bottom:0;width:32%;cursor:pointer;z-index:5}
-  .nav.prev{left:0}.nav.next{right:0}
+  .pg img{width:100%;height:100%;object-fit:cover;display:block;-webkit-user-drag:none}
+  .chev{position:fixed;top:50%;transform:translateY(-50%);color:#cdb48c;font-size:34px;opacity:.55;pointer-events:none;z-index:6}
+  .chev.l{left:10px}.chev.r{right:10px}
   .hint{position:fixed;left:0;right:0;bottom:16px;text-align:center;color:#cdb48c;font-size:14px;letter-spacing:.1em;opacity:.85}
-  .dots{position:fixed;left:0;right:0;top:14px;display:flex;gap:9px;justify-content:center;z-index:6}
-  .dots i{width:9px;height:9px;border-radius:50%;background:#5a5f68;display:inline-block;transition:background .3s}
+  .dots{position:fixed;left:0;right:0;top:14px;display:flex;gap:14px;justify-content:center;z-index:6}
+  .dots i{width:11px;height:11px;border-radius:50%;background:#5a5f68;display:inline-block;transition:background .3s;cursor:pointer}
   .dots i.on{background:#e6b667}
+  .home{position:fixed;top:10px;left:14px;z-index:7;color:#cdb48c;font-size:13px;text-decoration:none;
+    letter-spacing:.08em;opacity:.85;padding:4px 8px}
 </style></head><body>
+<a class="home" href="../../index.html">← もくじ</a>
 <div class="dots" id="dots"></div>
+<div class="chev l">‹</div><div class="chev r">›</div>
 <div class="stage">
   <div class="book" id="book">
-    <div class="pg on"><img src="book_p1.jpg"></div>
-    <div class="pg"><img src="book_p2.jpg"></div>
-    <div class="pg"><img src="book_p3.jpg"></div>
-    <div class="pg"><img src="book_p4.jpg"></div>
-    <div class="nav prev" onclick="go(-1)"></div>
-    <div class="nav next" onclick="go(1)"></div>
+    <div class="pg on"><img src="book_p1.jpg" alt="えほん 1見開きめ"></div>
+    <div class="pg"><img src="book_p2.jpg" alt="えほん 2見開きめ"></div>
+    <div class="pg"><img src="book_p3.jpg" alt="えほん 3見開きめ"></div>
+    <div class="pg"><img src="book_p4.jpg" alt="えほん 4見開きめ"></div>
   </div>
 </div>
-<div class="hint">◀ タップ・矢印キーで ページを めくる ▶</div>
+<div class="hint">タップ か スワイプで ページを めくる</div>
 <script>
-  var pg=document.querySelectorAll('.pg'),i=0,dots=document.getElementById('dots');
-  for(var k=0;k<pg.length;k++){var d=document.createElement('i');if(k==0)d.className='on';dots.appendChild(d);}
+  var book=document.getElementById('book'),pg=document.querySelectorAll('.pg'),i=0,dots=document.getElementById('dots');
+  for(var k=0;k<pg.length;k++){(function(n){var d=document.createElement('i');if(n==0)d.className='on';
+    d.addEventListener('click',function(e){e.stopPropagation();show(n);});dots.appendChild(d);})(k);}
   var di=dots.querySelectorAll('i');
   function show(n){i=Math.max(0,Math.min(pg.length-1,n));
     for(var k=0;k<pg.length;k++){pg[k].classList.toggle('on',k==i);di[k].classList.toggle('on',k==i);}}
   function go(d){show(i+d);}
+  function tapAt(x){var r=book.getBoundingClientRect();((x-r.left)/r.width<0.35)?go(-1):go(1);}
+  var sx=null,sy=null,lastTouch=0;
+  book.addEventListener('touchstart',function(e){sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  book.addEventListener('touchend',function(e){
+    lastTouch=Date.now();
+    if(sx===null)return;
+    var dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)>40&&Math.abs(dx)>Math.abs(dy)){(dx<0)?go(1):go(-1);}
+    else if(Math.abs(dx)<12&&Math.abs(dy)<12){tapAt(e.changedTouches[0].clientX);}
+    sx=null;sy=null;
+  },{passive:true});
+  book.addEventListener('click',function(e){if(Date.now()-lastTouch<600)return;tapAt(e.clientX);});
   document.addEventListener('keydown',function(e){if(e.key=='ArrowRight'||e.key==' ')go(1);if(e.key=='ArrowLeft')go(-1);});
+  try{localStorage.setItem("__READKEY__","1");}catch(e){}
 </script>
 </body></html>
