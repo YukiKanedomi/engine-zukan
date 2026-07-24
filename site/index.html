@@ -55,7 +55,7 @@
 
   <div class="shelf" id="shelf"></div>
 
-  <div class="howto">この図鑑は、話が進むほど自然に深くなっていきます。本文だけなら3分、「よりみち」を開くと10分。読んだ話には ✓ がつきます（この端末だけの記録です）。</div>
+  <div class="howto">この図鑑は、話が進むほど自然に深くなっていきます。本文だけなら3分、「よりみち」を開くと10分。読んだ話には はなまるがつきます（この端末だけの記録です）。</div>
 </div>
 
 <script>
@@ -101,7 +101,8 @@ for (const vol of SHELF) {
     const inner = isUp ? document.createElement("a") : document.createElement("span");
     inner.className = "row";
     if (isUp) inner.href = ep.href;
-    const tag = isUp ? (read ? '<span class="tag read">よんだ ✓</span>' : '<span class="tag new">よめるよ</span>')
+    const tag = isUp ? (read ? '<span class="tag read" title="よんだ"><img src="assets/icons/hanamaru.jpg" alt="よんだ" style="width:30px; height:30px; display:block; transform:rotate(-8deg)"></span>'
+                             : '<span class="tag new">よめるよ</span>')
                      : '<span class="tag">じゅんびちゅう</span>';
     inner.innerHTML = (ep.ico ? '<img class="ico" src="assets/icons/' + ep.ico + '.jpg" alt="" loading="lazy">' : '')
       + '<span class="no">' + ep.no + '</span><span class="kyoka">' + ep.title + '</span>' + tag;
