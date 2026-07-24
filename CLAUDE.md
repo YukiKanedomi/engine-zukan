@@ -28,9 +28,11 @@
 ```
 site/            公開物（GitHub Pages）。現状 index.html=第1話。話が増えたら index=目次+episodes/へ分割
 notes/           設計記録（design-decisions.md）
+ehon/            絵本ライン工房（原画・テンプレ・レシピ。正典=ehon/HANDOFF.md。公開はsite/ex/へJPEGのみ）
 BACKLOG.md       連載の進行と拡張アイデア
 ```
 
 - リズム: 1話書く → 妻の検収 → 反映 → 次の話
+- **公開の権限**: 編集が完了し検証も済んだら、基本そのままpushしてよい（2026-07-24 ユーザー承認。毎回の確認は不要。ただし方針・ルールの変更を伴う場合は従来どおり相談）
 - デプロイ: main への push で GitHub Actions が site/ を Pages へ（静的・ビルドなし・相対リンクのみ使用）
 - 初回のみ viz-panels にも掲載した（engine-zukan/engine-zukan-01.html）。以降の連載は本体 Pages で

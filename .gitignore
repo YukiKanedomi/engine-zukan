@@ -1,0 +1,4 @@
+# 絵本工房の重い原画・中間生成物はローカル保管のみ（レシピから再生成可能。公開はsite/のJPEGだけ）
+ehon/art/**/*.png
+ehon/output/*.png
+ehon/**/*.log
