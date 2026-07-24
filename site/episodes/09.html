@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 09 — じっさいの機体で、答え合わせ</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; max-width:400px; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%}
+  .zone{cursor:pointer; fill:transparent; stroke:transparent; stroke-width:5; rx:18}
+  .zone.sel{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:150px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.8rem; padding:4px 12px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  table.vals{width:100%; border-collapse:collapse; font-size:.8rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 6px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.72rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc); white-space:nowrap}
+
+  .fin{margin-top:30px; background:#fff; border:2px solid var(--ink); border-radius:12px; padding:16px 18px; font-size:.9rem; text-align:center}
+  .fin b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい9わ（さいしゅうわ）── 実機の章</div>
+    <h1 class="kyoka">じっさいの機体で、答え合わせ</h1>
+
+    <p class="body">最終話は、教科書を閉じて実物を見にいきます。日本の<b>H3</b>と、アメリカの<b>Falcon 9</b>。同じ「衛星を軌道へ運ぶ道具」なのに、設計思想は見事に対照的です。これまで8話ぶんの言葉が、そのまま読解の道具になります。まずは2機をタップしてください。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/lineup-h3-f9.jpg" alt="H3とFalcon 9の比較イラスト">
+        <svg viewBox="0 0 720 1080">
+          <rect class="zone" id="v-h3" x="90" y="270" width="290" height="740" rx="18"/>
+          <rect class="zone" id="v-f9" x="420" y="40" width="220" height="970" rx="18"/>
+        </svg>
+      </div>
+      <div class="hint">▲ 左がH3、右がFalcon 9（ようすを模したイラストです）</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <table class="vals">
+      <tr><th></th><th>H3</th><th>Falcon 9</th></tr>
+      <tr><td>全高</td><td class="num">63 m</td><td class="num">70 m</td></tr>
+      <tr><td>低軌道へ</td><td class="num">〜16.5 t</td><td class="num">22.8 t（使い捨て時）</td></tr>
+      <tr><td>1段エンジン</td><td class="num">LE-9 ×2〜3</td><td class="num">Merlin 1D ×9</td></tr>
+      <tr><td>サイクル</td><td class="num">エキスパンダーブリード</td><td class="num">ガス発生器</td></tr>
+      <tr><td>ブースタ</td><td class="num">SRB-3 ×0/2/4</td><td class="num">なし</td></tr>
+      <tr><td>1段目のゆくえ</td><td class="num">海に捨てる</td><td class="num">通常は着陸・再使用</td></tr>
+    </table>
+
+    <p class="body">そして卒業試験です。下の章番号をタップすると、その章の言葉でこの2機を読み解きます。<b>8話ぶんの言葉が全部、実機のどこかにつながっている</b>ことを確かめてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="r-01">01 すてる</span>
+      <span class="chip" id="r-02">02 推力</span>
+      <span class="chip" id="r-03">03 燃料</span>
+      <span class="chip" id="r-04">04 サイクル</span>
+      <span class="chip" id="r-05">05 ポンプ</span>
+      <span class="chip" id="r-06">06 ノズル</span>
+      <span class="chip" id="r-07">07 分離</span>
+      <span class="chip" id="r-08">08 ふるえ</span>
+    </div>
+
+    <div class="partcard" id="rcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--acc)"></span><span id="rcard-name"></span></div>
+      <p id="rcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>再使用は、ほんとうに得なのか</summary>
+      <div class="inner">
+        <p>Falcon 9の1段目は、着陸脚・グリッドフィン・着陸用の残り推進剤を<b>いつも持ち歩いています</b>。その分ペイロードは確実に減る——第1話のロケット方程式が課す、正直な税金です。それでも合計の勘定で勝てるのは、エンジン9基を抱えるいちばん高価な1段目を、何十回も使い回せるから。いっぽうH3は「使い捨てを徹底的に安く作る」ほうに賭けました。部品を自動車産業から調達し、エンジンは壊れる要素の少ないブリードサイクルに。<b>「回収の税金を払う」か「製造の値段を下げる」か</b>——同じ式を見て、ふたつのチームが別の答えを出したのです。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>LE-9スポットライト — この連載の主役級</summary>
+      <div class="inner">
+        <table class="vals">
+          <tr><th>推力（真空）</th><td class="num">1,471 kN</td></tr>
+          <tr><th>比推力（真空）</th><td class="num">422 秒</td></tr>
+          <tr><th>燃焼室圧</th><td class="num">約 10 MPa</td></tr>
+          <tr><th>サイクル</th><td class="num">エキスパンダーブリード（世界初のブースタ級）</td></tr>
+        </table>
+        <p>プリバーナを持たない、燃やさずに沸かして回すエンジン（第4話）。爆発的に壊れるモードが構造的に少なく、「安全なエンジン」を設計思想の芯に据えています。その心臓のターボポンプ（第5話）は、これからあなたが関わっていく世界です。この図鑑の言葉たちが、現場の議論のどこかで役に立ちますように。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート — 第1巻の地図</summary>
+      <div class="inner">
+        <p>連載を流体力学の地図に重ねて締めくくります。<b>圧縮性流れ</b>はノズル（第6話）に、<b>ターボ機械</b>はポンプ（第5話）に、<b>二相流</b>はキャビテーションと無重力の沈底（第5・7話）に、<b>流体構造連成</b>はPOGO（第8話）に、<b>空力音響</b>は発射台の爆音（第8話）に、それぞれ住んでいました。ロケットは「流体力学の全分野が極端な条件で同居する家」です。ここから先へ進むなら、Sutton『Rocket Propulsion Elements』と、無料で読めるNASA SP-8000シリーズが最良の次の一歩です。</p>
+      </div>
+    </details>
+
+    <div class="fin kyoka">
+      <p><b>第1巻 ロケット編 ── かんけつ</b></p>
+      <p style="margin-top:8px; font-size:.85rem">外がわから、内がわへ。ぜんたいから、細部へ。<br>読んでくれてありがとう。第2巻は飛行機編を予定しています ✈</p>
+    </div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・JAXA H3ロケット公開資料／Wikipedia H3 (rocket)・LE-9（全高63m・LEO 16.5t・GTO 4.0〜7.9t）<br>
+      ・SpaceX Falcon 9 公表スペック／Wikipedia Falcon 9（全高69.8m・LEO 22.8t・GTO 8.3t）<br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed.<br>
+      ・機体イラストは実機の構成（ブースタ数・段間部・脚）を模した簡略画です
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="08.html">← 08 爆音とふるえ</a>
+  <a href="../index.html">もくじへ（第1巻かんけつ！）→</a>
+</div>
+
+<script>
+const PARTS = {
+  "v-h3": { name:"H3（日本・2023年初打上げ）", color:"var(--sand)",
+    t:"「安く、確実に、注文に合わせて」が設計思想。太いコアにLE-9を2〜3基、足りない推力は固体ブースタSRB-3を0・2・4本と付け替えて調整します（形態30S・22S・24Lなど）。エンジンは壊れる要素の少ないエキスパンダーブリード。国の基幹ロケットとして、打上げ価格を先代H-IIAの半分にすることを目標に生まれました。" },
+  "v-f9": { name:"Falcon 9（アメリカ・現役の主力）", color:"#d7dbe0",
+    t:"「いちばん高い部品は、捨てずに使い回す」が設計思想。細長い機体に同じエンジンを9基束ね、1段目は逆噴射で着陸して何十回も再使用します。黒い段間部と折りたたみ脚がその印。エンジンをMerlin系列に絞って量産効果を極め、9基クラスタは飛行の大部分で1基止まっても任務を続けられる冗長性も生みました。" }
+};
+let cur = "v-h3";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const RECAP = {
+  "r-01": { name:"01 すてながら とんでいく", t:"H3はブースタもフェアリングも1段目も、順に捨てて身軽になる王道です。Falcon 9は「1段目は捨てない」という反逆で常識を変えました——ただしロケット方程式からは逃げられず、着陸のための装備と推進剤という税金を払っています。捨てるか、持ち帰るか。第1話の式が両方の背骨です。" },
+  "r-02": { name:"02 推力と比推力", t:"SRB-3は283.6秒しかありませんが約2,300kNの力持ち、LE-9は1,471kNで422秒の良燃費——「量の勝負」と「速さの勝負」の分担そのものです。Falcon 9はMerlin（海面282秒）を9基束ねて量を稼ぐ設計。どの機体も、離陸は推力・上段は比推力の原則どおりに部品を並べています。" },
+  "r-03": { name:"03 固体と液体", t:"H3は液体コア＋固体ブースタの混成で、固体の「安い即戦力」を活かします。SRB-3のグレインは点火の瞬間から全力を出す設計。Falcon 9は液体のみ——固体を使わない代わりに、エンジンの数で推力を組み立てます。燃料の選び方が、そのまま機体の輪郭を決めています。" },
+  "r-04": { name:"04 サイクル", t:"LE-9のエキスパンダーブリードは「燃やさず沸かして回す」安全思想、Merlinのガス発生器は「単純なものを大量に作る」量産思想。第4話の表のとおり、比推力はLE-9が上、しかしMerlinは安さと数で勝負。サイクルの選択は性能表ではなく、事業の思想の表明です。" },
+  "r-05": { name:"05 ターボポンプ", t:"どちらのエンジンも心臓は数万rpmのターボポンプです。LE-9のポンプはタービン駆動ガスが「沸かした水素」なので入口温度は低め——そのぶん低密度の水素を大流量・高回転（燃料ポンプ約41,000rpm）で扱う別の難しさを背負います。Merlinのポンプは燃焼ガスで回す高温仕事。インデューサがキャビテーションと戦っているのは両者共通——あなたの主戦場は、国境に関係なくすべてのロケットの中心にあります。" },
+  "r-06": { name:"06 ノズルと燃焼室", t:"Falcon 9の上段Merlin Vacuumは、海面用の何倍も大きなラッパを持つ真空特化ノズル——第6話の「広げるほど得（宇宙では）」の教科書例です。H3のLE-9も再生冷却の壁でノズルを守りつつ、その拾った熱でタービンを回す一石二鳥（第4話との合わせ技）。形と熱の設計が性能の最後のひと絞りを決めます。" },
+  "r-07": { name:"07 分離", t:"H3は実績ある火工品の作法、Falcon 9は空圧プッシャで「火薬を使わない分離」——再使用のための選択です。どちらも、長いコーストの後の再点火では推進剤の沈底というひと手間を欠かしません。ミッションの成否を分ける数秒の振り付けは、機体が変わっても同じ丁寧さで設計されています。" },
+  "r-08": { name:"08 音とふるえ", t:"種子島もケープカナベラルも、打上げの瞬間は発射台が大量の水を浴びせて音をてなずけます。そしてどの機体も、設計段階でPOGOの安定解析を通らなければ飛べません。エンジンが増えるほど、束ねるほど、振動の設計は難しくなる——静かに飛ぶロケットは、静かにするための膨大な仕事の上に立っています。" }
+};
+let curR = "r-01";
+function renderR(){
+  const r = RECAP[curR];
+  document.getElementById("rcard-name").textContent = r.name;
+  document.getElementById("rcard-text").textContent = r.t;
+  for (const id of Object.keys(RECAP)) document.getElementById(id).classList.toggle("sel", id === curR);
+}
+for (const id of Object.keys(RECAP)) document.getElementById(id).addEventListener("click", () => { curR = id; renderR(); });
+renderR();
+
+try { localStorage.setItem("read:09", "1"); } catch(e) {}
+</script>
+</body>
+</html>

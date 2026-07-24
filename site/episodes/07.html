@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 07 — バネと火薬の、わかれの作法</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい7わ ── 分離の章</div>
+    <h1 class="kyoka">バネと火薬の、わかれの作法</h1>
+
+    <p class="body">第1話でロケットは「すてながら とんでいく」と言いました。今回はその<b>実行部隊</b>の話です。何トンもの構造をミリ秒の精度で確実に手放し、しかし衛星は揺らさない——分離は「<b>つかんでいた手を離す</b>」「<b>そっと押し出す</b>」「<b>次の点火にそなえる</b>」の三幕でできています。</p>
+
+    <p class="body">まず、機体どうしはどう「つながれて」いるのか。分離面の代表的な道具立てがこちらです。</p>
+
+    <div class="fig">
+      <svg width="340" height="300" viewBox="0 0 340 300">
+        <rect class="stroke" x="130" y="24" width="80" height="86" rx="6" style="fill:#eef1f4"/>
+        <rect class="stroke" x="122" y="110" width="96" height="14" rx="4" style="fill:var(--sand)"/>
+        <rect class="stroke" x="122" y="152" width="96" height="14" rx="4" style="fill:var(--sand)"/>
+        <rect class="stroke" x="130" y="166" width="80" height="100" rx="6" style="fill:var(--blue)"/>
+        <g id="p-bolt" class="hot">
+          <rect class="shape stroke" x="138" y="104" width="10" height="68" rx="3" style="fill:#c47a4f"/>
+          <rect class="shape stroke" x="192" y="104" width="10" height="68" rx="3" style="fill:#c47a4f"/>
+        </g>
+        <g id="p-band" class="hot">
+          <path class="shape stroke" style="fill:#e8b98a" d="M104 118 Q96 138 104 158 L118 158 Q112 138 118 118 Z"/>
+          <path class="shape stroke" style="fill:#e8b98a" d="M236 118 Q244 138 236 158 L222 158 Q228 138 222 118 Z"/>
+        </g>
+        <g id="p-spring" class="hot">
+          <path class="shape stroke" style="stroke-width:2" d="M162 126 L168 131 L162 136 L168 141 L162 146 L168 151"/>
+          <path class="shape stroke" style="stroke-width:2" d="M176 126 L182 131 L176 136 L182 141 L176 146 L182 151"/>
+        </g>
+        <line x1="216" y1="68" x2="256" y2="68" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="206" y1="96" x2="256" y2="96" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="240" y1="138" x2="256" y2="138" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="186" y1="182" x2="256" y2="182" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="260" y="72" font-size="13" fill="#77808a">2段目がわ</text>
+        <text x="260" y="100" font-size="13" fill="#77808a">分離ボルト</text>
+        <text x="260" y="142" font-size="13" fill="#77808a">クランプバンド</text>
+        <text x="260" y="186" font-size="13" fill="#77808a">押し出しバネ</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#c47a4f"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">道具の主流は昔もいまも<b>火工品（パイロ）</b>です。電気の号令で確実に、ミリ秒で仕事を終える。何十年分の飛行実績が信頼を裏書きしています。弱点は、切断の瞬間に鋭い衝撃（<b>パイロショック</b>）が構造を走ること——精密な衛星や電子機器には毒です。だからFalcon 9は段間分離に火工品を使わず、<b>空圧のプッシャでぐいと押す方式</b>を選びました。衝撃がやさしく、再使用のたびに交換部品も出ない、という理屈です。</p>
+
+    <p class="body">では本番の流れを、三幕で見てみましょう。</p>
+
+    <div class="chips">
+      <span class="chip" id="sq-1">① 手を離す</span>
+      <span class="chip" id="sq-2">② 押し出す</span>
+      <span class="chip" id="sq-3">③ 沈めてから点火</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="230" viewBox="0 0 340 230">
+        <g id="q-1" style="display:none">
+          <rect class="stroke" x="140" y="20" width="60" height="70" rx="6" style="fill:#eef1f4"/>
+          <rect class="stroke" x="140" y="96" width="60" height="86" rx="6" style="fill:var(--blue)"/>
+          <path class="stroke" style="stroke:#c47a4f; stroke-width:2" d="M128 92 L116 84 M128 96 L112 96 M212 92 L224 84 M212 96 L228 96"/>
+          <text x="240" y="86" font-size="12" fill="#77808a">1段目の燃焼終了</text>
+          <text x="240" y="104" font-size="12" fill="#77808a">保持を解除</text>
+        </g>
+        <g id="q-2" style="display:none">
+          <rect class="stroke" x="140" y="10" width="60" height="70" rx="6" style="fill:#eef1f4"/>
+          <rect class="stroke" x="140" y="130" width="60" height="86" rx="6" style="fill:var(--blue)"/>
+          <path class="stroke" d="M170 92 L170 84 M170 84 L164 90 M170 84 L176 90" style="stroke-width:2"/>
+          <path class="stroke" d="M170 108 L170 116 M170 116 L164 110 M170 116 L176 110" style="stroke-width:2"/>
+          <text x="216" y="100" font-size="12" fill="#77808a">バネやスラスタで</text>
+          <text x="216" y="118" font-size="12" fill="#77808a">そっと引き離す</text>
+        </g>
+        <g id="q-3" style="display:none">
+          <rect class="stroke" x="140" y="16" width="60" height="110" rx="8" style="fill:#eef1f4"/>
+          <path class="shape stroke" style="fill:var(--blue)" d="M142 84 Q160 76 178 84 Q192 90 198 86 L198 124 L142 124 Z"/>
+          <path class="stroke" style="stroke:#c47a4f; stroke-width:2" d="M154 140 L154 152 M154 152 L149 146 M154 152 L159 146 M186 140 L186 152 M186 152 L181 146 M186 152 L191 146"/>
+          <text x="212" y="96" font-size="12" fill="#77808a">小さな加速で液を</text>
+          <text x="212" y="114" font-size="12" fill="#77808a">タンク底に沈めてから</text>
+          <text x="212" y="132" font-size="12" fill="#77808a">上段エンジン点火</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 分離は「離してから点火まで」がひとつづきの振り付けです</div>
+    </div>
+
+    <div class="partcard" id="sqcard" style="min-height:110px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="sqcard-name"></span></div>
+      <p id="sqcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>無重力では、タンクの燃料が浮く</summary>
+      <div class="inner">
+        <p>1段目を手放した直後、上段は無重力に近い状態です。するとタンクの中の液体は<b>壁を這い、気泡と混ざり、どこにいるかわからなくなる</b>。そのままポンプを回せば気体を吸い込んでキャビテーション（第5話）どころか吸い込み喪失です。そこで点火の前に、小さな固体モータやガスジェット（<b>アレージモータ</b>）でわずかに加速をかけ、慣性で液体をタンク後端に「沈底」させます。ほんの数秒・数分の一Gの、地味で確実な下ごしらえ。軌道上で何度も再点火する上段ほど、この振り付けが大切になります。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>フェアリングは貝殻のようにひらく</summary>
+      <div class="inner">
+        <p>衛星のカバー（第1話）は、縦の合わせ目と機体側の締結をラッチや火工品で解き、<b>バネなどで貝殻のように左右へ押し開いて</b>捨てられます。捨てどきの判断は「空力加熱が衛星の許容以下に落ちたら、なるべく早く」——遅れれば無駄な質量ぶんΔvを損する、第1話の流体屋ノートの駆け引きそのものです。開くときに機体や衛星に触れないことを、地上の分離試験と解析で確かめてから飛ばします。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>分離の前後は、タンク内の自由表面が主役になる珍しい時間です。エンジン停止の減速で液面が暴れる<b>スロッシング</b>は、固有周波数が姿勢制御と噛み合うと厄介なので、タンク内のバッフルで減衰させます。沈底（アレージ）は体積力を人為的に与えて自由表面を作り直す操作で、表面張力が効く低ボンド数の世界。もうひとつ、分離時の<b>プルーム干渉</b>——離れていく1段目に上段の噴流が吹き付け、思わぬ力や加熱を生む——も分離解析の定番です。CFDの出番が多い、流体屋がしっかり呼ばれる章です。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>08 爆音とふるえを、てなずける</b>: 打上げの音は物理的な暴力です。音で機体が壊れないための散水、燃焼の唸り、そしてポンプと配管が共鳴する怪談——POGO。第5話の伏線を回収します。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed.（分離・上段再点火まわり）<br>
+      ・NASA SP-8000 シリーズ（分離機構・スロッシング等の設計基準書群）<br>
+      ・SpaceX Falcon 9 User's Guide（空圧式段間分離）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="06.html">← 06 しぼって、ひろげて</a>
+  <a href="08.html">つぎ: 08 爆音とふるえ →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-bolt": { name:"分離ボルト", color:"#c47a4f",
+    t:"中に小さな火薬が仕込まれたボルトです。号令の電流で確実に破断し、締結を一瞬で解きます。似た仲間に、ナット側が割れるフランジブルナットも。ミリ秒での同時性が身上で、左右で切れる時刻がずれると機体がねじれるため、点火系は徹底して冗長化されます。" },
+  "p-band": { name:"クランプバンド", color:"#e8b98a",
+    t:"ふたつのフランジを外周からベルトで締め付けてつなぐ方式です（マーマンバンド）。バンドを1〜2か所で切るだけで全周が一度に解放される潔さが持ち味で、衛星と機体の結合の定番。切った後のバンドが暴れて衛星に触れないよう、受け止めのキャッチャーまで設計に含まれます。" },
+  "p-spring": { name:"押し出しバネ", color:"#9cc0d4",
+    t:"締結を解いただけでは、ふたつの機体はただ並んで飛び続けます。確実に距離を作るのがこの圧縮バネやガスプッシャの仕事。数十cm/sの相対速度をまっすぐ与えて、再接触を防ぎます。Falcon 9の段間分離はこの「押す係」を空圧で大型化し、火工品なしを実現しました。" }
+};
+let cur = "p-bolt";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const SEQ = {
+  "sq-1": { name:"① 手を離す — 保持解除", scene:"q-1",
+    t:"1段目の燃焼が終わると、機体はいったん惰性で飛びます。ここで分離ボルトやバンドが号令一下で切れ、締結が解除される。切れ残りは許されないので、火工品は二重系統。分離の成否はテレメトリの加速度と電気信号の両方で即座に確認されます。" },
+  "sq-2": { name:"② 押し出す — 安全な距離を作る", scene:"q-2",
+    t:"バネ・ガスプッシャ・小型スラスタが、ふたつの機体に静かな相対速度を与えます。大事なのはまっすぐ離すこと——姿勢が乱れると、あとから来る上段の噴流が1段目に当たったり、最悪は再接触します。離れていく1段目に横風や噴流が当たる挙動まで解析してから飛ばします。" },
+  "sq-3": { name:"③ 沈めてから点火 — 上段の下ごしらえ", scene:"q-3",
+    t:"無重力でタンクの液体は浮いて散らばります。そこで必要な機体ではアレージモータでわずかに加速し、液体をタンク後端に沈めてから点火します（分離直後の勢いや姿勢スラスタで足りる設計もありますが、長いコースト後の再点火では特に欠かせません）。ポンプ（第5話）に液体だけを飲ませるための、静かなひと手間。ここまで済んで、ようやく「わかれ」が完了します。" }
+};
+let curS = "sq-1";
+function renderS(){
+  const s = SEQ[curS];
+  document.getElementById("sqcard-name").textContent = s.name;
+  document.getElementById("sqcard-text").textContent = s.t;
+  for (const id of Object.keys(SEQ)) {
+    document.getElementById(id).classList.toggle("sel", id === curS);
+    document.getElementById(SEQ[id].scene).style.display = (id === curS) ? "" : "none";
+  }
+}
+for (const id of Object.keys(SEQ)) document.getElementById(id).addEventListener("click", () => { curS = id; renderS(); });
+renderS();
+
+try { localStorage.setItem("read:07", "1"); } catch(e) {}
+</script>
+</body>
+</html>

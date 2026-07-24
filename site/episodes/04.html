@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 04 — ポンプを回す3つの知恵</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:140px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .flow{fill:none; stroke-width:3; stroke-linecap:round; stroke-linejoin:round}
+  .boxlabel{font-size:11px; fill:#3a4550}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  table.vals{width:100%; border-collapse:collapse; font-size:.8rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 6px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.72rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc); white-space:nowrap}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい4わ ── サイクルの章</div>
+    <h1 class="kyoka">ポンプを回す3つの知恵</h1>
+
+    <p class="body">第2話で、燃焼室の圧力は100気圧を超えると言いました。そこへ毎秒数百kgの推進剤を<b>押し込み続ける</b>には、ポンプに途方もない動力が要ります——スペースシャトルの燃料ポンプで約77,000馬力。機関車百両分の力を、どこから調達するか。<b>この動力の工面のしかたを「サイクル」と呼びます</b>。</p>
+
+    <p class="body">知恵は大きく3つ。<b>①推進剤を少し横取りして小さな炉で燃やし、タービンを回して捨てる</b>（ガス発生器）。<b>②同じく横取りして燃やすが、回したあとのガスを本番の燃焼室に合流させて使い切る</b>（二段燃焼）。<b>③燃やさない。ノズルを冷やしたときの熱で推進剤を沸かし、その蒸気で回す</b>（エキスパンダー）。図の名前をタップして、ガスの通り道を見比べてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="cy-gg">ガス発生器</span>
+      <span class="chip" id="cy-sc">二段燃焼</span>
+      <span class="chip" id="cy-eb">エキスパンダーブリード</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="350" viewBox="0 0 340 350">
+        <rect x="120" y="16" width="100" height="38" rx="8" class="stroke" style="fill:#eef1f4"/>
+        <text x="170" y="40" text-anchor="middle" class="boxlabel">タンク</text>
+        <path class="flow" style="stroke:var(--blue)" d="M170 54 L170 86 M170 86 L164 76 M170 86 L176 76"/>
+        <rect x="130" y="88" width="80" height="36" rx="8" class="stroke" style="fill:var(--blue)"/>
+        <text x="170" y="111" text-anchor="middle" class="boxlabel">ポンプ</text>
+        <line x1="210" y1="106" x2="262" y2="106" class="stroke"/>
+        <rect x="262" y="88" width="62" height="36" rx="8" class="stroke" style="fill:var(--sand)"/>
+        <text x="293" y="111" text-anchor="middle" class="boxlabel">タービン</text>
+        <path class="flow" style="stroke:var(--blue)" d="M150 124 L150 210 L150 230 M150 230 L144 220 M150 230 L156 220"/>
+        <path class="stroke" d="M140 232 Q140 226 146 226 L194 226 Q200 226 200 232 L200 268 Q186 282 178 302 L162 302 Q154 282 140 268 Z" style="fill:#eef1f4"/>
+        <path class="stroke" d="M162 302 Q150 316 144 334 L196 334 Q190 316 178 302" style="fill:#eef1f4"/>
+        <text x="170" y="256" text-anchor="middle" class="boxlabel">燃焼室</text>
+
+        <g id="d-gg" style="display:none">
+          <rect x="232" y="160" width="70" height="34" rx="8" class="stroke" style="fill:#f0b285"/>
+          <text x="267" y="182" text-anchor="middle" class="boxlabel">ガス発生器</text>
+          <path class="flow" style="stroke:var(--acc)" d="M190 124 L190 148 Q190 172 226 176 M226 176 L216 170 M226 176 L217 182"/>
+          <path class="flow" style="stroke:var(--acc)" d="M282 160 Q290 140 291 130 M291 130 L285 138 M291 130 L296 139"/>
+          <path class="flow" style="stroke:#a9a9a9" d="M316 124 Q328 150 330 190 M330 190 L324 181 M330 190 L334 180"/>
+          <text x="304" y="212" font-size="11" fill="#77808a">捨てる</text>
+        </g>
+        <g id="d-sc" style="display:none">
+          <rect x="232" y="160" width="70" height="34" rx="8" class="stroke" style="fill:#f0b285"/>
+          <text x="267" y="182" text-anchor="middle" class="boxlabel">プリバーナ</text>
+          <path class="flow" style="stroke:var(--acc)" d="M190 124 L190 148 Q190 172 226 176 M226 176 L216 170 M226 176 L217 182"/>
+          <path class="flow" style="stroke:var(--acc)" d="M282 160 Q290 140 291 130 M291 130 L285 138 M291 130 L296 139"/>
+          <path class="flow" style="stroke:var(--acc)" d="M316 124 Q330 160 300 220 Q272 250 206 250 M206 250 L216 244 M206 250 L216 256"/>
+          <text x="300" y="240" font-size="11" fill="#77808a">合流して使い切る</text>
+        </g>
+        <g id="d-eb" style="display:none">
+          <path class="flow" style="stroke:var(--blue)" d="M190 124 L190 156 Q190 200 208 236 Q220 258 218 292 M218 292 L212 283 M218 292 L224 282"/>
+          <path class="flow" style="stroke:var(--acc)" d="M218 296 Q244 280 262 240 Q274 210 280 160 Q286 140 288 128 M288 128 L282 136 M288 128 L294 136"/>
+          <text x="252" y="316" font-size="11" fill="#77808a">冷却溝で沸かす</text>
+          <path class="flow" style="stroke:#a9a9a9" d="M316 124 Q328 150 330 190 M330 190 L324 181 M330 190 L334 180"/>
+          <text x="304" y="212" font-size="11" fill="#77808a">捨てる</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 青=推進剤の主流、オレンジ=タービンを回すガス</div>
+    </div>
+
+    <div class="partcard" id="cycard">
+      <div class="pname"><span class="dot" style="background:#f0b285"></span><span id="cycard-name"></span></div>
+      <p id="cycard-text"></p>
+    </div>
+
+    <p class="body">三者の性格は、数字にも現れます。ただし比推力は<b>推進剤（ケロシンか水素か）の違いが大きく効く</b>ので、サイクルだけの成績表ではないことに注意して読んでください。</p>
+
+    <table class="vals">
+      <tr><th>サイクル</th><th>代表エンジン</th><th>比推力(真空)</th><th>燃焼室圧</th></tr>
+      <tr><td>ガス発生器</td><td>Merlin 1D（ケロシン）</td><td class="num">311 秒</td><td class="num">9.7 MPa</td></tr>
+      <tr><td>二段燃焼(燃料リッチ)</td><td>RS-25（水素）</td><td class="num">452 秒</td><td class="num">20.6 MPa</td></tr>
+      <tr><td>二段燃焼(酸素リッチ)</td><td>RD-180（ケロシン）</td><td class="num">338 秒</td><td class="num">26.7 MPa</td></tr>
+      <tr><td>エキスパンダー(閉)</td><td>RL10B-2（水素）</td><td class="num">465.5 秒</td><td class="num">低め</td></tr>
+      <tr><td>エキスパンダーブリード</td><td>LE-9（水素）</td><td class="num">422 秒</td><td class="num">10.0 MPa</td></tr>
+    </table>
+
+    <p class="body">ガス発生器は<b>シンプルで安いが、捨てる分だけ損</b>（横取りしたガスは主室ほど働けないまま出ていきます）。二段燃焼は<b>使い切るから高性能、そのかわり配管は高圧地獄で複雑</b>。エキスパンダーは<b>お湯を沸かして回る上品さ</b>——ただし閉サイクルは沸かせる熱に限りがあり、大推力にできません。そこでH3のLE-9は、<b>沸かした蒸気の一部だけでタービンを回して捨てる「ブリード（開）」方式</b>を選び、上品さと大推力を初めて両立させました。世界初のブースタ級エキスパンダーブリードです。</p>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>圧力の家計簿 — なぜ二段燃焼は「高圧地獄」なのか</summary>
+      <div class="inner">
+        <p>流れは高い圧力から低い圧力へしか進みません。燃焼室が20MPaなら、ポンプの吐出はそれより高くないと押し込めない。さらに二段燃焼では、その手前にプリバーナとタービンが挟まるので、<b>ポンプはタービンの圧力降下ぶんまで上乗せして稼がねばなりません</b>。RS-25の燃料ポンプ吐出は41MPa超——燃焼室の2倍です。開サイクル（ガス発生器・ブリード）はタービン排気を低圧の外にポイと捨てられるので、タービンで大きな膨張比が取れ、少ないガスで済み、ポンプも楽。「捨てる損」と「配管の楽さ」の取引です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>酸素リッチと燃料リッチ — プリバーナの流儀</summary>
+      <div class="inner">
+        <p>プリバーナは推進剤を「わざと偏った比率」で燃やして、タービンが耐えられる温度のガスを作ります。水素エンジンは燃料リッチが素直（RS-25）。ところがケロシンで燃料リッチにすると<b>煤（すす）がタービンを詰まらせる</b>。そこでロシアは逆に酸素リッチ——灼熱の酸素ガスに金属が耐える冶金術を確立して、RD-180のような高圧エンジンを作りました。長らく他国が真似できなかった芸当です。どちらに偏らせるかひとつで、材料も設計思想も変わります。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>エキスパンダーサイクルは<b>作動流体が推進剤そのものになったランキンサイクルの親戚</b>です。ボイラの役は燃焼室・ノズルの冷却溝。ここで問題になるのが熱回収のスケーリングで、幾何相似の一次近似では<b>回収熱は濡れ面積（∝L²）、必要動力は流量（∝L³）に比例</b>——エンジンを大きくするほど熱が足りなくなり、閉エキスパンダーはRL10級で頭打ちになります。LE-9のブリード化は「全量を回すのを諦め、少量のガスに大きな膨張比で仕事をさせる」ことでこの壁を回避した設計です。タービン膨張比を稼げるのは背圧を捨てられる開サイクルの特権——第2話の圧力項の話が、ここでは設計自由度として効いてきます。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>05 心臓部、毎分4万回転</b>: サイクルが「回し方」なら、次は回される主役。あなたの主戦場、ターボポンプの中に潜ります。インデューサ、キャビテーション、そして数万馬力。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.6<br>
+      ・L3Harris (Aerojet Rocketdyne) RS-25 spec sheet／各エンジン公表スペック（Merlin 1D・RD-180・RL10B-2）<br>
+      ・JAXA LE-9 諸元（エキスパンダーブリードサイクル・10.0MPa・422秒）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="03.html">← 03 かたい燃料、ながれる燃料</a>
+  <a href="05.html">つぎ: 05 心臓部、毎分4万回転 →</a>
+</div>
+
+<script>
+const CYCLES = {
+  "cy-gg": { name:"ガス発生器サイクル — 少し燃やして、捨てる", color:"#f0b285",
+    t:"ポンプ出口から数%を横取りし、小さな炉（ガス発生器）で燃やしてタービンを回し、排気は機外へ捨てます。回路が独立しているので設計が素直で、開発も安い。アポロのF-1からFalcon 9のMerlinまで、半世紀を超える定番です。弱点は、横取り分が主室ほど働けないまま捨てられ、そのぶん比推力が下がること。" },
+  "cy-sc": { name:"二段燃焼サイクル — 燃やして回して、使い切る", color:"#f0b285",
+    t:"プリバーナで「偏った比率」で予備燃焼→タービンを回す→そのガスを燃焼室に送り込んで本燃焼で使い切ります。捨てる損がないので高性能ですが、タービン排気を高圧の燃焼室に押し込む都合上、系全体が超高圧に。RS-25、RD-180、そしてStarshipのRaptorもこの系譜（両方の推進剤をプリバーナに通すフルフロー型）です。" },
+  "cy-eb": { name:"エキスパンダーブリード — 沸かした蒸気で回して、捨てる", color:"var(--blue)",
+    t:"燃やす炉がありません。ノズルと燃焼室を冷やした水素が熱で気化・高圧ガス化するので、その一部（ブリード分）でタービンを回して捨てます。プリバーナがない分だけ壊れる要素が少なく、本質的に安全。LE-9はこの方式で1,471kNという世界初のブースタ級を実現しました。H3の設計思想「安く、確実に」の象徴です。" }
+};
+let curC = "cy-gg";
+function renderC(){
+  const c = CYCLES[curC];
+  document.getElementById("cycard-name").textContent = c.name;
+  document.querySelector("#cycard .dot").style.background = c.color;
+  document.getElementById("cycard-text").textContent = c.t;
+  for (const id of Object.keys(CYCLES)) document.getElementById(id).classList.toggle("sel", id === curC);
+  document.getElementById("d-gg").style.display = (curC === "cy-gg") ? "" : "none";
+  document.getElementById("d-sc").style.display = (curC === "cy-sc") ? "" : "none";
+  document.getElementById("d-eb").style.display = (curC === "cy-eb") ? "" : "none";
+}
+for (const id of Object.keys(CYCLES)) document.getElementById(id).addEventListener("click", () => { curC = id; renderC(); });
+renderC();
+
+try { localStorage.setItem("read:04", "1"); } catch(e) {}
+</script>
+</body>
+</html>

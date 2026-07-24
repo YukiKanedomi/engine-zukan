@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 05 — 心臓部、毎分4万回転</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%}
+  .zone{cursor:pointer; fill:transparent; stroke:transparent; stroke-width:4; rx:14}
+  .zone.sel{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:140px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  table.vals{width:100%; border-collapse:collapse; font-size:.82rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 8px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.74rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc)}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい5わ ── ターボポンプの章</div>
+    <h1 class="kyoka">心臓部、毎分4万回転</h1>
+
+    <p class="body">いよいよ、あなたのホームグラウンドです。第4話の「サイクル」が回し方の知恵なら、今回は<b>回される本体</b>。スペースシャトルの燃料ターボポンプは、<b>毎分37,000回転を超えて回り、約77,000馬力</b>——機関車百両分の動力を、洗濯機ほどの機械が出していました。H3のLE-9も、燃料ターボポンプは<b>毎分約41,000回転</b>。液体ロケットの技術的な心臓部がここだと言われるゆえんです。</p>
+
+    <p class="body">中身は、ひとつの軸に役者が一列に並んだ構成です。図の各部をタップしてみてください。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/turbopump-cutaway.jpg" alt="ターボポンプの断面図">
+        <svg viewBox="0 0 1100 550">
+          <rect class="zone" id="z-ind" x="14" y="180" width="330" height="230" rx="14"/>
+          <rect class="zone" id="z-imp" x="344" y="90" width="220" height="330" rx="14"/>
+          <rect class="zone" id="z-seal" x="564" y="160" width="230" height="220" rx="14"/>
+          <rect class="zone" id="z-tur" x="794" y="30" width="292" height="490" rx="14"/>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります（簡略化したカットモデルです）</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">なぜそこまで回すのか。ポンプの仕事（揚程）は羽根の周速で決まるので、<b>速く回せば回すほど、同じ仕事を小さく軽い羽根車でこなせる</b>からです。飛ばすものは1グラムでも軽くしたい。だからロケットのポンプは、地上のポンプの常識を桁で超えた回転数に踏み込みます。</p>
+
+    <p class="body">ただし高速回転には天敵がいます。速く回るほど吸込側では流れが加速して<b>圧力が下がり、液体が沸騰して気泡が生まれる</b>——キャビテーションです。下の順にタップしてみてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="cv-1">① 気泡がうまれる</span>
+      <span class="chip" id="cv-2">② 気泡がはじける</span>
+      <span class="chip" id="cv-3">③ インデューサの救い</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="200" viewBox="0 0 340 200">
+        <path class="stroke" d="M20 60 L320 60" style="stroke-width:1.6"/>
+        <path class="stroke" d="M20 150 L320 150" style="stroke-width:1.6"/>
+        <g id="s-1" style="display:none">
+          <path class="stroke" style="fill:var(--blue)" d="M60 150 Q92 96 128 88 L136 108 Q104 118 84 150 Z"/>
+          <circle class="stroke" cx="152" cy="84" r="7" style="fill:#fff; stroke-width:1.8"/>
+          <circle class="stroke" cx="170" cy="94" r="5" style="fill:#fff; stroke-width:1.8"/>
+          <circle class="stroke" cx="163" cy="72" r="4" style="fill:#fff; stroke-width:1.8"/>
+          <text x="200" y="82" font-size="12" fill="#77808a">羽根の裏で圧力が下がり</text>
+          <text x="200" y="100" font-size="12" fill="#77808a">液体が「沸く」</text>
+        </g>
+        <g id="s-2" style="display:none">
+          <path class="stroke" style="fill:var(--blue)" d="M60 150 Q92 96 128 88 L136 108 Q104 118 84 150 Z"/>
+          <path class="stroke" style="stroke:#c47a4f; stroke-width:2" d="M176 76 L188 64 M182 86 L198 84 M172 92 L182 102 M164 68 L160 56"/>
+          <circle cx="170" cy="80" r="3" fill="#c47a4f"/>
+          <text x="208" y="82" font-size="12" fill="#77808a">高圧部で気泡が潰れ</text>
+          <text x="208" y="100" font-size="12" fill="#77808a">壊食と振動が生まれる</text>
+        </g>
+        <g id="s-3" style="display:none">
+          <path class="stroke" style="fill:#9cc0d4" d="M50 150 Q60 120 78 104 L92 120 Q76 132 70 150 Z"/>
+          <path class="stroke" style="fill:#9cc0d4" d="M96 150 Q106 120 124 104 L138 120 Q122 132 116 150 Z"/>
+          <path class="stroke" style="fill:var(--blue)" d="M190 150 Q222 96 258 88 L266 108 Q234 118 214 150 Z"/>
+          <text x="52" y="86" font-size="12" fill="#77808a">ゆるい螺旋でそっと昇圧 →</text>
+          <text x="196" y="76" font-size="12" fill="#77808a">羽根車は安心して全力</text>
+        </g>
+      </svg>
+      <div class="hint">▲ インデューサは羽根車の「露払い」です</div>
+    </div>
+
+    <div class="partcard" id="cvcard" style="min-height:110px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="cvcard-name"></span></div>
+      <p id="cvcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>吸込みの貯金 — NPSHとタンク加圧</summary>
+      <div class="inner">
+        <div class="eq">NPSH = ( p<sub>in</sub> − p<sub>v</sub> ) / ρg</div>
+        <p>ポンプ入口の圧力（速度ヘッド込みの全圧で数えます）が蒸気圧 p<sub>v</sub> までどれだけ余裕があるか——この「沸騰までの貯金」が有効吸込みヘッド（NPSH）です。貯金が足りなければキャビテーションで即破産。だからロケットは<b>タンクをわざわざヘリウム等で加圧して</b>貯金（NPSHa）を積み増します。いっぽうインデューサの仕事は貯金を増やすことではなく、<b>「必要な貯金額（要求NPSH）」を引き下げる</b>こと——少ない残高でも羽根車が暮らせるようにする係です。ちなみに液体水素は密度が小さく、同じ圧力上昇にケタ違いの揚程が要るため、燃料側ポンプは高回転・多段になりがちです（極低温流体では、蒸発にともなう冷却がキャビテーションを和らげる熱力学効果も効いてきます）。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>数字で見る怪物 — シャトルHPFTP</summary>
+      <div class="inner">
+        <table class="vals">
+          <tr><th>項目</th><th>値</th></tr>
+          <tr><td>回転数</td><td class="num">37,000 rpm 超</td></tr>
+          <tr><td>出力</td><td class="num">約 77,000 馬力</td></tr>
+          <tr><td>昇圧</td><td class="num">約 1.2 MPa → 41 MPa 超</td></tr>
+          <tr><td>構成</td><td class="num">3段遠心ポンプ + 2段タービン</td></tr>
+        </table>
+        <p>液体水素を34倍の圧力に押し上げる3段の遠心ポンプを、2段のタービンが直結で回します。二段燃焼サイクル（第4話）の「高圧地獄」を支えるのがこの怪物で、シャトル計画では最も手を焼いた部品のひとつでした。軸受・シール・翼振動——回転機械の難所が全部、極端な条件で押し寄せます。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>ターボポンプはあなたの知識がいちばん直通する部品です。無次元整理もそのまま通用します——回転数の上限を縛るのは吸込比速度（キャビテーション）とチップ速度（強度）。インデューサは、限られたキャビテーションを許容しながら昇圧し、気泡の過大成長や不安定化（旋回キャビテーション）を抑えて主羽根車に有害な気泡を渡さない——そんなぎりぎりの設計をする世界で、ゆるい迎え角の螺旋翼・長いコード・少ない翼数という独特の形はそのためです。そしてもうひとつ——<b>ポンプは推進系の振動に参加します</b>。吸込配管の液柱と気泡・構造のたわみがバネ＝質量系を作り、推力変動と結合して自励振動を起こすことがある。名前をPOGOといいます。第8話でこの怪談をやりましょう。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>06 しぼって、ひろげて、はやくする</b>: ポンプが送り込んだ推進剤の終着点。燃焼室とノズル——「投げる速さ」を作る現場です。第2話の宿題「広げすぎると何が起きる？」もここで回収します。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.10<br>
+      ・NASA KSC SSME 教材・SSME Orientation（HPFTP: 37,000rpm超・約77,000hp・吐出6,000psi超）<br>
+      ・JAXA LE-9 諸元（燃料ターボポンプ 約41,000rpm・酸化剤 約17,000rpm）<br>
+      ・断面図は生成イラスト（構成はSutton ch.10の標準配置に基づき検証済み）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="04.html">← 04 ポンプを回す3つの知恵</a>
+  <a href="06.html">つぎ: 06 しぼって、ひろげて →</a>
+</div>
+
+<script>
+const PARTS = {
+  "z-ind": { name:"吸込口とインデューサ", color:"var(--blue)",
+    t:"タンクから来た推進剤を最初に迎える螺旋のねじ——インデューサです。役目は本命の羽根車が吸いやすいように、そっと圧力を底上げすること。ゆるい迎え角の螺旋翼で、キャビテーションすれすれの流れを手なずけます。ポンプ全体の吸込み性能はほぼここで決まる、静かな主役です。" },
+  "z-imp": { name:"羽根車とボリュート", color:"#9cc0d4",
+    t:"心臓の本体です。高速回転する羽根車が流れを外周へ振り飛ばし、出口のディフューザやボリュートが速度を圧力に変えて次へ送ります。シャトルの燃料ポンプは羽根車を3段重ねて約1.2MPaから41MPa超まで——34倍の昇圧。第4話の「圧力の家計簿」を稼ぐ現場です。" },
+  "z-seal": { name:"軸受とシール", color:"#f6d9b8",
+    t:"地味に見えて最難関です。数万rpmの軸を支える軸受は、潤滑油が使えないので推進剤そのもので潤滑・冷却します。そしてシールの向こうは高温のタービンガス。とくに酸化剤ポンプでは液体酸素と燃焼ガスが出会えば発火するため、間にパージガスを流した多重シールで隔てます。ポンプの寿命と信頼性は、ほぼこの数センチが決めます。" },
+  "z-tur": { name:"タービン", color:"#f0b285",
+    t:"第4話で見た駆動ガス（ガス発生器・プリバーナ・沸かした水素）がここに吹き込み、翼列を鳴らして数万馬力を絞り出します。ポンプと同じ軸に直結なので、回転数の妥協点探しがそのまま設計の骨格になります。高温側と極低温側が数十cmで同居する——ターボポンプが「機械設計の総合格闘技」と呼ばれる理由です。" }
+};
+let cur = "z-ind";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const CAV = {
+  "cv-1": { name:"① 羽根の裏で、液体が沸く", scene:"s-1",
+    t:"速い流れの中では圧力が下がります（ベルヌーイ）。羽根の裏側で圧力が液体の蒸気圧を割り込むと、温度はそのままなのに液体が沸騰し、気泡が生まれます。これがキャビテーション。極低温の推進剤はもともと沸点ぎりぎりで運ばれているので、ロケットのポンプは特にこれと隣り合わせです。" },
+  "cv-2": { name:"② 気泡は、高圧部で牙をむく", scene:"s-2",
+    t:"生まれた気泡が下流の高圧部へ流されると、一瞬で押し潰されます。このとき局所的に強烈な圧力波が立ち、金属の表面をえぐります（壊食）。さらに気泡の伸び縮みはポンプを「柔らかく」して供給系の振動特性を変え、条件がそろうと機体全体の振動（第8話のPOGO）に参加することもある、単なる部品トラブルを超えた問題児です。" },
+  "cv-3": { name:"③ だからインデューサが先に立つ", scene:"s-3",
+    t:"本命の羽根車を全力で回すために、手前のインデューサがゆるい螺旋でそっと圧力を底上げします。インデューサ自身はキャビテーションすれすれ——むしろ少し気泡を抱えながら動じないように設計されます。露払いが険しい顔を全部引き受けて、主役に花を持たせる構図です。" }
+};
+let curV = "cv-1";
+function renderV(){
+  const v = CAV[curV];
+  document.getElementById("cvcard-name").textContent = v.name;
+  document.getElementById("cvcard-text").textContent = v.t;
+  for (const id of Object.keys(CAV)) {
+    document.getElementById(id).classList.toggle("sel", id === curV);
+    document.getElementById(CAV[id].scene).style.display = (id === curV) ? "" : "none";
+  }
+}
+for (const id of Object.keys(CAV)) document.getElementById(id).addEventListener("click", () => { curV = id; renderV(); });
+renderV();
+
+try { localStorage.setItem("read:05", "1"); } catch(e) {}
+</script>
+</body>
+</html>

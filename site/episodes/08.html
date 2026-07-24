@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 08 — 爆音とふるえを、てなずける</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .boxlabel{font-size:11px; fill:#3a4550}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい8わ ── 振動の章</div>
+    <h1 class="kyoka">爆音とふるえを、てなずける</h1>
+
+    <p class="body">ロケットの音は「大きな音」ではありません。<b>構造を壊しにくる物理的な力</b>です。発射台の近くでは音圧レベルは200dBに迫り、いっぽう積み荷の衛星が耐えられるのはおよそ145dBまで。測る場所も条件も違う数字ですが、dBは対数なので、55dBの差は<b>音のエネルギーにして数十万倍</b>。この途方もないギャップを距離と設計で埋めるのが、今回の主役たちです。ふるえの出どころは大きく3つ——図をタップしてください。</p>
+
+    <div class="fig">
+      <svg width="340" height="330" viewBox="0 0 340 330">
+        <path class="stroke" d="M148 30 Q170 8 192 30 L192 60 L148 60 Z" style="fill:var(--sand)"/>
+        <g id="z-pogo" class="hot">
+          <rect class="shape stroke" x="148" y="60" width="44" height="130" rx="5" style="fill:#eef1f4"/>
+          <path class="shape stroke" style="stroke:var(--blue); stroke-width:3" d="M170 78 L170 176"/>
+          <circle class="shape stroke" cx="170" cy="186" r="9" style="fill:var(--blue)"/>
+        </g>
+        <g id="z-eng" class="hot">
+          <rect class="shape stroke" x="148" y="198" width="44" height="26" rx="5" style="fill:var(--blue)"/>
+          <path class="shape stroke" style="fill:#eef1f4" d="M158 224 Q150 240 144 252 L196 252 Q190 240 182 224 Z"/>
+        </g>
+        <g id="z-pad" class="hot">
+          <path class="shape stroke" style="fill:#f0b285" d="M150 254 Q142 274 132 288 Q152 296 170 296 Q188 296 208 288 Q198 274 190 254 Q170 264 150 254"/>
+          <line class="shape" x1="80" y1="302" x2="260" y2="302" stroke="#3a4550" stroke-width="2.2"/>
+          <path class="shape stroke" style="stroke:#9cc0d4; stroke-width:2" d="M112 302 Q124 280 140 270 M228 302 Q216 280 200 270"/>
+          <path class="shape stroke" style="stroke:#3a4550; stroke-width:1.6" d="M96 262 Q104 250 100 240 M244 262 Q236 250 240 240 M84 278 Q92 268 88 258 M256 278 Q248 268 252 258"/>
+        </g>
+        <line x1="200" y1="120" x2="228" y2="120" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="200" y1="212" x2="228" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="216" y1="276" x2="240" y2="276" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="232" y="124" font-size="13" fill="#77808a">POGO（配管と機体）</text>
+        <text x="232" y="216" font-size="13" fill="#77808a">燃焼の唸り</text>
+        <text x="244" y="280" font-size="13" fill="#77808a">発射台の音響</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#f0b285"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">3つのうち、いちばん「流体屋の怪談」らしいのがPOGOです。エンジンは正常、構造も正常、部品はどこも壊れていない——それなのに、<b>機体全体が竹馬（ホッピング）のように縦に跳ねはじめる</b>。仕組みを一周たどってみましょう。</p>
+
+    <div class="chips">
+      <span class="chip" id="pg-1">① 機体が縮む</span>
+      <span class="chip" id="pg-2">② 供給が揺れる</span>
+      <span class="chip" id="pg-3">③ 推力が揺れる</span>
+      <span class="chip" id="pg-4">④ 輪を断ち切る</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="240" viewBox="0 0 340 240">
+        <rect id="b-str" class="stroke" x="118" y="18" width="104" height="38" rx="10" style="fill:#eef1f4"/>
+        <text x="170" y="42" text-anchor="middle" class="boxlabel">機体の構造（バネ）</text>
+        <rect id="b-sup" class="stroke" x="24" y="120" width="120" height="38" rx="10" style="fill:#eef1f4"/>
+        <text x="84" y="144" text-anchor="middle" class="boxlabel">配管とポンプ</text>
+        <rect id="b-thr" class="stroke" x="196" y="120" width="120" height="38" rx="10" style="fill:#eef1f4"/>
+        <text x="256" y="144" text-anchor="middle" class="boxlabel">推力</text>
+        <path id="a-1" class="stroke" style="stroke-width:2.6" d="M126 58 Q92 84 84 116 M84 116 L80 106 M84 116 L92 109"/>
+        <path id="a-2" class="stroke" style="stroke-width:2.6" d="M148 139 L192 139 M192 139 L183 134 M192 139 L183 144"/>
+        <path id="a-3" class="stroke" style="stroke-width:2.6" d="M256 116 Q248 84 214 58 M214 58 L223 60 M214 58 L218 67"/>
+        <g id="b-acc" style="display:none">
+          <circle class="stroke" cx="84" cy="196" r="16" style="fill:#eef4ed"/>
+          <path class="stroke" d="M84 180 L84 162" style="stroke-width:2"/>
+          <text x="108" y="200" font-size="12" fill="#4e6b49">アキュムレータ（気体のバネ）</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 3つの箱がぐるぐると力を回しはじめたら、POGOです</div>
+    </div>
+
+    <div class="partcard" id="pgcard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="pgcard-name"></span></div>
+      <p id="pgcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>水で音をたおす — 散水システム</summary>
+      <div class="inner">
+        <p>発射のカウントダウン終盤、発射台は<b>毎秒何十トンもの水</b>を噴流と台に浴びせはじめます。固い反射面を水のクッションに変え、無数の水滴が音のエネルギーを飲み込む——これで条件により<b>十数dB</b>下がります。たった十数dBに聞こえますが、対数なので12dBならエネルギー約1/16。もちろん発射台近傍の200dB級とフェアリング内の145dBは測る場所が違う数字で、実際には距離による減衰・フェアリングの遮音・衛星側の設計マージンを全部積み重ねて、ようやく規定の環境に収めます。打上げ映像で機体より先に立ちのぼる白い雲の正体は、爆煙ではなく、散水がくだけてできた水しぶきと霧です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>燃焼の唸り — 部屋が楽器になってしまう話</summary>
+      <div class="inner">
+        <p>燃焼室は高温ガスの詰まった「部屋」なので、固有の音響モードを持ちます。燃焼の熱発生がこのモードと同位相で結びつくと、振動が振動を励まして急成長する——<b>燃焼不安定（スクリーチ）</b>です。アポロ計画のF-1エンジンはこれに苦しめられ、噴射器の面に仕切り板（バッフル）を立てて回転モードを砕くことで、ようやく手なずけました。現代でも新エンジン開発の最大の関門のひとつで、対策の道具立ては<b>バッフルと音響キャビティ</b>——部屋の音響を設計で「調律」する仕事です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>POGOは典型的な<b>流体—構造連成の自励振動</b>で、周波数はおおむね5〜50Hz。実測ではペイロード位置で17g、エンジンで34gに達した例があります。系のゲインを稼いでしまう主犯はポンプで、インデューサのキャビテーション気泡が「柔らかさ（コンプライアンス）」として働き、供給系の固有振動数を運転中に動かします（第5話の伏線回収です）。処方箋は<b>ポンプ入口にアキュムレータ＝気体バネを挿す</b>こと。Titan IIは窒素入りスタンドパイプ、Saturn VはLOXプリバルブの空洞にヘリウムを充填して即席のアキュムレータにしました。解析は供給系・構造・エンジンを伝達関数でつないだ閉ループの安定判別で、設計基準はNASA SP-8055にまとまっています。まさに流体屋が主担当の章です。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>09 じっさいの機体で、答え合わせ</b>: 最終話。H3とFalcon 9を並べて、8話ぶんの言葉——サイクル、ポンプ、ノズル、分離、振動——で実機を読み解きます。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・NASA SP-8055, <i>Prevention of Coupled Structure-Propulsion Instability (Pogo)</i><br>
+      ・Developments in pogo suppression methods for liquid rockets, <i>Progress in Aerospace Sciences</i> (2023)<br>
+      ・Review of launcher lift-off noise prediction and mitigation (2024)／NASA 散水試験公開資料<br>
+      ・NASA SP-4205（アポロ計画史・F-1燃焼不安定）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="07.html">← 07 わかれの作法</a>
+  <a href="09.html">つぎ: 09 実機で答え合わせ →</a>
+</div>
+
+<script>
+const PARTS = {
+  "z-pad": { name:"発射台の音響 — 音は下から来る", color:"#f0b285",
+    t:"離陸の数秒間、噴流が発射台に叩きつけられて猛烈な空力音が生まれ、地面や設備に反射して機体に返ってきます。音圧は台の近くで200dBに迫るレベル。フェアリング（第1話）が守っているのは空気との摩擦だけでなく、この音の砲撃でもあります。対策の主役は、意外にも大量の水——詳しくは下のよりみちで。" },
+  "z-eng": { name:"燃焼の唸り — エンジン自身がふるえる", color:"var(--blue)",
+    t:"燃焼室の中では、燃焼の熱発生と部屋の音響モードが結びついて自励的に暴れることがあります（燃焼不安定）。高周波のスクリーチは壁の熱伝達を跳ね上げ、数秒でエンジンを焼き壊すことも。噴射器（第6話）の設計と、バッフル・音響キャビティによる「部屋の調律」で抑え込みます。" },
+  "z-pogo": { name:"POGO — 配管と機体の共鳴", color:"#9cc0d4",
+    t:"機体構造のバネ振動と、配管・ポンプの供給振動と、推力の変動。この3つが輪になって力を回しはじめると、機体全体が縦にホッピングします。名前の由来はホッピング玩具（pogo stick）。どの部品も正常なのに系全体として発振する、システム振動の代表例です。下でループを一周たどりましょう。" }
+};
+let cur = "z-pad";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const POGO = {
+  "pg-1": { name:"① 燃焼終盤、機体が縮む", hl:"a-1",
+    t:"推進剤が減っていくと、構造の縦方向の固有振動数は飛行中にじわじわ変わっていきます。これが供給系の固有振動数と接近する瞬間が危険地帯。機体がわずかに縮むと、タンクや配管の中の液体が押され、物語が始まります。" },
+  "pg-2": { name:"② 配管の圧力が揺れ、ポンプが増幅する", hl:"a-2",
+    t:"押された液柱はポンプ入口の圧力を振動させます。ポンプは入口圧の変化に敏感で（第5話のNPSHの話）、キャビテーション気泡の伸び縮みが柔らかいバネのように働いて供給系の振動特性を変えます。ポンプのこの「柔らかさ」と動的なゲインが、ループ全体の安定性を大きく左右する役どころです。" },
+  "pg-3": { name:"③ 推力が揺れ、機体をまた押す", hl:"a-3",
+    t:"供給が揺れれば燃焼室に入る流量が揺れ、推力が揺れます。その推力変動が構造をまた押し縮める——①に戻って輪が閉じました。一周して戻った揺れが元より大きく、しかも押すタイミングが合ってしまう（正帰還）と、振動は自分で自分を育てはじめます。5〜50Hzで、ひどい例ではエンジン位置で34g。" },
+  "pg-4": { name:"④ 気体のバネで、輪を断ち切る", hl:"b-acc",
+    t:"処方箋はポンプ入口に気体をためた小部屋（アキュムレータ）を付けること。柔らかい気体バネが圧力の揺れを吸い込み、供給系の固有振動数を構造とすれ違わない場所へずらします。Titan IIは窒素のスタンドパイプ、Saturn Vはバルブの空洞にヘリウムを詰めて解決。小さな気体袋が巨大ロケットを救う、名解決のひとつです。" }
+};
+let curP = "pg-1";
+function renderP(){
+  const g = POGO[curP];
+  document.getElementById("pgcard-name").textContent = g.name;
+  document.getElementById("pgcard-text").textContent = g.t;
+  for (const id of Object.keys(POGO)) document.getElementById(id).classList.toggle("sel", id === curP);
+  for (const a of ["a-1","a-2","a-3"]) document.getElementById(a).style.stroke = "";
+  document.getElementById("b-acc").style.display = (curP === "pg-4") ? "" : "none";
+  const hl = POGO[curP].hl;
+  if (hl !== "b-acc") document.getElementById(hl).style.stroke = "#c47a4f";
+}
+for (const id of Object.keys(POGO)) document.getElementById(id).addEventListener("click", () => { curP = id; renderP(); });
+renderP();
+
+try { localStorage.setItem("read:08", "1"); } catch(e) {}
+</script>
+</body>
+</html>

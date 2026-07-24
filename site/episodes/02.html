@@ -160,7 +160,7 @@
       <tr><th>エンジン（推進剤）</th><th>比推力（真空）</th></tr>
       <tr><td>固体ブースタ</td><td class="num">250〜280 秒</td></tr>
       <tr><td>Merlin 1D（ケロシン）</td><td class="num">311 秒</td></tr>
-      <tr><td>LE-9（水素・H3の1段目）</td><td class="num">425 秒</td></tr>
+      <tr><td>LE-9（水素・H3の1段目）</td><td class="num">422 秒</td></tr>
       <tr><td>RS-25（水素・スペースシャトル）</td><td class="num">452 秒</td></tr>
     </table>
 
@@ -177,7 +177,7 @@
       <summary><span class="badge">よりみち</span>なぜ「秒」が燃費になるのか</summary>
       <div class="inner">
         <div class="eq">Isp = F / (ṁ·g<sub>0</sub>) = v<sub>e</sub> / g<sub>0</sub></div>
-        <p>推力を推進剤の<b>重量</b>流量（質量流量×重力加速度）で割った量が比推力です。力を力で割るので単位が消え、時間だけが残る——これが「秒」の正体。実質は投げる速さ v<sub>e</sub> を 9.8 で割っただけの数なので、<b>比推力425秒 ≒ 秒速4.2kmで投げている</b>と読み替えられます。第1話のロケット方程式 Δv = v<sub>e</sub>·ln(m<sub>0</sub>/m<sub>f</sub>) の v<sub>e</sub> がまさにこれで、比推力が良いほど同じ質量比でも遠くへ行けます。</p>
+        <p>推力を推進剤の<b>重量</b>流量（質量流量×重力加速度）で割った量が比推力です。力を力で割るので単位が消え、時間だけが残る——これが「秒」の正体。実質は投げる速さ v<sub>e</sub> を 9.8 で割っただけの数なので、<b>比推力422秒 ≒ 秒速4.1kmで投げている</b>と読み替えられます。第1話のロケット方程式 Δv = v<sub>e</sub>·ln(m<sub>0</sub>/m<sub>f</sub>) の v<sub>e</sub> がまさにこれで、比推力が良いほど同じ質量比でも遠くへ行けます。</p>
       </div>
     </details>
 
@@ -194,14 +194,14 @@
       <b>出典・もっと知りたい人へ</b><br>
       ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.2–3<br>
       ・NASA Glenn Research Center, "Rocket Thrust Equation" / "Specific Impulse"（パブリックドメイン）<br>
-      ・JAXA H3ロケット・LE-9 公開資料（比推力425秒・推力1471kN）
+      ・JAXA H3ロケット・LE-9 公開資料（比推力422秒・推力1471kN）
     </div>
   </div>
 </div>
 
 <div class="pager kyoka">
   <a href="01.html" style="color:inherit; text-decoration:none">← 01 すてながら とんでいく</a>
-  <span class="off">つぎ: 03 燃料のえらびかた（じゅんびちゅう）</span>
+  <a href="03.html" style="color:inherit; text-decoration:none">つぎ: 03 かたい燃料、ながれる燃料 →</a>
 </div>
 
 <script>
@@ -226,7 +226,7 @@ render();
 
 const TERMS = {
   "t-mdot": { name:"ṁ — 毎秒投げる量", color:"var(--acc)",
-    t:"ターボポンプが毎秒エンジンに送り込む推進剤の質量です。H3のLE-9ならおよそ毎秒350kg（推力1471kN÷(425秒×g)から逆算）——2秒たらずでお風呂が満杯になる勢い。これを増やすには太い配管と強いポンプが要ります。「量の勝負」の項で、第5話の主役はこの供給係です。" },
+    t:"ターボポンプが毎秒エンジンに送り込む推進剤の質量です。H3のLE-9ならおよそ毎秒350kg（推力1471kN÷(422秒×g)から逆算）——2秒たらずでお風呂が満杯になる勢い。これを増やすには太い配管と強いポンプが要ります。「量の勝負」の項で、第5話の主役はこの供給係です。" },
   "t-ve": { name:"ve — 投げる速さ", color:"var(--blue)",
     t:"ノズル出口でのガスの速さです。燃焼ガスの温度が高いほど、分子が軽いほど、そしてノズルの出来が良いほど速くなります。水素エンジンで秒速4km級。「速さの勝負」の項で、じつは比推力の正体もこれ（9.8で割っただけ）。詳しくはすぐ下で。" },
   "t-press": { name:"(pe − p0)·Ae — 圧力のおまけ", color:"var(--sand)",

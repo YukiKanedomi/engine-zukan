@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 06 — しぼって、ひろげて、はやくする</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい6わ ── ノズルと燃焼室の章</div>
+    <h1 class="kyoka">しぼって、ひろげて、はやくする</h1>
+
+    <p class="body">ターボポンプ（第5話）が全力で送り込んだ推進剤の終着点が、ここです。燃焼室の中は<b>約3,000℃・100気圧超</b>——鉄の沸点に迫り、たいていの構造金属が融けてしまう温度です。それなのにエンジンは何分も平気で燃え続ける。今回は「速さを作る形」と「溶けない工夫」の話です。</p>
+
+    <div class="fig">
+      <svg width="340" height="360" viewBox="0 0 340 360">
+        <g id="p-inj" class="hot">
+          <rect class="shape stroke" style="fill:#e8b98a" x="126" y="36" width="88" height="20" rx="5"/>
+          <circle class="shape" cx="146" cy="66" r="3" fill="#9cc0d4"/>
+          <circle class="shape" cx="163" cy="70" r="3" fill="#9cc0d4"/>
+          <circle class="shape" cx="180" cy="66" r="3" fill="#9cc0d4"/>
+          <circle class="shape" cx="197" cy="70" r="3" fill="#9cc0d4"/>
+        </g>
+        <g id="p-wall" class="hot">
+          <path class="shape stroke" style="fill:var(--sand)" d="M126 56 L138 56 L138 170 Q138 196 152 212 L146 222 Q126 200 126 170 Z"/>
+          <path class="shape stroke" style="fill:var(--sand)" d="M214 56 L202 56 L202 170 Q202 196 188 212 L194 222 Q214 200 214 170 Z"/>
+          <circle class="shape" cx="132" cy="80" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="132" cy="104" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="132" cy="128" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="132" cy="152" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="208" cy="80" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="208" cy="104" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="208" cy="128" r="2.4" fill="#9cc0d4"/>
+          <circle class="shape" cx="208" cy="152" r="2.4" fill="#9cc0d4"/>
+        </g>
+        <g id="p-throat" class="hot">
+          <path class="shape stroke" style="fill:var(--blue)" d="M146 222 Q152 230 152 238 Q152 246 148 252 L134 246 Q140 236 138 228 Z"/>
+          <path class="shape stroke" style="fill:var(--blue)" d="M194 222 Q188 230 188 238 Q188 246 192 252 L206 246 Q200 236 202 228 Z"/>
+        </g>
+        <g id="p-bell" class="hot">
+          <path class="shape stroke" style="fill:#eef1f4" d="M148 252 Q142 290 112 330 L128 336 Q156 298 162 258 Z"/>
+          <path class="shape stroke" style="fill:#eef1f4" d="M192 252 Q198 290 228 330 L212 336 Q184 298 178 258 Z"/>
+        </g>
+        <line x1="222" y1="46" x2="236" y2="46" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="222" y1="120" x2="236" y2="120" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="214" y1="238" x2="236" y2="238" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="234" y1="310" x2="248" y2="310" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="240" y="50" font-size="13" fill="#77808a">噴射器</text>
+        <text x="240" y="124" font-size="13" fill="#77808a">壁と冷却溝</text>
+        <text x="240" y="242" font-size="13" fill="#77808a">スロート</text>
+        <text x="252" y="314" font-size="13" fill="#77808a">ベル</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#e8b98a"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">形の不思議は、第2話と第5話でも顔を出した「しぼると速くなる」の続きです。水道のホースの先を親指でつぶすと速くなる——あれは音速までの話。<b>スロートでちょうど音速に達すると（チョーク）、今度は逆に、広げるほど速くなる</b>世界に入ります。だからロケットノズルは「しぼって、ひろげる」砂時計の形。この形が、圧力と温度を秒速数kmの「投げる速さ」へ変換します。</p>
+
+    <p class="body">では第2話の宿題——<b>「地上用エンジンで欲張ってノズルを広げすぎると、何が起きるか」</b>。膨張のさせ方を切り替えて見てください。</p>
+
+    <div class="chips">
+      <span class="chip" id="ex-over">広げすぎ（地上）</span>
+      <span class="chip" id="ex-ok">ちょうど</span>
+      <span class="chip" id="ex-under">足りない（宇宙）</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="230" viewBox="0 0 340 230">
+        <path class="stroke" d="M150 16 Q144 50 116 92 M190 16 Q196 50 224 92" style="stroke-width:2.6"/>
+        <g id="pl-over" style="display:none">
+          <path class="stroke" style="stroke:#c47a4f; stroke-width:2; stroke-dasharray:5 4" d="M128 60 Q140 74 140 92"/>
+          <path class="stroke" style="stroke:#c47a4f; stroke-width:2; stroke-dasharray:5 4" d="M212 60 Q200 74 200 92"/>
+          <path class="shape stroke" style="fill:#f0b285" d="M140 92 Q134 130 148 176 Q160 208 170 216 Q180 208 192 176 Q206 130 200 92 Q170 106 140 92"/>
+          <text x="240" y="66" font-size="12" fill="#77808a">壁から流れが</text>
+          <text x="240" y="84" font-size="12" fill="#77808a">はがれる（剥離）</text>
+        </g>
+        <g id="pl-ok" style="display:none">
+          <path class="shape stroke" style="fill:#f0b285" d="M116 92 Q112 140 122 190 Q140 218 170 220 Q200 218 218 190 Q228 140 224 92 Q170 108 116 92"/>
+          <text x="244" y="140" font-size="12" fill="#77808a">まっすぐな柱</text>
+          <text x="244" y="158" font-size="12" fill="#77808a">＝いちばん得</text>
+        </g>
+        <g id="pl-under" style="display:none">
+          <path class="shape stroke" style="fill:#f0b285" d="M116 92 Q96 130 66 160 Q92 196 136 212 Q170 222 204 212 Q248 196 274 160 Q244 130 224 92 Q170 110 116 92"/>
+          <text x="252" y="60" font-size="12" fill="#77808a">出てから膨らむ</text>
+          <text x="252" y="78" font-size="12" fill="#77808a">＝広がり損</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 同じエンジンでも、まわりの気圧で噴流の姿が変わります</div>
+    </div>
+
+    <div class="partcard" id="excard" style="min-height:110px">
+      <div class="pname"><span class="dot" style="background:#f0b285"></span><span id="excard-name"></span></div>
+      <p id="excard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>エンジンの流量は「首の太さ」が決める</summary>
+      <div class="inner">
+        <div class="eq">ṁ = p<sub>c</sub> · A<sub>t</sub> / c*</div>
+        <p>チョークしたスロートを通れる流量は、燃焼室圧 p<sub>c</sub> とスロート断面積 A<sub>t</sub> でほぼ決まります（c* は「燃焼の上手さ」を表す特性排気速度で、推進剤の組み合わせでだいたい決まる定数）。つまり<b>燃焼室圧と推進剤を決めたうえでは、エンジンの体格は首の太さ A<sub>t</sub> が決め、運転中の推力調整は p<sub>c</sub>——ポンプの送り込み——で行う</b>。第2話の ṁ、第4話のサイクル、第5話のポンプが、この一本の式で燃焼室につながります。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>3,000℃で溶けない、ふたつの知恵</summary>
+      <div class="inner">
+        <p>ひとつめは<b>再生冷却</b>。壁の中に細い溝を何百本も彫り、極低温の燃料を流してから燃やす。壁は守られ、燃料は予熱され、拾った熱はエキスパンダーサイクル（第4話）ならタービンの動力にもなる——捨てるものがない見事な循環です。ふたつめは<b>フィルム冷却</b>。壁ぎわにだけ燃料を多めに吹いて、温度の低いガスの膜で壁を包みます。いちばん過酷なのは熱の集中するスロートで、熱流束は太陽の表面から出る放射に匹敵するレベル。それを数ミリ向こうの冷たい溝がしのぎ続けます。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <div class="eq">dA / A = ( M² − 1 ) · du / u</div>
+        <p>「しぼって、ひろげて」の正体はこの面積—マッハ数関係です。M&lt;1では面積を絞ると加速、M&gt;1では広げると加速——符号がM=1で反転するので、加速し続けるには<b>音速点に面積の最小（スロート）を置くしかない</b>。ノズルの砂時計形は圧縮性流れの数学がそのまま金属になった形です。過膨張の剥離は実務でも急所で、非対称に剥がれると横向きの荷重（サイドロード）が立ち、起動・停止の過渡で機体を蹴ります。ベルの輪郭を特性曲線法で設計するのは、短い長さで軸方向の運動量を最大化するため——地上で使うノズルでは、その上で剥離余裕を別途確認します。第2話の圧力項 (p<sub>e</sub>−p<sub>0</sub>)A<sub>e</sub> の設計現場がここです。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>07 バネと火薬の、わかれの作法</b>: 第1話の「すてる」を機構で支える人たち。分離ボルト、クランプバンド、そして無重力でタンクの液を沈める小さな知恵。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.3・8<br>
+      ・NASA Glenn Research Center, "Nozzle Design" ほかノズル解説（パブリックドメイン）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="05.html">← 05 心臓部、毎分4万回転</a>
+  <a href="07.html">つぎ: 07 わかれの作法 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-inj": { name:"噴射器（インジェクタ）", color:"#e8b98a",
+    t:"燃焼室の天井にある、精密なシャワーヘッドです。燃料と酸化剤を何百もの小さな穴から吹き出し、素早く混ぜて燃やします。混ざりが悪ければ性能が落ち、混ざり方にムラがあると燃焼が暴れる（第8話の燃焼振動の入口）。エンジンの「味」はここで決まると言われる急所です。" },
+  "p-wall": { name:"壁と冷却溝", color:"var(--sand)",
+    t:"壁の中には細い溝が何百本も彫られ、極低温の燃料が流れています（再生冷却）。内側は3,000℃、溝の中は氷点下——数ミリの金属がその間に立ちます。燃料は壁を守りながら予熱され、エキスパンダーサイクルならその熱がタービンを回す動力になる。第4話の「沸かして回す」の熱源はこの壁です。" },
+  "p-throat": { name:"スロート", color:"var(--blue)",
+    t:"いちばん細い首。ここで流れはちょうど音速に達し（チョーク）、それより上流の様子だけで流量が決まるようになります。熱もいちばん集中する、エンジン全体で最も過酷な数センチ。燃焼室圧を決めたうえでは、エンジンの流量――つまり体格――はこの首の断面積で決まります。" },
+  "p-bell": { name:"ベル（スカート）", color:"#eef1f4",
+    t:"音速を超えたガスを、広げることでさらに加速する拡大部です。第1話で見た「上段ほど大きなラッパ」の理由はここ——まわりの気圧が低いほど、大きく広げるほど得になります。輪郭は膨張波の反射を計算して最適化された曲線で、ただの円錐ではありません。" }
+};
+let cur = "p-inj";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const EXP = {
+  "ex-over": { name:"過膨張 — 地上で広げすぎると", scene:"pl-over",
+    t:"出口の圧力が外気圧より低くなりすぎると、外気に押し戻されて噴流は細くくびれます。さらにひどいとノズルの内側で流れが壁からはがれ（剥離）、非対称な力がノズルを揺さぶる——上段用の大きなノズルを海面で全力運転できない理由です。ちなみに噴流に見える縞模様（マッハダイヤモンド）は、出口圧と外気圧が合わないときに膨張と圧縮を繰り返す模様で、過膨張でも不足膨張でも現れます。" },
+  "ex-ok": { name:"適正膨張 — ちょうどのとき", scene:"pl-ok",
+    t:"出口圧と外気圧が釣り合うと、噴流はまっすぐな柱になり、圧力項の損得がゼロ——第2話の式でいちばん得な状態です。ただし外気圧は高度でどんどん下がるので、固定形状のノズルが「ちょうど」でいられるのは特定の高度だけ。設計とは、どの高度に合わせるかの選択です。" },
+  "ex-under": { name:"不足膨張 — 宇宙では広げ足りない", scene:"pl-under",
+    t:"真空では外気圧ゼロ。どんなノズルでも出口圧のほうが高く、ガスは出てから横に膨らみます。残った出口圧も圧力項として推力に効くのですが（第2話）、もっと大きなノズルなら出口までにその分を軸方向の速さへ変換できたはず——その取りこぼしが「広がり損」です。だから真空用ノズルはできる限り大きく広げたい——でも大きさは重さと収納の敵。この綱引きの妥協点が、あのラッパの直径です。" }
+};
+let curE = "ex-over";
+function renderE(){
+  const e = EXP[curE];
+  document.getElementById("excard-name").textContent = e.name;
+  document.getElementById("excard-text").textContent = e.t;
+  for (const id of Object.keys(EXP)) {
+    document.getElementById(id).classList.toggle("sel", id === curE);
+    document.getElementById(EXP[id].scene).style.display = (id === curE) ? "" : "none";
+  }
+}
+for (const id of Object.keys(EXP)) document.getElementById(id).addEventListener("click", () => { curE = id; renderE(); });
+renderE();
+
+try { localStorage.setItem("read:06", "1"); } catch(e) {}
+</script>
+</body>
+</html>

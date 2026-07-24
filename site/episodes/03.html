@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 03 — かたい燃料、ながれる燃料</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:120px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  table.vals{width:100%; border-collapse:collapse; font-size:.82rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 8px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.74rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc)}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:22px; padding-top:10px; border-top:1px solid var(--line); font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager .off{opacity:.45}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div class="story">
+    <div class="ep">だい3わ ── 燃料の章</div>
+    <h1 class="kyoka">かたい燃料、ながれる燃料</h1>
+
+    <p class="body">ロケットの燃料には、大きくふたつの流儀があります。酸化剤ごと固めた塊に直接火をつける<b>固体</b>と、タンクからポンプでくみ上げて燃やす<b>液体</b>。H3ロケットはこの両方を使う欲張りな構成で、真ん中の液体エンジン（LE-9）のわきに、固体ブースタ（SRB-3）を注文に合わせて2本・4本とたすき掛けにします（軽い衛星なら付けない形態も）。</p>
+
+    <p class="body">固体ロケットは、いわば<b>巨大で精密な花火</b>です。酸化剤（過塩素酸アンモニウム）とアルミ粉の燃料を、自身も燃料を兼ねるゴム系のつなぎ（HTPB）で練り固めた塊——<b>グレイン</b>——が筒に詰まっていて、点火すると内側の穴の表面がいっせいに燃え広がります。ポンプも配管もいらない。何年でも保管できて、火をつければ数秒とかからず全力。そのかわり、<b>一度つけた火は止められないし、加減もできません</b>。</p>
+
+    <div class="fig">
+      <svg width="340" height="330" viewBox="0 0 340 330">
+        <g id="p-case" class="hot">
+          <path class="shape stroke" style="fill:var(--sand)" d="M136 40 Q170 14 204 40 L204 250 L136 250 Z"/>
+        </g>
+        <g id="p-grain" class="hot">
+          <path class="shape stroke" style="fill:#e8b98a" d="M146 52 Q170 32 194 52 L194 244 L146 244 Z"/>
+          <path class="shape stroke" style="fill:var(--paper)" d="M170 60 L178 84 L170 108 L162 84 Z M170 108 L178 132 L170 156 L162 132 Z M170 156 L178 180 L170 204 L162 180 Z M170 204 L178 228 L170 244 L162 228 Z"/>
+        </g>
+        <g id="p-noz3" class="hot">
+          <path class="shape stroke" style="fill:var(--blue)" d="M152 250 Q168 258 166 272 Q160 296 144 310 L196 310 Q180 296 174 272 Q172 258 188 250 Z"/>
+        </g>
+        <line x1="212" y1="66" x2="226" y2="66" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="212" y1="150" x2="226" y2="150" stroke="#c47a4f" stroke-width="1.5"/>
+        <line x1="212" y1="282" x2="226" y2="282" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="230" y="70" font-size="13" fill="#77808a">ケース</text>
+        <text x="230" y="154" font-size="13" fill="#77808a">グレイン（燃料の塊）</text>
+        <text x="230" y="286" font-size="13" fill="#77808a">ノズル</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">いっぽう液体ロケットは<b>精密機械</b>です。タンク・ポンプ・配管・バルブを従えて、燃焼室に推進剤を送り込む。部品は多く、極低温の推進剤は打上げ直前まで注ぎ足しが要る。そのかわり、<b>設計しだいで火力の加減（スロットル）も再点火もできて、水素系なら比推力もぐっと高い</b>。第2話の表を思い出してください——固体の250〜280秒に対して、水素の液体は420〜450秒級でした。</p>
+
+    <p class="body">だから使い分けはこうなります。<b>離陸の力仕事は、安くて力持ちの固体に</b>（SRB-3は1本で約2,300kN——LE-9の約1.5倍——を約110秒間）。<b>その先の効率と繊細な制御は液体に</b>。第1話の「量の勝負と速さの勝負」が、燃料の選び方にもそのまま現れています。</p>
+
+    <p class="body">ところで固体は「加減できない」と言いましたが、じつは<b>設計の段階でなら、火力の脚本を書けます</b>。グレインの穴の形を変えると、燃える表面積の増え方が変わるからです。</p>
+
+    <div class="chips">
+      <span class="chip" id="g-end">端面燃焼</span>
+      <span class="chip" id="g-tube">内孔（円筒）</span>
+      <span class="chip" id="g-star">星形</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="190" viewBox="0 0 340 190">
+        <line x1="46" y1="150" x2="310" y2="150" class="stroke" style="stroke-width:1.6"/>
+        <line x1="46" y1="150" x2="46" y2="26" class="stroke" style="stroke-width:1.6"/>
+        <text x="298" y="170" font-size="11" fill="#77808a">時間</text>
+        <text x="18" y="34" font-size="11" fill="#77808a">推力</text>
+        <path id="c-end"  class="stroke" style="stroke:#c47a4f; stroke-width:3; display:none" d="M46 118 L120 116 L200 117 L286 116 L296 148"/>
+        <path id="c-tube" class="stroke" style="stroke:#c47a4f; stroke-width:3; display:none" d="M46 120 Q140 108 220 78 Q262 64 276 58 L288 148"/>
+        <path id="c-star" class="stroke" style="stroke:#c47a4f; stroke-width:3; display:none" d="M46 66 L110 62 L180 64 L246 60 L262 148"/>
+        <circle cx="60" cy="176" r="0" />
+        <g id="gm-end" style="display:none">
+          <rect x="70" y="162" width="40" height="20" rx="4" class="stroke" style="stroke-width:1.6; fill:#e8b98a"/>
+          <line x1="106" y1="164" x2="106" y2="180" stroke="#c47a4f" stroke-width="3"/>
+        </g>
+        <g id="gm-tube" style="display:none">
+          <rect x="70" y="162" width="40" height="20" rx="4" class="stroke" style="stroke-width:1.6; fill:#e8b98a"/>
+          <rect x="82" y="168" width="16" height="8" rx="4" class="stroke" style="stroke-width:1.6; fill:var(--paper)"/>
+        </g>
+        <g id="gm-star" style="display:none">
+          <rect x="70" y="162" width="40" height="20" rx="4" class="stroke" style="stroke-width:1.6; fill:#e8b98a"/>
+          <path class="stroke" style="stroke-width:1.6; fill:var(--paper)" d="M90 166 L94 170 L98 172 L94 174 L90 178 L86 174 L82 172 L86 170 Z"/>
+        </g>
+      </svg>
+      <div class="hint">▲ 穴の形をえらぶと、推力の脚本がかわります</div>
+    </div>
+
+    <div class="partcard" id="gcard" style="min-height:96px">
+      <div class="pname"><span class="dot" style="background:#e8b98a"></span><span id="gcard-name"></span></div>
+      <p id="gcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>なぜ固体は比推力で負けるのか</summary>
+      <div class="inner">
+        <p>第2話で、投げる速さは「温度が高いほど・分子が軽いほど」速くなると言いました。固体の排気には、アルミの燃えかす（酸化アルミニウム）や塩化水素など<b>重たい分子や粒</b>がたくさん混ざります。しかも固体粒子は膨張で加速しきれず、速度のロスにもなる。軽い水蒸気（分子量18）を投げる水素エンジンとは、ここで差がつきます。SRB-3の283.6秒とLE-9の422秒。この開きの主因が投げているものの「重さ」で、そこに燃焼温度の違いや、粒が加速しきれない二相流の損も上乗せされます。それでも固体が選ばれ続けるのは、<b>推力あたりの値段と手間で圧勝</b>だから。エンジンは適材適所です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>三番目の流儀たち — 貯蔵性液体とハイブリッド</summary>
+      <div class="inner">
+        <p>じつは液体にも「花火寄り」の一派があります。四酸化二窒素とヒドラジン系燃料の組み合わせは、<b>触れただけで勝手に着火</b>（ハイパーゴリック）し、常温で何年も貯蔵できる。点火器いらずで確実に着くので、人工衛星や宇宙船のエンジンの定番です（毒性が強いのが玉にきず）。もうひとつ、固体の燃料に液体の酸化剤を吹き込む<b>ハイブリッドロケット</b>という折衷案もあり、止められる固体として研究が続いています。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge">🌀</span>流体屋のためのノート</summary>
+      <div class="inner">
+        <p>固体の質量流量は ṁ = ρ·A<sub>b</sub>·r で決まります。ρ は推進薬密度、A<sub>b</sub> は燃焼面積、r は燃焼速度。そして r は室圧の関数 <b>r = a·p<sup>n</sup></b>（サン・ロベールの法則）。つまり固体モータは「ポンプが流量を決める」世界ではなく、<b>幾何（燃焼面積の推移）と圧力フィードバックが流量を決める世界</b>です。単純な準定常モデルでは、指数 n が1未満なら圧力擾乱は自己減衰（静的安定）、1を超えると暴走——ただしこれだけで音響的な燃焼不安定まで安心できるわけではありません。ここが内部弾道学の入口。第5話からは逆に、流量を機械で支配する世界（ターボポンプ）に入ります。</p>
+      </div>
+    </details>
+
+    <div class="next">つぎの話 → <b>04 ポンプを回す3つの知恵</b>: 液体エンジンの心臓部・ターボポンプを「何で回すか」。ガス発生器、二段燃焼、そしてH3のエキスパンダーブリード。設計思想の読み比べです。</div>
+
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.12–13<br>
+      ・JAXA SRB-3 諸元（最大推力 約2,300kN・比推力283.6秒以上・燃焼 約110秒・推進薬66.8t）<br>
+      ・NASA Glenn Research Center, 固体ロケット解説（パブリックドメイン）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="02.html">← 02 うしろに投げると</a>
+  <a href="04.html">つぎ: 04 ポンプを回す3つの知恵 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-case": { name:"ケース", color:"var(--sand)",
+    t:"モータ全体を包む圧力容器です。中は数MPa〜十数MPaの高圧になるので、鋼または軽い炭素繊維（CFRP）でつくり、内側には燃え残り時間ぶんの断熱材を貼ります。SRB-3のケースもCFRP製。タンクと燃焼室を兼ねている、と考えると液体との違いが見えてきます。" },
+  "p-grain": { name:"グレイン（燃料の塊）", color:"#e8b98a",
+    t:"酸化剤と燃料を練り固めた、いわば「燃える構造材」です。中心の穴の表面だけが燃え、外へ外へと燃え進みます。穴の形が燃える面積の推移＝推力の脚本を決めるので、設計の主役はこの断面形状。SRB-3は1本に約67トン詰まっています。" },
+  "p-noz3": { name:"ノズル", color:"var(--blue)",
+    t:"役割は液体と同じ「圧力を速さに変える装置」ですが、冷やす推進剤が流れていないので、熱に耐える炭素系材料を貼って耐えしのぎます。首を振って方向を制御するものもありますが、SRB-3は簡素化のため固定式——方向制御は液体のLE-9に任せる分業です。" }
+};
+let cur = "p-case";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const GRAINS = {
+  "g-end": { curve:"c-end", mark:"gm-end", name:"端面燃焼 — ろうそく型",
+    t:"塊の端面だけがろうそくのように燃え下がります。燃える面積がずっと一定なので推力も一定。ただし面積を大きくできないので推力は控えめで、燃焼時間は長い。じっくり長く押したい用途向けです。" },
+  "g-tube": { curve:"c-tube", mark:"gm-tube", name:"内孔（円筒） — だんだん強く",
+    t:"中心の丸い穴の表面が燃えます。燃え進むほど穴が広がって表面積が増えるので、推力は後半に向けてだんだん増える（プログレッシブ）。機体が軽くなる頃に力が増すのは、じつは都合が悪いことも。" },
+  "g-star": { curve:"c-star", mark:"gm-star", name:"星形 — 最初から全力、ほぼ一定",
+    t:"穴を星形に切ると、最初から表面積が大きく、燃え進んでもギザギザが埋まる分と広がる分が相殺してほぼ一定に。大推力を安定して出せるので、ブースタの定番です。断面の幾何だけで推力の脚本を書く——固体設計の腕の見せどころ。" }
+};
+let curG = "g-star";
+function renderG(){
+  const g = GRAINS[curG];
+  document.getElementById("gcard-name").textContent = g.name;
+  document.getElementById("gcard-text").textContent = g.t;
+  for (const id of Object.keys(GRAINS)) {
+    document.getElementById(id).classList.toggle("sel", id === curG);
+    document.getElementById(GRAINS[id].curve).style.display = (id === curG) ? "" : "none";
+    document.getElementById(GRAINS[id].mark).style.display = (id === curG) ? "" : "none";
+  }
+}
+for (const id of Object.keys(GRAINS)) document.getElementById(id).addEventListener("click", () => { curG = id; renderG(); });
+renderG();
+
+try { localStorage.setItem("read:03", "1"); } catch(e) {}
+</script>
+</body>
+</html>
