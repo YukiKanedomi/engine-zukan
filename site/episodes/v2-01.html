@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編01 — ひこうきは、空気をまげて とんでいく</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+  .pager .off{opacity:.45}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch01.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep01.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい1わ ── つばさの章</div>
+    <h1 class="kyoka">ひこうきは、空気をまげて とんでいく</h1>
+
+    <p class="body">第2巻は、空のエンジンとつばさの話です。まずはいちばん大きな不思議から——目方250トンの金属のかたまりが、なぜ空に浮かんでいられるのか。答えはたった一言、<b>つばさは、通りすぎる空気を下に曲げている</b>。曲げられた空気は下向きの勢いを受け取り、そのお返し（反作用）が機体を持ち上げます。じつは第1巻第2話「うしろに投げると、まえにすすむ」とまったく同じ物理で、<b>投げる向きが「うしろ」から「した」に変わっただけ</b>なのです。</p>
+
+    <p class="body">ところで、有名な説明を聞いたことがあるはずです——「翼の上面はふくらんでいて道のりが長い。<b>同じ時刻に後縁へ着くためには</b>上の空気が速く流れる必要がある。速いと圧力が下がるから浮く」。この説明、<b>太字の部分がまちがい</b>です。実験で流れに煙を入れて見ると、上面の空気は「同時」どころか<b>下面より先に</b>後縁へ着いてしまいます。実際の流れがどうなっているのか、絵で見ましょう。</p>
+
+    <div class="fig">
+      <svg width="340" height="300" viewBox="0 0 340 300">
+        <g id="p-up" class="hot">
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M14 128 C 70 106, 140 84, 205 98 C 252 110, 296 138, 326 158"/>
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M14 148 C 70 132, 132 108, 200 118 C 250 128, 300 152, 328 172"/>
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M326 158 L316 151 M326 158 L317 162 M328 172 L318 165 M328 172 L319 176"/>
+          <path style="fill:none; stroke:transparent; stroke-width:20" d="M14 138 C 70 118, 136 96, 202 108 C 251 119, 298 145, 327 165"/>
+        </g>
+        <g id="p-low" class="hot">
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M14 182 C 80 184, 150 190, 215 186 C 262 182, 300 196, 326 210"/>
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M14 202 C 80 206, 155 212, 225 206 C 270 200, 304 212, 328 222"/>
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M326 210 L316 204 M326 210 L317 214 M328 222 L318 216 M328 222 L319 226"/>
+          <path style="fill:none; stroke:transparent; stroke-width:20" d="M14 192 C 80 195, 152 201, 220 196 C 266 191, 302 204, 327 216"/>
+        </g>
+        <g id="p-body" class="hot">
+          <path class="shape stroke" style="fill:var(--sand)" d="M56 158 C 90 124, 160 114, 216 126 C 252 134, 276 148, 284 154 C 252 164, 160 169, 106 167 C 78 165, 62 161, 56 158 Z"/>
+          <circle class="shape" cx="57.5" cy="159.5" r="3.5" fill="#c47a4f"/>
+        </g>
+        <g id="p-trail" class="hot">
+          <circle class="shape" cx="282" cy="154" r="5.5" fill="#e8b98a" stroke="var(--ink)" stroke-width="2"/>
+          <circle cx="282" cy="154" r="17" fill="transparent"/>
+        </g>
+        <g id="p-down" class="hot">
+          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:3" d="M290 172 C 304 182, 317 191, 328 199"/>
+          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:3; stroke-linecap:round" d="M328 199 L317 197 M328 199 L320 190"/>
+          <path style="fill:none; stroke:transparent; stroke-width:22" d="M290 172 C 304 182, 317 191, 328 199"/>
+        </g>
+        <line x1="150" y1="86" x2="150" y2="70" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="112" y="62" font-size="13" fill="#77808a">上面 はやい（低圧）</text>
+        <line x1="140" y1="208" x2="140" y2="240" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="86" y="258" font-size="13" fill="#77808a">下面 ゆっくり（高圧）</text>
+        <line x1="286" y1="146" x2="296" y2="136" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="290" y="128" font-size="13" fill="#77808a">後縁</text>
+        <line x1="300" y1="238" x2="312" y2="228" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="236" y="256" font-size="13" fill="#77808a">下にまがった流れ</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">まとめると、ふつうに飛んでいるとき、翼は<b>「下から押される」より「上から吸われる」乗り物</b>です。たいていの翼・たいていの飛び方では、上面の低圧の吸い上げのほうが下面の高圧の押し上げより大きく効きます。湿った日の離着陸で<b>翼の上面にだけ白い雲がふっと湧く</b>ことがあるのは、この低圧が空気を冷やしている証拠——ページの終わりの「ほんものの一枚」で実物をお見せします。</p>
+
+    <p class="body">では、もっと持ち上げたいときはどうするか。手は2つ——<b>速く飛ぶか、迎え角（流れに対する翼の傾き）を深くするか</b>です。切り替えて見てください。深くしすぎたときに何が起きるかも。</p>
+
+    <div class="chips">
+      <span class="chip" id="ao-low">あさい</span>
+      <span class="chip" id="ao-mid">ふかい</span>
+      <span class="chip" id="ao-high">ふかすぎ</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="220" viewBox="0 0 340 220">
+        <g id="sc-low" style="display:none">
+          <path class="stroke" style="stroke:var(--blue); stroke-width:2.2" d="M16 74 C 100 66, 220 70, 324 84"/>
+          <path class="stroke" style="stroke:#c8b590; stroke-width:2.2" d="M16 140 C 100 140, 220 142, 324 150"/>
+          <path class="stroke" style="fill:var(--sand)" d="M78 112 C 108 94, 168 88, 224 98 C 250 103, 264 108, 268 111 C 242 120, 160 124, 116 122 C 96 120, 82 116, 78 112 Z"/>
+          <text x="240" y="188" font-size="12" fill="#77808a">まげは ひかえめ</text>
+        </g>
+        <g id="sc-mid" style="display:none">
+          <path class="stroke" style="stroke:var(--blue); stroke-width:2.2" d="M16 60 C 90 50, 150 44, 208 62 C 252 76, 292 108, 320 140"/>
+          <path class="stroke" style="stroke:#c8b590; stroke-width:2.2" d="M16 128 C 70 124, 120 124, 170 132 C 224 142, 280 162, 318 182"/>
+          <path class="stroke" style="fill:var(--sand)" d="M78 88 C 108 70, 148 66, 192 82 C 228 96, 256 116, 268 130 C 238 134, 180 124, 140 110 C 110 100, 86 92, 78 88 Z"/>
+          <text x="234" y="206" font-size="12" fill="#77808a">ぐっと まげる</text>
+        </g>
+        <g id="sc-high" style="display:none">
+          <path class="stroke" style="fill:var(--sand)" d="M84 76 C 112 58, 150 56, 190 74 C 226 90, 254 116, 268 136 C 238 138, 184 126, 144 108 C 114 96, 92 82, 84 76 Z"/>
+          <path class="stroke" style="stroke:var(--blue); stroke-width:2.2; fill:none" d="M16 52 C 60 46, 100 44, 134 50 C 200 60, 270 72, 328 80"/>
+          <path class="stroke" style="stroke:var(--blue); stroke-width:1.8; stroke-dasharray:4 4; fill:none" d="M204 72 q15 -11 23 -1 q7 11 -7 16 q-13 4 -16 -7"/>
+          <path class="stroke" style="stroke:var(--blue); stroke-width:1.8; stroke-dasharray:4 4; fill:none" d="M252 96 q15 -11 23 0 q6 12 -8 16 q-13 3 -15 -8"/>
+          <path class="stroke" style="stroke:#c8b590; stroke-width:2.2; fill:none" d="M16 124 C 70 120, 118 122, 166 132 C 220 144, 276 166, 316 188"/>
+          <text x="216" y="208" font-size="12" fill="#77808a">はがれた（失速）</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 迎え角で「曲げの強さ」がかわります</div>
+    </div>
+
+    <div class="partcard" id="aocard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="aocard-name"></span></div>
+      <p id="aocard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>揚力を、1本の式で</summary>
+      <div class="inner">
+        <div class="eq">L = ½ ρ v² S C<sub>L</sub></div>
+        <p>密度ρ、速さv、翼面積S、そして翼のがんばり度C<sub>L</sub>。速さが<b>2乗</b>で効くのは、速く飛ぶほど「単位時間に出会う空気の量」も「その空気に与える下向きの速度変化」も速さに比例して増える——量×変化の掛け算だからです。数字にすると、787-9は最大離陸重量約254トン（従来公称値）・翼面積377m²。<b>翼1m²あたり約670kg</b>、畳1枚ほどの面積で軽自動車1台ぶんを支える勘定です。離陸の速さはジェット旅客機でおおむね時速240〜285km（機体・重さ・フラップ設定で変わります）——滑走路の上でこの式の左辺が機体の重さを追い越した瞬間が、浮揚です。ちなみに巡航中のC<sub>L</sub>はざっくり0.4〜0.6——速さがほとんどの仕事をしてくれるので、翼の傾けはわずかで足ります。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>「同時に着く」は、どこでまちがえたか</summary>
+      <div class="inner">
+        <p>等時間通過説がもっともらしく聞こえるのは、前縁で別れた空気が後縁で「再会する」絵を描いてしまうから。でも<b>再会する義理はどこにもありません</b>。煙で可視化すると上面の空気は先に着きます（Babinsky 2003、NASA Glennの解説）。では上面が速くなる本当の理由は——翼が流れに角度をもって置かれたとき、<b>後縁から流れが滑らかに離れられる流れ方はひとつしかない</b>（クッタ条件）。その条件を満たすように翼のまわりに「回る成分」（循環）がひとつ選ばれ、結果として上面は速く、下面は遅くなります。「速いから低圧」（ベルヌーイ）も「下に曲げた反作用」（ニュートン）も、<b>同じ流れ場を別の帳簿で会計しているだけ</b>で、どちらも正しい答えを出します。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <div class="eq">L′ = ρ U<sub>∞</sub> Γ</div>
+        <p>2次元翼の揚力はクッタ・ジューコフスキーの定理に集約され、循環Γは<b>クッタ条件が選びます</b>（定常・付着流・高Reの極限での話。始動時には始動渦と対になって動的に決まり、失速後の流れでは条件自体が意味を失います）。非粘性のポテンシャル流では任意のΓで解が作れてしまうのに、「後縁で速度が有限」という一点が粘性の記憶として解を一意に決める——揚力理論のいちばん美しい場所です。世に言う「ベルヌーイ派vsニュートン派」論争は、検査体積の取り方が違う会計の差にすぎず、翼面の圧力積分でも遠方の運動量欠損でも同じLが出ます（丁寧な整理はMcLean）。実務の落とし穴もここにあって、CFDの後処理で近傍の圧力項と遠方の運動量項を混ぜて数えると、揚力を二重計上したり取りこぼしたりします。次話は3次元へ——翼が有限の長さになった瞬間、翼端に渦が立ち、「揚力の代金」としての誘導抗力が現れます。渦度の保存則が翼の後ろに書く請求書、の話です。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-01.jpg" alt="A340の機窓から見た翼。上面だけを薄い凝結雲の膜が覆っている" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜離陸直後のA340の機窓から。<b>翼の上面だけ</b>を、うすい雲の膜がぴったり覆っています。上面の低圧で湿った空気が断熱的に冷え、水蒸気が凝結したもの——翼の上面に強い低圧があるという今日の話が、そのまま目に見えるめずらしい一枚です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Cloud_over_A340_wing.JPG" style="color:inherit">Mgw89（CC BY-SA 3.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>02 つばさの かたち</b>: グライダーの翼はなぜあんなに細長いのか。翼端に立ちのぼる渦と、揚力の「代金」としての抗力。翼の形は、その支払いの知恵です。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・J. D. Anderson, <i>Fundamentals of Aerodynamics</i>, 6th ed., ch.1・3・4<br>
+      ・NASA Glenn Research Center, "Incorrect Lift Theory"（等時間通過説の反証・パブリックドメイン）<br>
+      ・H. Babinsky, "How do wings work?", <i>Physics Education</i> 38(5), 2003<br>
+      ・787-9の数値（MTOW 254t・翼面積377m²）: Boeing公表値／Wikipedia "Boeing 787 Dreamliner"
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="../index.html">← もくじ</a>
+  <span class="off">つぎ: 02 つばさの かたち（じゅんびちゅう）</span>
+</div>
+
+<script>
+const PARTS = {
+  "p-body": { name:"翼のかたち（翼型）", color:"var(--sand)",
+    t:"上がふくらんだ、しずくを寝かせたような断面です。前縁のすぐ下に、流れがいったん止まって上下に分かれる「よどみ点」（オレンジの点）があります。ただし——ふくらみは揚力の必須条件ではありません。紙飛行機のまっ平らな翼も、傾けてさえいれば立派に空気を曲げて浮かびます。ふくらみは「効率よく・剥がれにくく」曲げるための洗練です。" },
+  "p-up": { name:"上面のながれ — はやい（低圧）", color:"var(--blue)",
+    t:"翼の上に持ち上げられた流れは加速し、圧力が下がります。翼はこの低圧に「上から吸われて」いて、たいていの場合、揚力の稼ぎ頭は下面ではなくこちら。湿った日にここだけ雲が湧くのは、低圧で空気が冷えるから（ページ末尾の写真）。なぜ速くなるのかの正直な答えは、2つめの「よりみち」で。" },
+  "p-low": { name:"下面のながれ — ゆっくり（高圧）", color:"#c8b590",
+    t:"下面の流れはやや減速し、圧力が上がって翼を押し上げます。「下から押される」——直感に合うのはこちらですが、寄与は上面の吸い上げより小さめ。押しと吸いの合計が翼全体の揚力です。なお図は典型的な正揚力状態の描き方で、翼型と迎え角によっては下面にも局所的な加速・負圧域ができます。" },
+  "p-trail": { name:"後縁 — 流れの出口", color:"#e8b98a",
+    t:"鋭くとがった後縁は、ただの飾りではありません。「流れはここから滑らかに離れるしかない」という束縛（クッタ条件）が、翼のまわりの流れ方をただ一つに選びます。上面が速くなるのも、この束縛の結果。翼のいちばん静かな場所が、じつは流れ全体の運命を決めています。" },
+  "p-down": { name:"下にまがった流れ", color:"#e08a4e",
+    t:"翼を通り抜けた空気は、下向きの勢いを受け取ってゆるやかに沈みながら去っていきます。毎秒何トンもの空気に下向きの速度変化を与え続ける——F≒ṁ·Δv のお返しが揚力です。第1巻第2話と同じ勘定で、投げる向きが下なだけ（きちんとやるなら遠方の検査面で運動量流束と圧力を合わせて積分します）。ベルヌーイの圧力の話と、このニュートンの話は、同じ現象の表と裏です。" }
+};
+let cur = "p-body";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const AO = {
+  "ao-low": { name:"あさい迎え角 — 巡航のかまえ", scene:"sc-low",
+    t:"速く飛んでいるときは、少し曲げるだけで体重ぶんの揚力が足ります。巡航中の旅客機の揚力係数はざっくり0.4〜0.6——vの2乗が効いてくれるおかげで、翼の傾けはわずかで済みます。" },
+  "ao-mid": { name:"ふかい迎え角 — 離着陸のがんばり", scene:"sc-mid",
+    t:"遅いときはv²が小さいぶん、迎え角を深くし、さらにフラップ（翼の後ろを折り曲げる高揚力装置）でC_Lを稼ぎます。時速240〜285kmで滑走路を蹴る離陸の瞬間が、翼のいちばんの働きどころ。窓側の席なら、翼が形を変えていくのが見えます。" },
+  "ao-high": { name:"ふかすぎ — 失速", scene:"sc-high",
+    t:"曲げるのにも限界があります。深くしすぎると、上面の圧力回復（逆圧力勾配）に境界層が耐えられなくなって流れが剥がれ、揚力は頭打ちから減少へ——失速です。第1巻第6話のノズルと同じ「剥離」ですが、翼では高度を失うのが問題。だから旅客機は失速に近づくと警報や保護機能が働きます（操縦桿を震わせて知らせる機種も）。機首を下げて速度を取り戻せば、翼はまた働き始めます。" }
+};
+let curA = "ao-mid";
+function renderA(){
+  const a = AO[curA];
+  document.getElementById("aocard-name").textContent = a.name;
+  document.getElementById("aocard-text").textContent = a.t;
+  for (const id of Object.keys(AO)) {
+    document.getElementById(id).classList.toggle("sel", id === curA);
+    document.getElementById(AO[id].scene).style.display = (id === curA) ? "" : "none";
+  }
+}
+for (const id of Object.keys(AO)) document.getElementById(id).addEventListener("click", () => { curA = id; renderA(); });
+renderA();
+
+try { localStorage.setItem("read:v2-01", "1"); } catch(e) {}
+</script>
+</body>
+</html>

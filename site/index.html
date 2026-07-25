@@ -71,6 +71,9 @@ const SHELF = [
     { no:"08", title:"爆音とふるえを、てなずける",         href:"episodes/08.html", ico:"ep08" },
     { no:"09", title:"じっさいの機体で、答え合わせ",       href:"episodes/09.html", ico:"ep09" },
   ]},
+  { vol:"第2巻 飛行機編", episodes:[
+    { no:"01", title:"ひこうきは、空気をまげて とんでいく", href:"episodes/v2-01.html", ico:"v2ep01", key:"v2-01" },
+  ]},
   { vol:"えほんの たな（EX）", episodes:[
     { no:"EX1", title:"ロケットは どうして とべるの？", href:"ex/ehon-01/index.html", ico:"book" },
     { no:"EX2", title:"エンジンの なかは どうなってるの？", href:"ex/ehon-02/index.html", ico:"book" },
@@ -96,7 +99,7 @@ for (const vol of SHELF) {
     const li = document.createElement("li");
     const isUp = !!ep.href;
     let read = false;
-    try { read = isUp && localStorage.getItem("read:" + ep.no); } catch(e) {}
+    try { read = isUp && localStorage.getItem("read:" + (ep.key || ep.no)); } catch(e) {}
     if (!isUp) li.className = "soon";
     const inner = isUp ? document.createElement("a") : document.createElement("span");
     inner.className = "row";
