@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編02 — つばさの かたち</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch02.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep02.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい2わ ── 渦の章</div>
+    <h1 class="kyoka">つばさの かたち</h1>
+
+    <p class="body">前話の終わりに、翼を通った空気は下向きの勢いをもらって去っていきました。でも、実物の翼には<b>「端」</b>があります。下面の高圧の空気は、端まで来ると我慢できずに<b>上面の低圧側へ回り込む</b>。この回り込みが後ろへ流されながら巻き上がって、翼の両端から<b>翼端渦</b>という空気の竜巻が伸びるのです。</p>
+
+    <p class="body">この渦、ただの模様ではありません。<b>揚力の請求書</b>です。渦を回し続けるエネルギーは機体が払っています。しかも渦は翼のまわりの空気をよけいに押し下げるので、翼は「少し下向きの風の中」で働くことになり、揚力の向きがわずかに後ろへ傾く——これが<b>誘導抗力</b>。浮くことそのものに付いてくる税金です。</p>
+
+    <div class="fig">
+      <svg width="340" height="270" viewBox="0 0 340 270">
+        <g id="p-leak" class="hot">
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.6" d="M62 152 q-30 -2 -28 -32"/>
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.6; stroke-linecap:round" d="M34 120 L30 131 M34 120 L44 125"/>
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.6" d="M278 152 q30 -2 28 -32"/>
+          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.6; stroke-linecap:round" d="M306 120 L310 131 M306 120 L296 125"/>
+          <path style="fill:none; stroke:transparent; stroke-width:20" d="M62 152 q-30 -2 -28 -32 M278 152 q30 -2 28 -32"/>
+        </g>
+        <g id="p-vort" class="hot">
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.6" d="M46 100 q-24 -14 -10 -34 q22 -10 30 8 q6 16 -10 24 q-14 6 -18 -8"/>
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.6" d="M294 100 q24 -14 10 -34 q-22 -10 -30 8 q-6 16 10 24 q14 6 18 -8"/>
+          <path style="fill:none; stroke:transparent; stroke-width:26" d="M46 100 q-24 -14 -10 -34 M294 100 q24 -14 10 -34"/>
+        </g>
+        <g id="p-body2" class="hot">
+          <rect class="shape stroke" style="fill:var(--sand)" x="44" y="118" width="252" height="14" rx="7"/>
+          <circle class="shape stroke" style="fill:#eef1f4" cx="170" cy="125" r="17"/>
+        </g>
+        <g id="p-down" class="hot">
+          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:2.8" d="M120 150 L120 186 M170 152 L170 192 M220 150 L220 186"/>
+          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:2.8; stroke-linecap:round" d="M120 186 L114 176 M120 186 L126 176 M170 192 L164 182 M170 192 L176 182 M220 186 L214 176 M220 186 L226 176"/>
+          <path style="fill:none; stroke:transparent; stroke-width:30" d="M120 150 L120 186 M170 152 L170 192 M220 150 L220 186"/>
+        </g>
+        <g id="p-upw" class="hot">
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4" d="M16 168 L16 136 M324 168 L324 136"/>
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M16 136 L11 145 M16 136 L21 145 M324 136 L319 145 M324 136 L329 145"/>
+          <path style="fill:none; stroke:transparent; stroke-width:22" d="M16 168 L16 136 M324 168 L324 136"/>
+        </g>
+        <line x1="288" y1="66" x2="298" y2="56" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="248" y="48" font-size="13" fill="#77808a">翼端渦</text>
+        <line x1="60" y1="146" x2="52" y2="166" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="26" y="184" font-size="13" fill="#77808a">回りこみ</text>
+        <line x1="170" y1="200" x2="170" y2="216" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="136" y="234" font-size="13" fill="#77808a">吹きおろし</text>
+        <line x1="318" y1="176" x2="308" y2="196" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="236" y="214" font-size="13" fill="#77808a">外側は上昇流</text>
+        <text x="118" y="30" font-size="12" fill="#9aa2ab">（機体を正面から見た図）</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">では、この税金を安くするには？ 式は「よりみち」に譲って結論だけ——同じ揚力・同じ翼面積なら、<b>スパンを伸ばして細長くする（アスペクト比を上げる）ほど誘導抗力は減ります</b>。翼の細長さは、その機体が渦の税金とどう付き合うことにしたかの表明です。切り替えてみてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="ar-glider">グライダー</span>
+      <span class="chip" id="ar-airliner">旅客機</span>
+      <span class="chip" id="ar-fighter">こまわり機</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="170" viewBox="0 0 340 170">
+        <g id="pl-glider" style="display:none">
+          <rect class="stroke" style="fill:var(--sand)" x="14" y="66" width="312" height="7" rx="3.5"/>
+          <ellipse class="stroke" style="fill:#eef1f4" cx="170" cy="70" rx="9" ry="16"/>
+          <text x="96" y="118" font-size="12" fill="#77808a">アスペクト比 約51（eta）</text>
+          <text x="104" y="140" font-size="12" fill="#c47a4f">渦の税金: ごくわずか</text>
+        </g>
+        <g id="pl-airliner" style="display:none">
+          <rect class="stroke" style="fill:var(--sand)" x="66" y="60" width="208" height="21" rx="8"/>
+          <ellipse class="stroke" style="fill:#eef1f4" cx="170" cy="70" rx="13" ry="26"/>
+          <text x="102" y="118" font-size="12" fill="#77808a">アスペクト比 約9.6（787）</text>
+          <text x="118" y="140" font-size="12" fill="#c47a4f">渦の税金: ほどほど</text>
+        </g>
+        <g id="pl-fighter" style="display:none">
+          <path class="stroke" style="fill:var(--sand)" d="M118 52 L222 52 L252 88 L88 88 Z"/>
+          <ellipse class="stroke" style="fill:#eef1f4" cx="170" cy="68" rx="11" ry="30"/>
+          <text x="110" y="118" font-size="12" fill="#77808a">アスペクト比 3前後</text>
+          <text x="76" y="140" font-size="12" fill="#c47a4f">渦の税金: 重いが、速さでねじふせる</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 細長さは「渦の税金」への答えです</div>
+    </div>
+
+    <div class="partcard" id="arcard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="arcard-name"></span></div>
+      <p id="arcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>税金の式と、ウィングレット</summary>
+      <div class="inner">
+        <div class="eq">C<sub>Di</sub> = C<sub>L</sub>² / (π e AR)</div>
+        <p>誘導抗力係数は<b>揚力係数の2乗に比例し、アスペクト比ARに反比例</b>します。C<sub>L</sub>²が効くので、ゆっくり飛ぶ（＝C<sub>L</sub>が大きい）ほど税金は急に重くなる——重くて遅いとき、つまり離着陸のころほど渦は強く、<b>空港で大型機の後ろの着陸間隔をわざわざ空ける</b>（後方乱気流管制）のはこのためです。そして翼端の小さな折り返し——ウィングレット。ただの衝立ではなく、翼端に立てた小さな揚力面で、渦の巻き込み流から前向きの力の成分を回収しつつ、荷重分布を端へ延ばして実効スパンを稼ぐ装置です。稼ぎは巡航燃費の数%ですが、その数%のために世界中の翼の端が折れ曲がりました。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>渦に乗る鳥、渦をよける飛行機</summary>
+      <div class="inner">
+        <p>図の「外側は上昇流」を思い出してください。翼端渦の外側では空気が持ち上がります。<b>渡り鳥のV字編隊は、前の鳥の翼端が作るこの上昇流に翼を載せて飛ぶ省エネ術</b>——鳥たちは揚力線理論を体で知っています。いっぽう人間の飛行機にとって、先行機の残した渦は数分間も空に残る見えない乱気流。だから管制は機体の重さで後続の間隔を変えます。ページ末尾の写真は、まさにこの後方乱気流を研究するためにNASAが煙で渦を可視化した1枚です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>枠組みは揚力線理論です。翼をスパン方向の循環分布Γ(y)で置き換えると、<b>循環のスパン方向変化ぶんが後流渦シートとして放出される</b>——ヘルムホルツの渦定理の帰結で、翼端渦はこのシートが巻き上がった姿です。「発生してしまう」ものではなく、循環の保存が翼の後ろに書く必然です。楕円循環分布のとき吹きおろしはスパン一様になり誘導抗力最小（スパン効率e=1）、その会計が C<sub>Di</sub>=C<sub>L</sub>²/(πeAR)。実務では、3次元CFDの抗力予測は遠方境界の扱いとスパン方向解像度に敏感で、圧力積分と後流面の運動量欠損積分の突き合わせ（第1巻からの「会計」問題の続き）が精度の見張り番になります。次話は翼を機体に取り付けます——釣り合いとモーメントの世界へ。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-02.jpg" alt="農薬散布機の翼端渦が赤い煙で可視化されたNASAの実験写真" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜着陸帯に張った煙のカーテンを農薬散布機が横切った瞬間（NASAラングレー研究所の後方乱気流研究）。翼端渦が煙を巻き上げ、揚力の請求書が巨大な螺旋になって空に現れました。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Airplane_vortex_edit.jpg" style="color:inherit">NASA Langley（パブリックドメイン）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>03 きたいは、そらの やじろべえ</b>: 浮けるだけでは、まっすぐ飛べません。しっぽの羽根の見えない仕事と、「なぜどの旅客機も1万m・マッハ0.8で飛ぶのか」の経済学。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・J. D. Anderson, <i>Fundamentals of Aerodynamics</i>, 6th ed., ch.5（有限翼・揚力線理論）<br>
+      ・NASA Langley, Wake Vortex Study（写真・パブリックドメイン）<br>
+      ・アスペクト比の数値: Wikipedia "eta (glider)"（AR 51.33）・"Boeing 787 Dreamliner"（約9.6）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v2-01.html">← 01 空気をまげて とんでいく</a>
+  <a href="v2-03.html">つぎ: 03 そらの やじろべえ →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-body2": { name:"つばさ（正面から）", color:"var(--sand)",
+    t:"機体を正面から見た図です。まんなかが胴体、左右へ翼が伸びる。翼の上下には前話の圧力差（上が低く・下が高い）がかかっています。この図の主役は翼そのものではなく、翼の「端」で起きること——タップで見てまわってください。" },
+  "p-leak": { name:"回りこみ — 渦のたね", color:"#c8b590",
+    t:"下面の高圧の空気が、翼端で上面の低圧側へ漏れ出す流れです。翼が有限の長さであることの宿命で、飛んでいる限り止められません。厳密には渦は翼端だけでなく翼全体から薄いシートとして流され、後ろで端の側へ巻き上がって集中します——回りこみは、そのいちばん目立つ現れです。" },
+  "p-vort": { name:"翼端渦 — 揚力の請求書", color:"var(--blue)",
+    t:"回りこみが巻き上がってできる、翼端から後ろへ伸びる空気の竜巻です。渦を回すエネルギーは機体の燃料が払っています。大型機の渦は数分間も空に残り、後続機を振り回すほど強い——空港の着陸間隔を決めているのは、じつはこの渦です。" },
+  "p-down": { name:"吹きおろし — 傾く揚力", color:"#e08a4e",
+    t:"左右の渦は対になって、翼の内側の空気全体を下へ押し下げます。翼は自分が作った下降気流の中で働くことになり、感じる風がわずかに下を向く。すると揚力もわずかに後ろへ傾いて、その後ろ向き成分が誘導抗力——「浮くための税金」になります。" },
+  "p-upw": { name:"外側は上昇流", color:"var(--blue)",
+    t:"渦の外側では、逆に空気が持ち上がります。渡り鳥のV字編隊は、前の鳥の翼端が作るこの上昇流に翼を載せる省エネ飛行——第5話で主役になる鳥たちは、じつは空力の達人でもあります。" }
+};
+let cur = "p-vort";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const AR = {
+  "ar-glider": { name:"グライダー — 税金を極限まで削る", scene:"pl-glider",
+    t:"エンジンを持たず、上昇気流の貯金だけで何百kmも飛ぶには、渦の税金を削るしかありません。高性能グライダーetaはスパン30.9m・アスペクト比51.33。翼というより「空を切る定規」です。人力飛行機やU-2偵察機など、非力・長時間の機体はみなこの方向に進化します。" },
+  "ar-airliner": { name:"旅客機 — 9.6で止める理由", scene:"pl-airliner",
+    t:"787のアスペクト比は約9.6。細長いほど得なのに、ここで止めるのは翼が構造物でもあるから——細長い翼は付け根の曲げモーメントが苦しく、重くなります。空港の駐機幅、翼内の燃料タンク容量も制約。翼端を折りたたんで空港制限をかわす新型機も現れました。翼の細長さは空力と構造の停戦ラインです。" },
+  "ar-fighter": { name:"こまわり機 — 速さでねじふせる", scene:"pl-fighter",
+    t:"速く飛ぶ機体は動圧が揚力を稼ぐのでC_Lが小さくて済み、渦の税金はもともと軽い——ただしそれは直線飛行の話で、急旋回中は荷重倍数のぶん税金も跳ね上がります。それでも短い翼を選ぶのは、超音速の造波抗力・頑丈さ・ロールの速さとの総合取引。同じ式を見て、グライダーと正反対の答えを出した機体です。" }
+};
+let curA = "ar-airliner";
+function renderA(){
+  const a = AR[curA];
+  document.getElementById("arcard-name").textContent = a.name;
+  document.getElementById("arcard-text").textContent = a.t;
+  for (const id of Object.keys(AR)) {
+    document.getElementById(id).classList.toggle("sel", id === curA);
+    document.getElementById(AR[id].scene).style.display = (id === curA) ? "" : "none";
+  }
+}
+for (const id of Object.keys(AR)) document.getElementById(id).addEventListener("click", () => { curA = id; renderA(); });
+renderA();
+
+try { localStorage.setItem("read:v2-02", "1"); } catch(e) {}
+</script>
+</body>
+</html>

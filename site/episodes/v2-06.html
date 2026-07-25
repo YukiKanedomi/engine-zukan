@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編06 — 風に さからう、はねの行列</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch06.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep06.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい6わ ── 圧縮機の章</div>
+    <h1 class="kyoka">風に さからう、はねの行列</h1>
+
+    <p class="body">コアの入口へ潜ります。燃やす前に、空気は<b>ぎゅっと縮めておく</b>必要があります（圧力比が高いほど熱機関は効率が良い——第1巻第4話のサイクルの話と同じ理屈）。現代のエンジンは吸った空気を<b>40倍以上</b>に押し縮めますが、じつはこれ、タービンよりはるかに難しい仕事です。なぜなら圧縮とは、<b>空気にとっての「のぼり坂」（逆圧力勾配）を、流れに登らせ続けること</b>だから。第1話で翼を失速させたあの敵が、ここでは何百枚の翼に常時張り付いています。</p>
+
+    <p class="body">その解決が「はねの行列」。<b>回る翼の列（動翼）と止まった翼の列（静翼）を交互に並べ</b>、1段あたりおよそ1.2〜1.4倍（段と設計によります）というささやかな坂を、10数段かけて登り切ります。欲張らないことが、この機械の知恵です。</p>
+
+    <div class="fig">
+      <svg width="340" height="250" viewBox="0 0 340 250">
+        <g id="p-path" class="hot">
+          <path class="shape stroke" style="fill:none" d="M36 62 L304 92 M36 190 L304 160"/>
+          <path class="shape stroke" style="fill:#eef1f4" d="M36 116 L304 118 L304 134 L36 136 Z"/>
+        </g>
+        <g id="p-rotor" class="hot">
+          <g class="shape">
+            <rect class="stroke" style="fill:var(--sand)" x="58" y="70" width="9" height="44" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="58" y="138" width="9" height="44" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="118" y="78" width="9" height="36" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="118" y="138" width="9" height="36" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="178" y="85" width="9" height="30" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="178" y="138" width="9" height="30" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="238" y="92" width="9" height="24" rx="3"/>
+            <rect class="stroke" style="fill:var(--sand)" x="238" y="138" width="9" height="24" rx="3"/>
+          </g>
+        </g>
+        <g id="p-stator" class="hot">
+          <g class="shape">
+            <rect class="stroke" style="fill:var(--blue)" x="88" y="74" width="9" height="40" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="88" y="138" width="9" height="40" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="148" y="82" width="9" height="32" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="148" y="138" width="9" height="32" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="208" y="88" width="9" height="27" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="208" y="138" width="9" height="27" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="268" y="95" width="9" height="21" rx="3"/>
+            <rect class="stroke" style="fill:var(--blue)" x="268" y="138" width="9" height="21" rx="3"/>
+          </g>
+        </g>
+        <g id="p-bleed" class="hot">
+          <rect class="shape stroke" style="fill:#e8b98a" x="192" y="52" width="26" height="14" rx="4"/>
+          <path class="shape" style="fill:none; stroke:#e8b98a; stroke-width:2.6" d="M205 50 L205 30"/>
+          <path class="shape" style="fill:none; stroke:#e8b98a; stroke-width:2.6; stroke-linecap:round" d="M205 30 L199 39 M205 30 L211 39"/>
+        </g>
+        <path style="fill:none; stroke:#77808a; stroke-width:2.6" d="M8 126 L30 126 M30 126 L22 121 M30 126 L22 131"/>
+        <path style="fill:none; stroke:#77808a; stroke-width:2.6" d="M310 126 L330 126 M330 126 L322 121 M330 126 L322 131"/>
+        <line x1="62" y1="196" x2="62" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="34" y="230" font-size="13" fill="#77808a">動翼（回る）</text>
+        <line x1="152" y1="196" x2="152" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="126" y="230" font-size="13" fill="#77808a">静翼（止まる）</text>
+        <line x1="262" y1="196" x2="276" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="238" y="230" font-size="13" fill="#77808a">すぼむ通路</text>
+        <line x1="218" y1="56" x2="238" y2="44" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="242" y="38" font-size="13" fill="#77808a">抽気弁</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">この繊細な行列は、流量が減ると機嫌を損ねます。局所の失速がぐるぐる回る<b>旋回失速</b>と、系全体が脈打つ<b>サージ</b>——性格の違うふたつの不安定が、圧縮機の二大トラブルです。</p>
+
+    <div class="chips">
+      <span class="chip" id="cm-design">ごきげん（設計点）</span>
+      <span class="chip" id="cm-stall">旋回失速</span>
+      <span class="chip" id="cm-surge">サージ</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="180" viewBox="0 0 340 180">
+        <g id="sc-design" style="display:none">
+          <circle class="stroke" cx="170" cy="88" r="56" style="fill:#eef1f4"/>
+          <circle cx="170" cy="88" r="14" fill="var(--sand)" stroke="var(--ink)" stroke-width="2"/>
+          <g style="stroke:#9cc0d4; stroke-width:2.4; fill:none">
+            <path d="M170 40 L170 58"/><path d="M204 54 L192 66"/><path d="M218 88 L200 88"/><path d="M204 122 L192 110"/><path d="M170 136 L170 118"/><path d="M136 122 L148 110"/><path d="M122 88 L140 88"/><path d="M136 54 L148 66"/>
+          </g>
+          <text x="98" y="166" font-size="12" fill="#77808a">全員が気持ちよく働く回転数と流量</text>
+        </g>
+        <g id="cm-sc-stall" style="display:none">
+          <circle class="stroke" cx="170" cy="88" r="56" style="fill:#eef1f4"/>
+          <path d="M170 88 L170 32 A56 56 0 0 1 218 60 Z" fill="#c47a4f" opacity=".55"/>
+          <circle cx="170" cy="88" r="14" fill="var(--sand)" stroke="var(--ink)" stroke-width="2"/>
+          <path style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-dasharray:5 4" d="M216 46 A62 62 0 0 0 170 26"/>
+          <text x="58" y="166" font-size="12" fill="#77808a">失速した一角（セル）が、回転の半分ほどの速さで回る</text>
+        </g>
+        <g id="cm-sc-surge" style="display:none">
+          <circle class="stroke" cx="170" cy="88" r="56" style="fill:#eef1f4"/>
+          <circle cx="170" cy="88" r="14" fill="var(--sand)" stroke="var(--ink)" stroke-width="2"/>
+          <path style="fill:none; stroke:#e08a4e; stroke-width:6" d="M240 88 L120 88"/>
+          <path style="fill:none; stroke:#e08a4e; stroke-width:3; stroke-linecap:round" d="M120 88 L136 78 M120 88 L136 98"/>
+          <text x="84" y="166" font-size="12" fill="#77808a">ためた圧力が逆流 — 系全体が「ドン」と脈打つ</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 圧縮機を正面から見た「ご機嫌の3態」</div>
+    </div>
+
+    <div class="partcard" id="cmcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="cmcard-name"></span></div>
+      <p id="cmcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>なぜ1段で1.4倍しか縮められないのか</summary>
+      <div class="inner">
+        <p>タービンは1段で大仕事ができます。流れが加速する「くだり坂」だから、境界層はご機嫌のまま。ところが圧縮機の翼列は流れを減速させて圧力を回復する「のぼり坂」で、<b>減速のさせすぎ（拡散のしすぎ）は境界層の剥離＝失速に直結</b>します。だから1段の圧力比は亜音速段で1.2〜1.3ほどが相場（先端が遷音速の前段ではもっと欲張れます）で、40倍を稼ぐには10数段の行列になる。タービン屋と圧縮機屋の人数が違うのは、物理の非対称のせいです。第1巻第5話のロケットポンプと並べると面白い——<b>ポンプの宿敵はキャビテーション、圧縮機の宿敵は失速</b>。どちらも「吸い込み側」に急所がある機械です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>サージとのつきあい方</summary>
+      <div class="inner">
+        <p>サージは翼1枚の失速ではなく、<b>圧縮機と、その前後の容積・配管まで含めた系全体の不安定</b>です。押し込む力が需要に負けた瞬間、ためた高圧空気が逆流し、また押し込み、また逆流——爆音と炎を伴う脈動になります。守りは三段構え。①<b>可変静翼（VSV）</b>の角度スケジュールで下流の動翼への流入角を整える、②<b>抽気弁</b>で行き場のない空気を逃がす、③そして<b>軸を分ける</b>——前の段と後ろの段を別々の回転数で回す2軸化（RRはさらに3軸）。「みんなを同じ軸で回すと誰かが我慢する」問題への、GTFのギアとは別の答えがここにあります。第9話の対決の伏線です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>圧縮機の運転は<b>圧縮機マップ</b>（横軸: 修正流量、縦軸: 圧力比、回転数一定線の束）で語られます。作動線とサージラインの距離＝サージマージンが設計の通貨。旋回失速のセルは静止系でロータと同方向・回転の半分ほどの速さで伝播し（ロータ相対では後退）、旋回失速に落ちるかサージに落ちるかのモード選択はGreitzerのBパラメータ——プレナムの圧縮性とダクト慣性の相対——が左右し、サージ振動にはヘルムホルツ型の系力学が現れる。<b>翼列の局所空力と、ダクト音響・容積の系力学が結婚した現象</b>で、定常CFDが最も苦手とする領域です。設計空間は流量係数φ・負荷係数ψの無次元平面で歩くのが正道。あなたのロケットポンプの世界とは、比速度の言葉でつながっています——空気か液体か、縮むか縮まないか、そしてNPSHかサージマージンか。次話は行列の出口、火の部屋へ。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-06.jpg" alt="CFM56の高圧圧縮機ロータ。段ごとに小さくなる動翼の列" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜CFM56の高圧圧縮機ロータ。奥へ行くほど翼が小さくなるのは、空気が縮んで通路が細くなるから——図の「すぼむ通路」の実物です。この1枚1枚が、毎秒何十回転もの世界で第1話の翼として働いています。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:CFM56_High_Pressure_Compressor_Rotor.JPG" style="color:inherit">Nubifer（CC BY-SA 3.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>07 とける温度より、あつい部屋</b>: 縮めた空気に火を入れる燃焼器と、融点より熱いガスの中で回り続けるタービンの、ありえない両立。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・N. Cumpsty, <i>Jet Propulsion</i>／P. Hill &amp; C. Peterson, <i>Mechanics and Thermodynamics of Propulsion</i>（圧縮機・サージ）<br>
+      ・E. M. Greitzer, "Surge and Rotating Stall in Axial Flow Compressors" (1976)<br>
+      ・全体圧力比の例: Wikipedia "CFM International LEAP"（OPR 40）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v2-05.html">← 05 とりと ぶつかっても</a>
+  <a href="v2-07.html">つぎ: 07 とける温度より、あつい部屋 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-rotor": { name:"動翼 — 仕事を渡す係", color:"var(--sand)",
+    t:"回転する翼の列です。1枚1枚は第1話の翼そのもので、回ることで空気に運動エネルギーを渡し、押し込みます。1段で欲張れるのは1.3〜1.4倍まで——それ以上減速させると、翼の上の境界層がのぼり坂に負けて剥がれます（失速）。" },
+  "p-stator": { name:"静翼 — 圧力に変える係", color:"var(--blue)",
+    t:"動翼が付けた旋回の勢いを受け止めて、圧力に変換する止まった翼の列です。回る・止まるのリレーが1段。この静翼、低回転時には角度を変えられるものがあり（可変静翼）、行列全体の機嫌を取る調整弁になっています。" },
+  "p-path": { name:"すぼむ通路 — 縮んだ証拠", color:"#eef1f4",
+    t:"後ろへ行くほど通路が細くなるのは、空気が圧縮されて密度が上がるから。同じ質量流量なら断面積は小さくてよいのです。第1巻第6話のノズル（広げて加速）とちょうど逆向きの理屈が、ここでは「絞って圧縮の帳尻を合わせる」形で現れます。" },
+  "p-bleed": { name:"抽気弁 — 逃がして守る", color:"#e8b98a",
+    t:"始動時や急減速時、前段と後段の相性が崩れて空気が行き場を失うと、失速やサージの入口になります。そこで途中から空気を抜いて捨てる（抽気）。もったいないようで、これが行列を守る保険です。抜いた空気は機内の空調や防氷にも使われます。" }
+};
+let cur = "p-rotor";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const CM = {
+  "cm-design": { name:"設計点 — 行列の晴れの日", scene:"sc-design",
+    t:"全部の段がちょうどよい迎え角で働く、効率最高の運転点です。圧縮機はこの点の近くで暮らすように設計されますが、離陸・巡航・降下で条件は動き続ける——「どこまで機嫌を保てるか」の余裕（サージマージン）が設計の通貨になります。" },
+  "cm-stall": { name:"旋回失速 — 失速のかたまりが回る", scene:"cm-sc-stall",
+    t:"一部の翼が失速すると、その「詰まり」が隣の翼の迎え角を狂わせ、失速の塊（セル）が伝わり始めます。外から見ればロータと同じ向きに、回転の半分ほどの速さで回り続ける（ロータに乗って見れば後ろへ逃げていく）。効率が落ち、翼に周期的な力が加わって振動の種にも——第8話のふるえの話につながる入口です。" },
+  "cm-surge": { name:"サージ — 系全体の脈動", scene:"cm-sc-surge",
+    t:"押し込む力が需要に負けると、圧縮機とその前後の系全体で圧力と流量が脈動し始めます。深いサージでは、ためこんだ高圧空気がドン！と逆流し、爆音とともに入口から炎が見えることも。制御は即座に抽気と燃料を操作して作動点を安全側へ戻します。翼1枚の話が系全体の不安定に化ける——詳しくは下の「よりみち」へ。" }
+};
+let curC = "cm-design";
+function renderC(){
+  const c = CM[curC];
+  document.getElementById("cmcard-name").textContent = c.name;
+  document.getElementById("cmcard-text").textContent = c.t;
+  for (const id of Object.keys(CM)) {
+    document.getElementById(id).classList.toggle("sel", id === curC);
+    document.getElementById(CM[id].scene).style.display = (id === curC) ? "" : "none";
+  }
+}
+for (const id of Object.keys(CM)) document.getElementById(id).addEventListener("click", () => { curC = id; renderC(); });
+renderC();
+
+try { localStorage.setItem("read:v2-06", "1"); } catch(e) {}
+</script>
+</body>
+</html>

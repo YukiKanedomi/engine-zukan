@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編09 — じっさいのエンジンで、答え合わせ</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:140px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.8rem; padding:4px 12px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  table.vals{width:100%; border-collapse:collapse; font-size:.8rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 6px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.72rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc); white-space:nowrap}
+  .fin{margin-top:30px; background:#fff; border:2px solid var(--ink); border-radius:12px; padding:16px 18px; font-size:.9rem; text-align:center}
+  .fin b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch09.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep09.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい9わ（さいしゅうわ）── 実機の章</div>
+    <h1 class="kyoka">じっさいのエンジンで、答え合わせ</h1>
+
+    <p class="body">最終話は、第1巻と同じく実物での答え合わせです。しかも今回は最高の教材がある——<b>「同じ機体に、2種類のエンジン」という自然実験</b>が2組も飛んでいるのです。ナローボディのA320neoは<b>LEAP-1A</b>（CFM＝GEとサフランの合弁）と<b>PW1100G</b>（P&WのGTF）を、ワイドボディの787は<b>GEnx</b>（GE）と<b>Trent 1000</b>（ロールス・ロイス）を選べる。同じ翼の下で、別の設計思想が毎日競争しています。まずは4基の「顔の大きさ」から。</p>
+
+    <div class="fig">
+      <svg width="340" height="200" viewBox="0 0 380 210">
+        <g id="e-leap" class="hot">
+          <circle class="shape stroke" style="fill:#eef1f4" cx="40" cy="96" r="34.7"/>
+          <circle class="shape" cx="40" cy="96" r="9" fill="var(--sand)" stroke="var(--ink)" stroke-width="1.8"/>
+        </g>
+        <g id="e-pw" class="hot">
+          <circle class="shape stroke" style="fill:#eef1f4" cx="119" cy="96" r="36"/>
+          <circle class="shape" cx="119" cy="96" r="9" fill="#e8b98a" stroke="var(--ink)" stroke-width="1.8"/>
+        </g>
+        <g id="e-genx" class="hot">
+          <circle class="shape stroke" style="fill:#eef1f4" cx="215" cy="96" r="49.4"/>
+          <circle class="shape" cx="215" cy="96" r="11" fill="var(--sand)" stroke="var(--ink)" stroke-width="1.8"/>
+        </g>
+        <g id="e-trent" class="hot">
+          <circle class="shape stroke" style="fill:#eef1f4" cx="324" cy="96" r="49.9" />
+          <circle class="shape" cx="324" cy="96" r="11" fill="var(--blue)" stroke="var(--ink)" stroke-width="1.8"/>
+        </g>
+        <text x="16" y="152" font-size="12" fill="#77808a">LEAP-1A</text>
+        <text x="92" y="152" font-size="12" fill="#77808a">PW1100G</text>
+        <text x="190" y="168" font-size="12" fill="#77808a">GEnx-1B</text>
+        <text x="294" y="168" font-size="12" fill="#77808a">Trent 1000</text>
+        <text x="104" y="24" font-size="12" fill="#9aa2ab">（ファン直径をおなじ縮尺で）</text>
+      </svg>
+      <div class="hint">▲ エンジンをタップすると、その設計思想にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#eef1f4"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <table class="vals">
+      <tr><th></th><th>LEAP-1A</th><th>PW1100G</th><th>GEnx-1B</th><th>Trent 1000</th></tr>
+      <tr><td>機体</td><td class="num">A320neo</td><td class="num">A320neo</td><td class="num">787</td><td class="num">787</td></tr>
+      <tr><td>ファン直径</td><td class="num">198 cm</td><td class="num">206 cm</td><td class="num">282 cm</td><td class="num">285 cm</td></tr>
+      <tr><td>バイパス比</td><td class="num">11</td><td class="num">12.5</td><td class="num">9.3</td><td class="num">10超</td></tr>
+      <tr><td>回転数の答え</td><td class="num">2軸・直結</td><td class="num">ギア 3.06:1</td><td class="num">2軸・直結</td><td class="num">3軸</td></tr>
+    </table>
+    <div style="font-size:.7rem; color:var(--sub); margin-top:-4px">※バイパス比などは公称の代表値。作動点や細かな型式で変わります。</div>
+
+    <p class="body">そして卒業試験です。章番号をタップすると、その章の言葉でこの4基を読み解きます。<b>8話ぶんの言葉が、実機のどこかに必ずつながっている</b>ことを確かめてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="r-01">01 揚力</span>
+      <span class="chip" id="r-02">02 渦</span>
+      <span class="chip" id="r-03">03 つりあい</span>
+      <span class="chip" id="r-04">04 バイパス</span>
+      <span class="chip" id="r-05">05 まもり</span>
+      <span class="chip" id="r-06">06 圧縮機</span>
+      <span class="chip" id="r-07">07 ねつ</span>
+      <span class="chip" id="r-08">08 おと</span>
+    </div>
+
+    <div class="partcard" id="rcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--acc)"></span><span id="rcard-name"></span></div>
+      <p id="rcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>直結 vs ギア — ナローボディの対決</summary>
+      <div class="inner">
+        <p>同じA320neoの翼の下で、<b>LEAPは直結のまま</b>材料（複合材ファン・高温タービン）と空力で燃費を絞り出し、<b>PW1100Gはギアを入れて</b>ファンをゆっくり・タービンを速く回します。ギア側の代償は歯車の重さ・発熱・実績づくり、直結側の代償はタービン段数と回転数の妥協。営業成績はほぼ互角の拮抗が続いていて、<b>物理は一つでも最適解は一つではない</b>ことの生きた証拠です。第1巻09話のH3とFalcon 9——「同じ式を見て、別の答えを出したふたつのチーム」——と同じ光景が、翼の下でも起きています。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>2軸 vs 3軸 — ワイドボディの対決</summary>
+      <div class="inner">
+        <p>787の2基も思想がきれいに割れます。<b>GEnxは2軸</b>＋GE90譲りの複合材ファンで部品点数と実績を取り、<b>Trent 1000はRR伝統の3軸</b>——低圧・中圧・高圧を別々の軸で回して、それぞれを最適回転数に近づけます。気づいたでしょうか、<b>3軸もギアも「回転数のジレンマ」への答え</b>だということ。軸を増やすか、歯車で割るか、直結で我慢して他で稼ぐか。第4話の一つの問いに、業界は3通りの答えを並走させているのです。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート — 第2巻の地図</summary>
+      <div class="inner">
+        <p>第2巻を流体力学の地図に重ねて締めくくります。<b>ポテンシャル流と渦</b>は翼と翼端渦（01・02話）に、<b>圧縮性流れ</b>は遷音速の翼とファン（03・08話）に、<b>ターボ機械</b>は圧縮機とタービン（06・07話）に、<b>燃焼と伝熱</b>は火の部屋（07話）に、<b>空力音響</b>は8乗則（08話）に、<b>流体構造連成</b>はフラッターとバードストライク（05・08話）に住んでいました。そしてエンジンの選定は、熱力学・構造・整備性・事業リスクの連立方程式——数字の裏に必ず「何を恐れ、何に賭けたか」という設計思想が透けています。ロケットの現場に立つとき、この2冊ぶんの言葉があなたの道具箱にありますように。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-09.jpg" alt="離陸するルフトハンザのA320neo。太いPW1100Gナセルが目立つ" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜離陸するルフトハンザのA320neo。翼の下の太いナセルがPW1100G——中には3万馬力を伝える減速歯車が回っています。次に空港でこの機体を見かけたら、あなたはもう、ナセルの太さから設計思想を読める人です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Lufthansa_Airbus_A320neo.jpg" style="color:inherit">Paul Schmid（CC BY-SA 4.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="fin kyoka">
+      <p><b>第2巻 飛行機編 ── かんけつ</b></p>
+      <p style="margin-top:8px; font-size:.85rem">うちゅうのエンジンと、そらのエンジン。<br>ふたつの巻は、どちらも「投げて、すすむ」の話でした。<br>読んでくれてありがとう。つづきは、あなたの現場で ✈</p>
+    </div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・Wikipedia "CFM International LEAP"・"Pratt &amp; Whitney PW1000G"・"General Electric GEnx"・"Rolls-Royce Trent 1000"（各諸元）<br>
+      ・PW1100G-JM 減速比3.0625:1: NZ CAA Type Acceptance Report<br>
+      ・G. P. Sutton ならぬ空の定番: N. Cumpsty, <i>Jet Propulsion</i>
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v2-08.html">← 08 うたうエンジン</a>
+  <a href="../index.html">もくじへ（第2巻かんけつ！）→</a>
+</div>
+
+<script>
+const PARTS = {
+  "e-leap": { name:"LEAP-1A — 直結の職人芸", color:"#eef1f4",
+    t:"CFM（GE＋サフランの合弁）。2軸直結のまま、複合材ファンや高温コアの積み重ねで燃費を絞り出す「実績と洗練」の路線です。バイパス比11・OPR40。737 MAXにも同系が載る、世界でいちばん数の出ているエンジン一族の現在形。" },
+  "e-pw": { name:"PW1100G — ギアの挑戦者", color:"#e8b98a",
+    t:"P&WのGTF。ファンとタービンの間に減速比3.0625:1の減速歯車（キャリア固定のスター配置）を入れ、約3万馬力を歯車で伝えます。ファンはゆっくり静かに、タービンは速く身軽に——第4話の回転数のジレンマへの真正面の答え。バイパス比12.5はこのクラス最大級です。" },
+  "e-genx": { name:"GEnx-1B — GE90の遺伝子", color:"#eef1f4",
+    t:"787用のGE製エンジン。GE90で拓いた複合材ファンブレードの系譜を受け継ぎ、2軸直結でファン直径282cm・バイパス比9.3。大きな会社が大きな実績を静かに更新していく、王道の設計です。" },
+  "e-trent": { name:"Trent 1000 — 3軸の伝統", color:"var(--blue)",
+    t:"787用のロールス・ロイス製エンジン。RB211から続くRR伝統の3軸構成で、低圧・中圧・高圧をそれぞれ別の軸で最適回転に近づけます。ギアとは別のやり方で回転数のジレンマに答えた、もうひとつの解。ファン直径285cm・バイパス比10超。" }
+};
+let cur = "e-pw";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const RECAP = {
+  "r-01": { name:"01 揚力のことば", t:"エンジンを吊るあの翼も、ファンの1枚1枚も、みんな「空気を曲げて」働いています。ナセルの入口リップさえ、吸い込み時には翼として設計される——第2巻はぜんぶ、第1話の応用問題でした。" },
+  "r-02": { name:"02 渦のことば", t:"翼端渦の税金は、ファンブレードの先端にもあります。ブレード先端とケースの隙間を漏れる流れ（チップリーク渦）は圧縮機・タービンの効率を数%単位で食う大物——「端があると渦ができて損」という文法は、機械の中でも生きています。" },
+  "r-03": { name:"03 つりあいのことば", t:"巨大なエンジンをどこに吊るかは、重心と釣り合いの問題そのものです。主翼下・重心近くへの搭載は、やじろべえの腕への載せ方の答え。双発機の垂直尾翼が「片発停止でも効く」大きさで決まっていたことも思い出してください。" },
+  "r-04": { name:"04 バイパスのことば", t:"表の4基のバイパス比とファン直径は、そのまま「大きく、ゆっくり投げる」の到達点です。そして回転数のジレンマへの3つの答え——直結・ギア・3軸——が同じ空を並んで飛んでいる。教科書の1行が、市場で競争しています。" },
+  "r-05": { name:"05 まもりのことば", t:"この4基はすべて、同じ鳥吸い込み試験（33.76）とブレードオフ試験（33.94）をくぐって空にいます。設計思想は違っても、「壊れ方まで設計する」約束だけは全員共通——競争のさらに底にある、業界の共有財産です。" },
+  "r-06": { name:"06 圧縮機のことば", t:"LEAPのOPR40は、ファン・ブースタ・10段の高圧圧縮機が、段ごとに違う圧力比を律儀に積み重ねた到達点。2軸・3軸・可変静翼・抽気——行列の機嫌の取り方の教科書が、4基それぞれの断面図に書き込まれています。" },
+  "r-07": { name:"07 ねつのことば", t:"4基の燃費競争の本丸はタービン入口温度です。融点超えのガスに何度まで踏み込めるか——単結晶翼・フィルム冷却・遮熱コーティングの三種の神器の練度が、カタログ燃費の数%差になって現れます。" },
+  "r-08": { name:"08 おとのことば", t:"PW1100Gの静かさはファン低速化（ギアの配当）、787のシェブロンは噴流の声への答え。空港の夜間制限は運航の実務そのものなので、静かさは快適さではなく商品性能です。8乗則は営業資料の中でも生きています。" }
+};
+let curR = "r-04";
+function renderR(){
+  const r = RECAP[curR];
+  document.getElementById("rcard-name").textContent = r.name;
+  document.getElementById("rcard-text").textContent = r.t;
+  for (const id of Object.keys(RECAP)) document.getElementById(id).classList.toggle("sel", id === curR);
+}
+for (const id of Object.keys(RECAP)) document.getElementById(id).addEventListener("click", () => { curR = id; renderR(); });
+renderR();
+
+try { localStorage.setItem("read:v2-09", "1"); } catch(e) {}
+</script>
+</body>
+</html>

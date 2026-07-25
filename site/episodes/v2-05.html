@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編05 — とりと ぶつかっても、こわれない</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch05.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep05.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい5わ ── まもりの章</div>
+    <h1 class="kyoka">とりと ぶつかっても、こわれない</h1>
+
+    <p class="body">空は、機械だけのものではありません。離陸する機体は時速300km、そこへ体重1kgの鳥が1羽——ぶつかれば、やわらかいはずの鳥が<b>砲弾</b>になります。しかもエンジンの入口では、前話の巨大なファンが<b>先端音速超</b>で回っている。ここに飛び込まれたらどうなるのか。今日は、エンジン設計のいちばん過酷な問い——<b>「壊れ方まで設計する」</b>という世界の話です。</p>
+
+    <p class="body">答えを先に言うと、現代のエンジンは<b>鳥を吸い込むことを前提に</b>作られています。ブレードは「軽く・強く・欠けにくく」の三重の注文に応え、それでも壊れる日のために、破片を外へ出さない「檻」が用意されている。まず入口の守りを一周しましょう。</p>
+
+    <div class="fig">
+      <svg width="340" height="290" viewBox="0 0 340 290">
+        <g id="p-case" class="hot">
+          <circle class="shape" cx="176" cy="152" r="112" fill="none" stroke="var(--ink)" stroke-width="2.2"/>
+          <circle class="shape" cx="176" cy="152" r="103" fill="none" stroke="#e8b98a" stroke-width="12" opacity=".9"/>
+        </g>
+        <g id="p-blade" class="hot">
+          <g class="shape">
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q186 108 174 62 Q196 100 192 148 Z"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q216 132 252 100 Q228 148 186 162 Z" transform="rotate(8 176 152)"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q220 170 262 166 Q222 196 180 178 Z"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q186 200 202 238 Q164 210 166 164 Z"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q140 196 100 210 Q128 168 162 156 Z"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q128 152 88 138 Q130 122 168 140 Z"/>
+            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q140 112 132 74 Q170 102 176 140 Z"/>
+          </g>
+        </g>
+        <g id="p-spin" class="hot">
+          <circle class="shape" cx="176" cy="152" r="24" fill="var(--sand)" stroke="var(--ink)" stroke-width="2.2"/>
+          <path class="shape" style="fill:none; stroke:var(--ink); stroke-width:2" d="M176 152 q10 -4 8 -14 q-12 2 -8 14"/>
+        </g>
+        <g id="p-bird" class="hot">
+          <path class="shape" style="fill:#8a7a63; stroke:var(--ink); stroke-width:1.8" d="M34 44 q10 -12 22 -6 q14 -14 24 0 q14 -4 16 8 q-16 10 -30 6 q-12 8 -24 2 q-8 -2 -8 -10"/>
+          <path class="shape" style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-dasharray:6 5" d="M92 62 Q120 88 142 116"/>
+          <path class="shape" style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-linecap:round" d="M142 116 L131 111 M142 116 L138 104"/>
+          <circle cx="60" cy="48" r="30" fill="transparent"/>
+        </g>
+        <line x1="286" y1="86" x2="300" y2="72" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="256" y="62" font-size="13" fill="#77808a">ケース（檻）</text>
+        <line x1="240" y1="196" x2="268" y2="222" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="242" y="242" font-size="13" fill="#77808a">ブレード</text>
+        <line x1="176" y1="180" x2="150" y2="258" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="112" y="276" font-size="13" fill="#77808a">スピナー</text>
+        <line x1="70" y1="66" x2="52" y2="88" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="20" y="106" font-size="13" fill="#77808a">とり</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#eef1f4"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">この守りが本物かどうかは、<b>実物のエンジンを使った試験</b>で確かめます。合格しなければ旅客機に載せることはできません。3つの「試験の日」を見てください——最後の1つは、試験場ではなく本番で起きた日です。</p>
+
+    <div class="chips">
+      <span class="chip" id="ts-bird">鳥吸いこみ試験</span>
+      <span class="chip" id="ts-fbo">ブレードオフ試験</span>
+      <span class="chip" id="ts-1549">ハドソン川</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="180" viewBox="0 0 340 180">
+        <g id="sc-bird" style="display:none">
+          <circle class="stroke" cx="200" cy="90" r="58" style="fill:#eef1f4"/>
+          <circle cx="200" cy="90" r="16" fill="var(--sand)" stroke="var(--ink)" stroke-width="2"/>
+          <path style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-dasharray:6 5" d="M60 50 Q120 62 152 76 M60 90 Q120 92 146 92 M60 130 Q120 120 152 106"/>
+          <text x="76" y="26" font-size="12" fill="#77808a">きめられた重さの鳥を、きめられた数だけ</text>
+        </g>
+        <g id="sc-fbo" style="display:none">
+          <circle class="stroke" cx="170" cy="90" r="58" style="fill:#eef1f4"/>
+          <circle class="stroke" cx="170" cy="90" r="66" style="fill:none; stroke:#e8b98a; stroke-width:10"/>
+          <path class="stroke" style="fill:#f0b285" d="M170 90 L196 44 L210 56 L182 96 Z"/>
+          <text x="66" y="26" font-size="12" fill="#77808a">最大回転で1枚を切断 → 檻の中に留める</text>
+        </g>
+        <g id="sc-1549" style="display:none">
+          <path style="fill:#bcd4e0" d="M20 110 Q90 100 170 110 Q250 120 320 110 L320 170 L20 170 Z"/>
+          <path class="stroke" style="fill:#eef1f4" d="M96 96 Q140 84 210 90 L244 96 Q210 110 150 108 Z"/>
+          <path class="stroke" style="fill:#e8b98a" d="M236 84 L252 62 L262 64 L252 88 Z"/>
+          <text x="90" y="36" font-size="12" fill="#77808a">2009年1月15日 — 155人、全員生還</text>
+        </g>
+      </svg>
+      <div class="hint">▲ タップで3つの「試験の日」を切り替え</div>
+    </div>
+
+    <div class="partcard" id="tscard" style="min-height:150px">
+      <div class="pname"><span class="dot" style="background:var(--sand)"></span><span id="tscard-name"></span></div>
+      <p id="tscard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>やわらかい鳥が、なぜ凶器になるのか</summary>
+      <div class="inner">
+        <p>衝突のミリ秒の世界では、鳥は「やわらかい固体」ではなく<b>ほぼ水のかたまり</b>として振る舞います。ぶつかった瞬間の圧力の理論上限は水撃圧——<b>密度×音速×衝突速度の積</b>——で、相対速度100m/s級なら1,000気圧を超える桁。実物では鳥体の変形や接触条件でそこから下がりますが、それでも桁外れの一撃です。体重1kgでも、この一撃が高速で回るブレードの薄い断面に斜めに入る。だから設計の現場では鳥を<b>流体の弾</b>としてモデル化し（SPHなどの粒子法）、回転するブレードとの連成解析を回してから、実物にニワトリの模擬弾を撃ち込んで答え合わせをします。あなたの分野の言葉で言えば、これは衝撃波と自由表面をもつ、極端な流体構造連成問題です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>かるく、つよく、かけにくく — ブレード材料の旅</summary>
+      <div class="inner">
+        <p>ファンブレードへの注文は互いに喧嘩しています。<b>軽く</b>（回転の遠心荷重と燃費のため）、<b>強く</b>（常時の空力荷重と振動のため）、そして<b>欠けにくく</b>（鳥のため）。中実チタンで始まった歴史は、1984年就航のRB211-535E4で<b>中空ワイドコード翼</b>へ（幅広の翼を中空構造で軽く——RRの金字塔）、1995年就航のGE90で<b>炭素繊維複合材＋チタン前縁</b>へ（商用エンジン初。軽い複合材の弱点の耐衝撃を、金属の鎧った前縁で補う）進みました。軽いブレードは、万一切れたときの破片エネルギーも小さい——だから檻（ケース）も軽くできる。<b>1kgの軽量化が、檻の軽量化まで連鎖する</b>のがこの設計の妙味です。GE90のブレードはニューヨーク近代美術館に収蔵されるほど美しい——機能の形は、彫刻になります。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>認証要求の<b>言い分け</b>が設計思想の核心です。33.76は、最大約8ポンド（3.65kg・吸入口面積による）の大型単一鳥には「<b>危険な壊れ方をせず、安全に停止できること</b>」、0.35〜1.15kgの中型群鳥には「<b>持続推力の低下25%以内で規定の運転スケジュールをこなすこと</b>」を要求する——確率と結果の重さで要求を階層化しています（現行はさらに大型群鳥・コア吸い込み区分も）。33.94のブレードオフ試験は最大回転で最も危険な1枚を故意に破断し、封じ込め・火災なし・マウント保持・15秒以上の回転継続を実機で示す。そしてUS1549では、各エンジンが当時の想定（単一4ポンド鳥）を超える大型鳥を<b>複数羽ずつ・両発同時に</b>吸い込みました。単体規格の外側で事態を受け止めたのは、機体側の不時着水設計と乗員の手順。安全は単体の頑丈さではなく多層の設計である、という教訓は、第1巻で見たLE-9の「壊れ方の少ないサイクルを選ぶ」思想と同じ言葉でできています。解析屋としては、ソフトボディ衝突は検証データが命——モデルの妥当性は最後は実射が決めます。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-05.jpg" alt="ハドソン川に着水したUSエアウェイズ1549便。翼の上に乗客が並んで救助を待つ" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜2009年1月15日、ハドソン川。両方のエンジンを失ったA320が川面に浮かび、翼の上に乗客が並んで救助を待っています。155人、全員生還。エンジンが鳥に耐える設計も、耐えきれなかった日のための備えも——どちらも本物の「安全」の一部です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:US_Airways_Flight_1549_(N106US)_after_crashing_into_the_Hudson_River_(crop_2).jpg" style="color:inherit">Greg L（CC BY 2.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>06 風に さからう、はねの行列</b>: コアの入口へ。空気を40倍に押し縮める圧縮機と、その宿敵——失速とサージの話。あなたの主戦場です。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・14 CFR §33.76（鳥吸い込み）・§33.94（ブレード封じ込め）: eCFR / Cornell LII<br>
+      ・NTSB, <i>AAR-10/03</i>（US Airways 1549便事故調査報告）／Wikipedia "US Airways Flight 1549"<br>
+      ・Wikipedia "General Electric GE90"（複合材ファン・1995年就航）・"Rolls-Royce RB211"（ワイドコード翼・1984年）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v2-04.html">← 04 大きく、ゆっくり なげる</a>
+  <a href="v2-06.html">つぎ: 06 はねの行列 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-blade": { name:"ファンブレード — 三重の注文", color:"#eef1f4",
+    t:"軽く（遠心荷重と燃費）、強く（常時の空力荷重）、欠けにくく（鳥）。互いに喧嘩する注文に、中空チタンのワイドコード翼や、炭素繊維複合材＋チタン前縁という答えが生まれました。枚数が少なくなるほど（GE90は22枚）、1枚の責任は重くなります。材料の旅は下の「よりみち」で。" },
+  "p-case": { name:"ケース — 破片を出さない檻", color:"#e8b98a",
+    t:"ブレードが万一根元から飛んでも、破片を機体側に出さないための帯です。方式は機種ごとに違い、厚い金属ケースもあれば、アラミド繊維（ケブラー等）を何十層も巻いた複合材ケースも——どれも破片のエネルギーを受け止めて絡め取ります。規則33.94が要求する「封じ込め」の主役で、エンジンのいちばん外側の約束です。" },
+  "p-spin": { name:"スピナー — 先端のうずまき", color:"var(--sand)",
+    t:"中心の尖ったカバーです。回転の中心は周速が遅く、氷や鳥が張り付きやすい場所——だから尖らせて、当たったものを外へ弾く形にしてあります。渦巻き模様は、回転していることを地上作業員に見せるための実用的なサインでもあります。" },
+  "p-bird": { name:"とりの道 — 低空のすれちがい", color:"#8a7a63",
+    t:"バードストライクの大半は離着陸の低高度で起きます。空港が草地や水辺の鳥をレーダーや猛禽で管理するのはこのため。それでも年に何千件も起きるから、エンジン側は「当たっても大丈夫」を設計で保証します。相対速度100m/s級では、1kgの鳥もただの生き物ではいられません——下の「よりみち」へ。" }
+};
+let cur = "p-blade";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const TS = {
+  "ts-bird": { name:"鳥吸いこみ試験（33.76）", scene:"sc-bird",
+    t:"決められた重さの鳥を、決められた数だけ、運転中の実物エンジンに撃ち込みます。大型の単一鳥（吸入口の広さに応じて1.85〜3.65kg）では、危険な壊れ方をせず安全に停止までこぎつけられること。0.35〜1.15kgの中型の群れ鳥では、持続推力の低下を25%以内に留め、決められた運転スケジュールを最後までこなせること（現行規則にはさらに大型の群れ鳥やコア吸い込みの区分もあります）。——1羽の大物には安全な降参を、群れには耐えて飛べを。確率と結果で要求を使い分ける、大人の規則です。" },
+  "ts-fbo": { name:"ファンブレードオフ試験（33.94）", scene:"sc-fbo",
+    t:"最大回転数で回る実物エンジンの、最も危険なブレード1枚を爆薬で根元から切断します。破片をケースの中に封じ込め、火災を起こさず、取付部を壊さず、切断後も少なくとも15秒、回り続けても壊れないことを示す（推力を出し続ける試験ではありません）——一発勝負で、実物のエンジンを1基捧げる試験です。動画を一度見ると、ケースという「檻」への敬意が変わります。" },
+  "ts-1549": { name:"ハドソン川 — 本番の日", scene:"sc-1549",
+    t:"2009年1月15日、ニューヨーク。離陸直後のA320が高度2,818ft（対地）でカナダガンの群れと交差し、各エンジンが約8ポンド級の鳥を複数羽ずつ吸い込んで、両方ともほぼ推力を失いました。1基あたりで見ても当時の認証基準（単一4ポンド鳥）を大きく超え、しかも両発同時。機長は機体をハドソン川へ滑空着水させ、155人全員が生還します。規格の外で起きたことを、機体の設計と人間の腕が受け止めた日——「安全は多層」の教科書です。" }
+};
+let curT = "ts-bird";
+function renderT(){
+  const t = TS[curT];
+  document.getElementById("tscard-name").textContent = t.name;
+  document.getElementById("tscard-text").textContent = t.t;
+  for (const id of Object.keys(TS)) {
+    document.getElementById(id).classList.toggle("sel", id === curT);
+    document.getElementById(TS[id].scene).style.display = (id === curT) ? "" : "none";
+  }
+}
+for (const id of Object.keys(TS)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
+
+try { localStorage.setItem("read:v2-05", "1"); } catch(e) {}
+</script>
+</body>
+</html>

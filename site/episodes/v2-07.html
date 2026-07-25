@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 飛行機編07 — とける温度より、あつい部屋</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .hot{cursor:pointer}
+  .hot .shape{transition:opacity .15s}
+  .hot.dim .shape{opacity:.35}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .stroke{fill:none; stroke:var(--ink); stroke-width:2.2; stroke-linecap:round; stroke-linejoin:round}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:fixed; bottom:0; left:0; right:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v2-ch07.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v2ep07.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第2巻 だい7わ ── ねつの章</div>
+    <h1 class="kyoka">とける温度より、あつい部屋</h1>
+
+    <p class="body">40倍に縮めた空気に、いよいよ火を入れます。ここで熱力学の意地悪な事実——<b>タービンに入るガスは熱いほど、エンジンは強く・効率よくなる</b>。だから設計者はガス温度を上げ続け、現代のエンジンではタービン入口温度は<b>1900K（約1600℃）級</b>。ところがタービン翼のニッケル超合金は、その温度では<b>溶けてしまいます</b>。融点より熱いガスの中で、翼は高速回転しながら何万時間も働く——今日は、そのありえない両立の種明かしです。</p>
+
+    <p class="body">種は2つ。<b>火を暴れさせない部屋（燃焼器）</b>と、<b>涼しさを着る翼（タービン）</b>。まず部屋から一周しましょう。</p>
+
+    <div class="fig">
+      <svg width="340" height="260" viewBox="0 0 340 260">
+        <g id="p-noz" class="hot">
+          <rect class="shape stroke" style="fill:#e8b98a" x="34" y="106" width="26" height="28" rx="6"/>
+          <path class="shape" style="fill:none; stroke:var(--ink); stroke-width:2" d="M60 112 q14 6 0 14 M66 108 q20 10 0 22"/>
+        </g>
+        <g id="p-liner" class="hot">
+          <path class="shape stroke" style="fill:none" d="M64 84 L206 84 M64 156 L206 156"/>
+          <g class="shape" style="fill:#9cc0d4">
+            <circle cx="86" cy="84" r="2.6"/><circle cx="110" cy="84" r="2.6"/><circle cx="134" cy="84" r="2.6"/><circle cx="158" cy="84" r="2.6"/><circle cx="182" cy="84" r="2.6"/>
+            <circle cx="86" cy="156" r="2.6"/><circle cx="110" cy="156" r="2.6"/><circle cx="134" cy="156" r="2.6"/><circle cx="158" cy="156" r="2.6"/><circle cx="182" cy="156" r="2.6"/>
+          </g>
+        </g>
+        <g id="p-flame" class="hot">
+          <path class="shape stroke" style="fill:#f0b285" d="M78 120 q16 -22 34 -8 q20 -18 34 2 q18 -10 26 6 q-14 22 -46 18 q-30 6 -48 -18"/>
+        </g>
+        <g id="p-blade" class="hot">
+          <path class="shape stroke" style="fill:#eef1f4" d="M244 70 Q268 82 270 120 Q272 158 252 182 L232 176 Q248 150 246 118 Q244 92 234 76 Z"/>
+          <g class="shape" style="fill:#9cc0d4">
+            <circle cx="243" cy="88" r="2.4"/><circle cx="247" cy="104" r="2.4"/><circle cx="249" cy="120" r="2.4"/><circle cx="249" cy="136" r="2.4"/><circle cx="246" cy="152" r="2.4"/><circle cx="241" cy="167" r="2.4"/>
+          </g>
+        </g>
+        <g id="p-cool" class="hot">
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:3" d="M70 208 L236 208 Q252 208 252 192"/>
+          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:3; stroke-linecap:round" d="M252 192 L246 202 M252 192 L258 201"/>
+        </g>
+        <line x1="44" y1="100" x2="36" y2="80" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="16" y="70" font-size="13" fill="#77808a">燃料ノズルとスワーラ</text>
+        <line x1="130" y1="78" x2="130" y2="56" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="96" y="46" font-size="13" fill="#77808a">ライナ（多孔の壁）</text>
+        <line x1="256" y1="80" x2="282" y2="60" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="252" y="48" font-size="13" fill="#77808a">タービン動翼</text>
+        <line x1="150" y1="212" x2="150" y2="232" stroke="#c47a4f" stroke-width="1.5"/>
+        <text x="96" y="250" font-size="13" fill="#77808a">冷却空気（圧縮機から拝借）</text>
+      </svg>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#f0b285"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">主役はやはりタービン動翼です。融点超えのガスに突っ込まれて生き延びるために、翼は<b>三枚の「涼しさ」を重ね着</b>しています。</p>
+
+    <div class="chips">
+      <span class="chip" id="cl-film">フィルム冷却</span>
+      <span class="chip" id="cl-conv">内部冷却</span>
+      <span class="chip" id="cl-tbc">遮熱コーティング</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <svg width="340" height="180" viewBox="0 0 340 180">
+        <g id="sc-film" style="display:none">
+          <path class="stroke" style="fill:#eef1f4" d="M110 40 Q150 36 230 44 L230 140 Q150 148 110 132 Z"/>
+          <g style="fill:#9cc0d4"><circle cx="118" cy="60" r="3"/><circle cx="120" cy="86" r="3"/><circle cx="118" cy="112" r="3"/></g>
+          <path style="fill:none; stroke:#9cc0d4; stroke-width:2.4" d="M118 60 q-16 8 -22 24 M120 86 q-16 8 -20 24 M118 112 q-14 8 -18 22"/>
+          <text x="70" y="168" font-size="12" fill="#77808a">小さな孔から空気の「汗」をかいて膜をまとう</text>
+        </g>
+        <g id="sc-conv" style="display:none">
+          <path class="stroke" style="fill:#eef1f4" d="M110 40 Q150 36 230 44 L230 140 Q150 148 110 132 Z"/>
+          <path style="fill:none; stroke:var(--blue); stroke-width:4" d="M126 132 L126 60 Q126 52 136 52 L150 52 Q158 52 158 60 L158 124 Q158 132 168 132 L182 132 Q190 132 190 124 L190 56"/>
+          <text x="72" y="168" font-size="12" fill="#77808a">中は空洞 — 冷たい空気が血管のように巡る</text>
+        </g>
+        <g id="sc-tbc" style="display:none">
+          <path class="stroke" style="fill:#eef1f4" d="M110 40 Q150 36 230 44 L230 140 Q150 148 110 132 Z"/>
+          <path class="stroke" style="fill:none; stroke:#e8b98a; stroke-width:7" d="M110 40 Q150 36 230 44"/>
+          <path style="fill:none; stroke:#e08a4e; stroke-width:2.4; stroke-dasharray:4 4" d="M120 22 L214 28"/>
+          <text x="62" y="168" font-size="12" fill="#77808a">セラミックの薄い「日傘」が熱をワンクッション</text>
+        </g>
+      </svg>
+      <div class="hint">▲ 翼の断面で見る、三枚の重ね着</div>
+    </div>
+
+    <div class="partcard" id="clcard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="clcard-name"></span></div>
+      <p id="clcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>1枚で、F1カー1台ぶん</summary>
+      <div class="inner">
+        <p>Trent XWBの高圧タービンには68枚の動翼が並び、離陸時には<b>1枚あたり約900馬力——F1カー1台ぶんの動力</b>を取り出しています（Aviation Week）。しかもその1枚は、融点超えのガスに炙られ、猛烈な遠心荷重を受けながらの仕事です。金属側の切り札が<b>単結晶鋳造</b>——翼をまるごと1つの結晶として鋳ることで、高温でひずみの起点になる結晶粒界そのものを消してしまう。じわじわ伸びる劣化（クリープ）への、材料屋の見事な返し技です。タービン翼が「工業製品の宝石」と呼ばれるのは、価格のせいだけではありません。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>火を、その場に留める</summary>
+      <div class="inner">
+        <p>燃焼器の中の流速で、ただ火を点けたら即座に吹き消えます。そこで入口の<b>スワーラ</b>が空気に旋回を与え、部屋の中央に<b>逆流する渦だまり（再循環域）</b>を作る——火種はこの静かな渦に住み着いて、後から来る混合気に次々火を渡します。「保炎」という漢字二文字の裏には、渦で火を飼うという流体屋の仕事がある。壁のライナは無数の小孔から空気の膜をまとって焼損を防ぎます——第1巻第6話でロケットのフィルム冷却を見ましたが、<b>ロケットは燃料で、ジェットは空気で</b>。冷やす媒体は違えど、壁の数ミリの攻防は同じ言葉で書かれています。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>タービン冷却は内部対流・衝突噴流・TBCまで含む<b>共役伝熱の総合戦</b>で、外側のフィルム冷却はまさに境界層制御です。フィルム冷却の性能は吹き出し比（冷却流と主流の質量流束比。運動量流束比も別途効きます）で峠を越え、吹きすぎれば膜が主流に突き抜けて剥がれる——「守るための噴流が守りを壊す」非線形が現場の悩みどころ。設計は共役熱伝達（CHT）解析で金属温度を10K単位で追い込みます。<b>金属温度が10〜20K下がるとクリープ寿命が倍近く変わる</b>世界（時間‐温度の等価則）なので、この10Kは誇張ではなく通貨です。冷却空気は圧縮機から拝借した「タダではない空気」——使うほどサイクル効率は落ちるので、冷やしすぎも罪。熱いガス・冷たい空気・回る構造の三つ巴の最適化が、この部屋の日常です。次話は、この機械が歌う声と、ふるえの話。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v2-07.jpg" alt="CFM56の高圧タービン動翼。前縁にフィルム冷却孔が並ぶ" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜CFM56の高圧タービン動翼。前縁に並ぶ小さな孔がフィルム冷却の出口で、ここから空気の汗をかきながら、融点より熱いガスの中で働きます。手のひらサイズのこの1枚が、自動車数台ぶんの動力を取り出します。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:CFM56_High_Pressure_Turbine_Blade.JPG" style="color:inherit">Nubifer（CC BY-SA 3.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>08 うたうエンジン、ふるえる はね</b>: 空港が静かになった理由の物理。恐ろしい「8乗則」と、ギザギザのノズル、そして翼のふるえ（フラッター）。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・タービン入口温度・冷却: Wikipedia "Turbine blade"（TET 1900K級・合金融点超え）<br>
+      ・Trent XWB 1枚900馬力: Aviation Week "Six Facts About The Trent XWB Engine"<br>
+      ・N. Cumpsty, <i>Jet Propulsion</i>（燃焼器・タービン冷却）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v2-06.html">← 06 はねの行列</a>
+  <a href="v2-08.html">つぎ: 08 うたうエンジン →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-flame": { name:"火 — 部屋の主", color:"#f0b285",
+    t:"縮めた空気と霧にした燃料が出会い、連続的に燃え続ける場所です。温度はタービン翼の融点を超える1900K級。この火を「その場に留めて」「壁に触れさせない」のが部屋の設計のすべてです。" },
+  "p-noz": { name:"燃料ノズルとスワーラ — 火を飼う渦", color:"#e8b98a",
+    t:"燃料を霧にして吹き込むノズルと、空気に旋回を与えるスワーラ。旋回流は部屋の中央に逆流の渦だまり（再循環域）を作り、火種はそこに住み着きます。速い流れの中で火が吹き消えないのは、この渦のおかげ——「保炎」の正体です。" },
+  "p-liner": { name:"ライナ — 汗をかく壁", color:"#9cc0d4",
+    t:"火を囲む多孔の壁です。無数の小さな孔から圧縮機の空気を吹き出し、冷たい空気の膜をまとって自分を守ります。第1巻第6話のロケットのフィルム冷却と同じ発想——向こうは燃料で、こちらは空気で。壁の数ミリの攻防は、機械が違っても同じ言葉です。" },
+  "p-blade": { name:"タービン動翼 — 融点の中で回る", color:"#eef1f4",
+    t:"融点超えのガスから動力を取り出す、このエンジンで最も過酷な持ち場です。前縁の点々は冷却孔。中は空洞で冷却空気が巡り、表面はセラミックの遮熱コーティング。1枚でF1カー1台ぶんの動力を取り出します——詳しくは下の「よりみち」へ。" },
+  "p-cool": { name:"冷却空気 — 拝借した涼しさ", color:"var(--blue)",
+    t:"冷却に使う空気は、圧縮機の途中から拝借してきたものです。せっかく仕事をして縮めた空気を燃やさずに使うので、タダではない——使うほどエンジンの効率は下がります。「何度下げるのに何%払うか」という取引が、熱設計の日常です。" }
+};
+let cur = "p-blade";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const CL = {
+  "cl-film": { name:"フィルム冷却 — 空気の汗", scene:"sc-film",
+    t:"表面の小さな孔から冷却空気を吹き出し、翼の肌を薄い空気の膜で包みます。熱いガスを翼に触れさせない最前線。ただし吹き出しすぎると膜が主流に突き抜けて剥がれる——さじ加減が命の技です。" },
+  "cl-conv": { name:"内部冷却 — 翼の中の血管", scene:"sc-conv",
+    t:"翼の中は空洞で、冷却空気がつづら折りの通路を巡っています。内壁には乱流を促す小さな突起（リブ）が並び、熱交換器として働く。外から見れば1枚の金属の翼が、中身は精密な熱交換器です。" },
+  "cl-tbc": { name:"遮熱コーティング — セラミックの日傘", scene:"sc-tbc",
+    t:"表面に焼き付けた薄いセラミック層（TBC）が、金属に届く熱をワンクッション弱めます。フィルム・内部冷却・TBCの三枚重ねで、金属の温度はガスより数百度低く保たれる——翼は「涼しさを着て」火の中で働いています。" }
+};
+let curL = "cl-film";
+function renderL(){
+  const c = CL[curL];
+  document.getElementById("clcard-name").textContent = c.name;
+  document.getElementById("clcard-text").textContent = c.t;
+  for (const id of Object.keys(CL)) {
+    document.getElementById(id).classList.toggle("sel", id === curL);
+    document.getElementById(CL[id].scene).style.display = (id === curL) ? "" : "none";
+  }
+}
+for (const id of Object.keys(CL)) document.getElementById(id).addEventListener("click", () => { curL = id; renderL(); });
+renderL();
+
+try { localStorage.setItem("read:v2-07", "1"); } catch(e) {}
+</script>
+</body>
+</html>
