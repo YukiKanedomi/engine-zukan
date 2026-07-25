@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -84,30 +90,23 @@
     <p class="body">昔の空港を知る人は「ジェットは雷の音」と言います。いまの空港はずいぶん静かになりました。魔法ではなく物理です。第1巻第8話でロケットの爆音を手なずけましたが、飛行機のエンジンには続きの物語がある——<b>音を出す張本人が、この40年で交代した</b>のです。今日はエンジンの声の解剖と、それからもうひとつ、翼たちの「ふるえ」の話。</p>
 
     <div class="fig">
-      <svg width="340" height="240" viewBox="0 0 340 240">
-        <path class="stroke" style="fill:#eef1f4" d="M60 78 Q170 62 262 84 L262 156 Q170 178 60 162 Z"/>
-        <g id="p-fansrc" class="hot">
-          <rect class="shape stroke" style="fill:#dfe6ec" x="88" y="86" width="12" height="68" rx="4"/>
-          <path class="shape" style="fill:none; stroke:#c47a4f; stroke-width:2.2" d="M70 96 q-14 24 0 48 M52 88 q-20 32 0 64 M34 80 q-26 40 0 80"/>
-        </g>
-        <g id="p-liner" class="hot">
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:5; stroke-dasharray:7 5" d="M64 84 Q120 72 168 74 M64 156 Q120 168 168 166"/>
-        </g>
-        <g id="p-chev" class="hot">
-          <path class="shape stroke" style="fill:#e8b98a" d="M262 84 L276 92 L262 100 L276 108 L262 116 L276 124 L262 132 L276 140 L262 148 L262 84 Z"/>
-        </g>
-        <g id="p-jetsrc" class="hot">
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:2.6" d="M282 104 q22 8 40 4 M282 120 q24 2 42 8 M282 136 q20 -6 40 2"/>
-        </g>
-        <line x1="94" y1="80" x2="94" y2="46" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="66" y="36" font-size="13" fill="#77808a">ファンの声</text>
-        <line x1="120" y1="166" x2="120" y2="196" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="72" y="214" font-size="13" fill="#77808a">音響ライナ（吸音の壁）</text>
-        <line x1="272" y1="146" x2="284" y2="170" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="252" y="188" font-size="13" fill="#77808a">シェブロン</text>
-        <line x1="312" y1="112" x2="322" y2="92" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="266" y="82" font-size="13" fill="#77808a">噴流の声</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-08-noise.jpg" alt="エンジンナセルの側面図。入口からの音の弧、内壁の音響ライナ、後端のシェブロンと噴流">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-fansrc"><rect x="20" y="80" width="280" height="860" rx="30"/></g>
+          <g class="zone" id="p-liner"><ellipse cx="390" cy="505" rx="120" ry="210"/></g>
+          <g class="zone" id="p-chev"><rect x="980" y="320" width="220" height="380" rx="30"/></g>
+          <g class="zone" id="p-jetsrc"><rect x="1200" y="290" width="330" height="450" rx="30"/></g>
+          <line x1="180" y1="120" x2="150" y2="220" stroke="#c47a4f" stroke-width="4"/>
+          <text x="60" y="90" font-size="38" fill="#5a636d">ファンの声</text>
+          <line x1="420" y1="900" x2="395" y2="720" stroke="#c47a4f" stroke-width="4"/>
+          <text x="260" y="960" font-size="38" fill="#5a636d">音響ライナ（吸音の壁）</text>
+          <line x1="1030" y1="880" x2="1080" y2="700" stroke="#c47a4f" stroke-width="4"/>
+          <text x="930" y="940" font-size="38" fill="#5a636d">シェブロン</text>
+          <line x1="1330" y1="180" x2="1310" y2="320" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1220" y="150" font-size="38" fill="#5a636d">噴流の声</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -218,7 +217,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

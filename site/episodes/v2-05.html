@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -86,41 +92,22 @@
     <p class="body">答えを先に言うと、現代のエンジンは<b>鳥を吸い込むことを前提に</b>作られています。ブレードは「軽く・強く・欠けにくく」の三重の注文に応え、それでも壊れる日のために、破片を外へ出さない「檻」が用意されている。まず入口の守りを一周しましょう。</p>
 
     <div class="fig">
-      <svg width="340" height="290" viewBox="0 0 340 290">
-        <g id="p-case" class="hot">
-          <circle class="shape" cx="176" cy="152" r="112" fill="none" stroke="var(--ink)" stroke-width="2.2"/>
-          <circle class="shape" cx="176" cy="152" r="103" fill="none" stroke="#e8b98a" stroke-width="12" opacity=".9"/>
-        </g>
-        <g id="p-blade" class="hot">
-          <g class="shape">
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q186 108 174 62 Q196 100 192 148 Z"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q216 132 252 100 Q228 148 186 162 Z" transform="rotate(8 176 152)"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q220 170 262 166 Q222 196 180 178 Z"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q186 200 202 238 Q164 210 166 164 Z"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q140 196 100 210 Q128 168 162 156 Z"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q128 152 88 138 Q130 122 168 140 Z"/>
-            <path class="stroke" style="fill:#eef1f4" d="M176 152 Q140 112 132 74 Q170 102 176 140 Z"/>
-          </g>
-        </g>
-        <g id="p-spin" class="hot">
-          <circle class="shape" cx="176" cy="152" r="24" fill="var(--sand)" stroke="var(--ink)" stroke-width="2.2"/>
-          <path class="shape" style="fill:none; stroke:var(--ink); stroke-width:2" d="M176 152 q10 -4 8 -14 q-12 2 -8 14"/>
-        </g>
-        <g id="p-bird" class="hot">
-          <path class="shape" style="fill:#8a7a63; stroke:var(--ink); stroke-width:1.8" d="M34 44 q10 -12 22 -6 q14 -14 24 0 q14 -4 16 8 q-16 10 -30 6 q-12 8 -24 2 q-8 -2 -8 -10"/>
-          <path class="shape" style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-dasharray:6 5" d="M92 62 Q120 88 142 116"/>
-          <path class="shape" style="fill:none; stroke:#c47a4f; stroke-width:2.4; stroke-linecap:round" d="M142 116 L131 111 M142 116 L138 104"/>
-          <circle cx="60" cy="48" r="30" fill="transparent"/>
-        </g>
-        <line x1="286" y1="86" x2="300" y2="72" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="256" y="62" font-size="13" fill="#77808a">ケース（檻）</text>
-        <line x1="240" y1="196" x2="268" y2="222" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="242" y="242" font-size="13" fill="#77808a">ブレード</text>
-        <line x1="176" y1="180" x2="150" y2="258" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="112" y="276" font-size="13" fill="#77808a">スピナー</text>
-        <line x1="70" y1="66" x2="52" y2="88" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="20" y="106" font-size="13" fill="#77808a">とり</text>
-      </svg>
+      <div class="cutwrap" style="max-width:420px">
+        <img src="../assets/fig/v2-05-fan.jpg" alt="ターボファンの正面図。ファンブレード・スピナー・コンテインメントケースと、左上から近づく鳥">
+        <svg viewBox="0 0 1024 1024">
+          <g class="zone" id="p-case"><circle cx="512" cy="512" r="445"/></g>
+          <g class="zone" id="p-blade"><circle cx="512" cy="512" r="330"/></g>
+          <g class="zone" id="p-spin"><circle cx="512" cy="512" r="105"/></g>
+          <g class="zone" id="p-bird"><rect x="30" y="30" width="260" height="190" rx="30"/></g>
+          <line x1="810" y1="230" x2="862" y2="175" stroke="#c47a4f" stroke-width="4"/>
+          <text x="680" y="140" font-size="36" fill="#5a636d">ケース（檻）</text>
+          <line x1="740" y1="770" x2="800" y2="850" stroke="#c47a4f" stroke-width="4"/>
+          <text x="760" y="905" font-size="36" fill="#5a636d">ブレード</text>
+          <line x1="500" y1="630" x2="430" y2="880" stroke="#c47a4f" stroke-width="4"/>
+          <text x="280" y="935" font-size="36" fill="#5a636d">スピナー</text>
+          <text x="240" y="130" font-size="36" fill="#5a636d">とり</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -229,7 +216,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

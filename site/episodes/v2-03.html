@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -86,37 +92,27 @@
     <p class="body">機体をやじろべえだと思ってください。支点が<b>重心</b>、左右の腕が<b>主翼と尾翼</b>。旅客機はふつう「主翼が持ち上げ、水平尾翼がわずかに<b>下向き</b>に押さえて帳尻を合わせる」釣り合い（トリム）で飛んでいます。そして「乱されても自分で戻る」性質——<b>安定</b>——は、重心が機体全体の釣り合い点より前にあることから生まれる、これとは別の話。似て非なるふたつの仕掛けを、図で見分けてください。</p>
 
     <div class="fig">
-      <svg width="340" height="240" viewBox="0 0 340 240">
-        <path class="stroke" style="fill:#eef1f4" d="M36 118 Q60 104 120 102 L262 102 Q292 102 306 112 Q296 126 262 128 L120 128 Q60 128 36 118 Z"/>
-        <g id="p-wing" class="hot">
-          <path class="shape stroke" style="fill:var(--sand)" d="M118 112 L188 112 L172 132 L118 130 Z"/>
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:2.8" d="M148 96 L148 72"/>
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:2.8; stroke-linecap:round" d="M148 72 L142 82 M148 72 L154 82"/>
-        </g>
-        <g id="p-htail" class="hot">
-          <path class="shape stroke" style="fill:var(--blue)" d="M270 108 L318 100 L312 116 L272 118 Z"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.6" d="M296 128 L296 148"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.6; stroke-linecap:round" d="M296 148 L290 139 M296 148 L302 139"/>
-        </g>
-        <g id="p-vtail" class="hot">
-          <path class="shape stroke" style="fill:#e8b98a" d="M268 102 L292 52 L308 52 L296 102 Z"/>
-        </g>
-        <g id="p-cg" class="hot">
-          <circle class="shape" cx="160" cy="116" r="7" fill="#c47a4f" stroke="var(--ink)" stroke-width="2"/>
-          <path class="shape stroke" d="M160 132 L154 146 L166 146 Z" style="fill:#fff"/>
-        </g>
-        <g id="p-eng" class="hot">
-          <rect class="shape stroke" style="fill:#eef1f4" x="128" y="134" width="34" height="18" rx="9"/>
-        </g>
-        <line x1="148" y1="64" x2="148" y2="50" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="104" y="42" font-size="13" fill="#77808a">主翼: もちあげる</text>
-        <line x1="300" y1="156" x2="300" y2="172" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="212" y="190" font-size="13" fill="#77808a">水平尾翼: 下におさえる</text>
-        <line x1="304" y1="56" x2="316" y2="46" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="252" y="34" font-size="13" fill="#77808a">垂直尾翼</text>
-        <line x1="160" y1="152" x2="160" y2="168" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="120" y="186" font-size="13" fill="#77808a">重心（支点）</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-03-aircraft.jpg" alt="旅客機の側面図。主翼・エンジン・水平尾翼・垂直尾翼と重心の位置">
+        <svg viewBox="0 0 1536 1024">
+          <circle cx="700" cy="590" r="16" fill="#c47a4f" stroke="#3a4550" stroke-width="4"/>
+          <g class="zone" id="p-wing"><rect x="560" y="510" width="500" height="110" rx="26"/></g>
+          <g class="zone" id="p-eng"><rect x="500" y="580" width="250" height="130" rx="30"/></g>
+          <g class="zone" id="p-vtail"><rect x="1170" y="230" width="300" height="250" rx="26"/></g>
+          <g class="zone" id="p-htail"><rect x="1220" y="480" width="250" height="80" rx="22"/></g>
+          <g class="zone" id="p-cg"><circle cx="700" cy="590" r="70"/></g>
+          <line x1="900" y1="330" x2="880" y2="510" stroke="#c47a4f" stroke-width="4"/>
+          <text x="760" y="300" font-size="38" fill="#5a636d">主翼: もちあげる</text>
+          <line x1="450" y1="820" x2="560" y2="690" stroke="#c47a4f" stroke-width="4"/>
+          <text x="260" y="880" font-size="38" fill="#5a636d">エンジン</text>
+          <line x1="700" y1="880" x2="700" y2="670" stroke="#c47a4f" stroke-width="4"/>
+          <text x="600" y="945" font-size="38" fill="#5a636d">重心（支点）</text>
+          <line x1="1210" y1="740" x2="1300" y2="560" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1010" y="800" font-size="38" fill="#5a636d">水平尾翼: 下におさえる</text>
+          <line x1="1140" y1="180" x2="1240" y2="300" stroke="#c47a4f" stroke-width="4"/>
+          <text x="960" y="150" font-size="38" fill="#5a636d">垂直尾翼</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -230,7 +226,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -87,29 +93,20 @@
     <p class="body">最終話は、第1巻と同じく実物での答え合わせです。しかも今回は最高の教材がある——<b>「同じ機体に、2種類のエンジン」という自然実験</b>が2組も飛んでいるのです。ナローボディのA320neoは<b>LEAP-1A</b>（CFM＝GEとサフランの合弁）と<b>PW1100G</b>（P&WのGTF）を、ワイドボディの787は<b>GEnx</b>（GE）と<b>Trent 1000</b>（ロールス・ロイス）を選べる。同じ翼の下で、別の設計思想が毎日競争しています。まずは4基の「顔の大きさ」から。</p>
 
     <div class="fig">
-      <svg width="340" height="200" viewBox="0 0 380 210">
-        <g id="e-leap" class="hot">
-          <circle class="shape stroke" style="fill:#eef1f4" cx="40" cy="96" r="34.7"/>
-          <circle class="shape" cx="40" cy="96" r="9" fill="var(--sand)" stroke="var(--ink)" stroke-width="1.8"/>
-        </g>
-        <g id="e-pw" class="hot">
-          <circle class="shape stroke" style="fill:#eef1f4" cx="119" cy="96" r="36"/>
-          <circle class="shape" cx="119" cy="96" r="9" fill="#e8b98a" stroke="var(--ink)" stroke-width="1.8"/>
-        </g>
-        <g id="e-genx" class="hot">
-          <circle class="shape stroke" style="fill:#eef1f4" cx="215" cy="96" r="49.4"/>
-          <circle class="shape" cx="215" cy="96" r="11" fill="var(--sand)" stroke="var(--ink)" stroke-width="1.8"/>
-        </g>
-        <g id="e-trent" class="hot">
-          <circle class="shape stroke" style="fill:#eef1f4" cx="324" cy="96" r="49.9" />
-          <circle class="shape" cx="324" cy="96" r="11" fill="var(--blue)" stroke="var(--ink)" stroke-width="1.8"/>
-        </g>
-        <text x="16" y="152" font-size="12" fill="#77808a">LEAP-1A</text>
-        <text x="92" y="152" font-size="12" fill="#77808a">PW1100G</text>
-        <text x="190" y="168" font-size="12" fill="#77808a">GEnx-1B</text>
-        <text x="294" y="168" font-size="12" fill="#77808a">Trent 1000</text>
-        <text x="104" y="24" font-size="12" fill="#9aa2ab">（ファン直径をおなじ縮尺で）</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-09-lineup.jpg" alt="4基のターボファンの正面図。左の2基が小さく、右の2基が大きい">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="e-leap"><circle cx="185" cy="500" r="160"/></g>
+          <g class="zone" id="e-pw"><circle cx="490" cy="500" r="160"/></g>
+          <g class="zone" id="e-genx"><circle cx="880" cy="495" r="225"/></g>
+          <g class="zone" id="e-trent"><circle cx="1310" cy="495" r="225"/></g>
+          <text x="105" y="740" font-size="38" fill="#5a636d">LEAP-1A</text>
+          <text x="395" y="740" font-size="38" fill="#5a636d">PW1100G</text>
+          <text x="790" y="800" font-size="38" fill="#5a636d">GEnx-1B</text>
+          <text x="1200" y="800" font-size="38" fill="#5a636d">Trent 1000</text>
+          <text x="470" y="120" font-size="34" fill="#9aa2ab">（ファン直径は ほぼ実寸の比）</text>
+        </svg>
+      </div>
       <div class="hint">▲ エンジンをタップすると、その設計思想にかわります</div>
     </div>
 
@@ -211,7 +208,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

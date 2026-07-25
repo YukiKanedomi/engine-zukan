@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -86,40 +92,23 @@
     <p class="body">その思想を形にしたのが<b>ターボファン</b>です。中心の小さな「コア」が焚き火のように動力を作り、その動力で先頭の<b>大きなファン</b>を回す。空気の大部分は燃焼室を通らず、ファンで少し加速されただけで<b>コアの外側をバイパス</b>して流れていきます。エンジンというより「ダクトに入ったプロペラ」——それが現代のジェットです。</p>
 
     <div class="fig">
-      <svg width="340" height="250" viewBox="0 0 340 250">
-        <path class="stroke" style="fill:none" d="M44 66 Q150 56 302 74 M44 184 Q150 194 302 176"/>
-        <g id="p-fan" class="hot">
-          <path class="shape stroke" style="fill:#eef1f4" d="M46 125 L64 78 L74 78 L60 125 L74 172 L64 172 Z"/>
-          <rect class="shape stroke" style="fill:#eef1f4" x="66" y="70" width="10" height="110" rx="4"/>
-        </g>
-        <g id="p-gear" class="hot">
-          <circle class="shape" cx="94" cy="125" r="11" fill="#e8b98a" stroke="var(--ink)" stroke-width="2"/>
-          <circle class="shape" cx="94" cy="119" r="3" fill="#fdf9f0" stroke="var(--ink)" stroke-width="1.4"/>
-          <circle class="shape" cx="89" cy="129" r="3" fill="#fdf9f0" stroke="var(--ink)" stroke-width="1.4"/>
-          <circle class="shape" cx="99" cy="129" r="3" fill="#fdf9f0" stroke="var(--ink)" stroke-width="1.4"/>
-          <circle cx="94" cy="125" r="20" fill="transparent"/>
-        </g>
-        <g id="p-core" class="hot">
-          <path class="shape stroke" style="fill:var(--sand)" d="M108 104 L252 108 Q262 125 252 142 L108 146 Q100 125 108 104 Z"/>
-          <path class="shape stroke" d="M118 108 L126 142 M134 109 L141 141 M149 110 L155 140" style="stroke-width:1.8"/>
-          <ellipse class="shape" cx="180" cy="125" rx="14" ry="12" fill="#f0b285" stroke="var(--ink)" stroke-width="2"/>
-          <path class="shape stroke" d="M206 111 L213 139 M220 112 L226 138" style="stroke-width:1.8"/>
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:3" d="M256 125 L296 125 M296 125 L286 119 M296 125 L286 131"/>
-        </g>
-        <g id="p-bypass" class="hot">
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:7; opacity:.8" d="M86 90 Q180 82 300 92"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:7; opacity:.8" d="M86 160 Q180 168 300 158"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:3; stroke-linecap:round" d="M300 92 L288 85 M300 92 L288 98 M300 158 L288 152 M300 158 L288 165"/>
-        </g>
-        <line x1="66" y1="62" x2="58" y2="46" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="30" y="36" font-size="13" fill="#77808a">ファン</text>
-        <line x1="238" y1="86" x2="248" y2="66" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="222" y="56" font-size="13" fill="#77808a">バイパス流</text>
-        <line x1="180" y1="150" x2="180" y2="208" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="146" y="226" font-size="13" fill="#77808a">コア（焚き火）</text>
-        <line x1="94" y1="140" x2="80" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="42" y="230" font-size="13" fill="#77808a">ギア（GTF）</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-04-turbofan.jpg" alt="高バイパスターボファンの側面断面図。ファン・減速ギア・コア・バイパスダクト">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-bypass"><rect x="500" y="200" width="800" height="165" rx="30"/><rect x="500" y="650" width="800" height="165" rx="30"/></g>
+          <g class="zone" id="p-core"><rect x="540" y="380" width="700" height="260" rx="30"/></g>
+          <g class="zone" id="p-fan"><rect x="230" y="190" width="230" height="640" rx="30"/></g>
+          <g class="zone" id="p-gear"><circle cx="490" cy="510" r="95"/></g>
+          <line x1="300" y1="150" x2="360" y2="240" stroke="#c47a4f" stroke-width="4"/>
+          <text x="170" y="120" font-size="38" fill="#5a636d">ファン</text>
+          <line x1="1100" y1="150" x2="1050" y2="260" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1000" y="120" font-size="38" fill="#5a636d">バイパス流</text>
+          <line x1="900" y1="900" x2="920" y2="640" stroke="#c47a4f" stroke-width="4"/>
+          <text x="760" y="960" font-size="38" fill="#5a636d">コア（焚き火）</text>
+          <line x1="440" y1="900" x2="480" y2="610" stroke="#c47a4f" stroke-width="4"/>
+          <text x="290" y="960" font-size="38" fill="#5a636d">ギア（GTF）</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -228,7 +217,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

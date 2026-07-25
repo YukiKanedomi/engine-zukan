@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -86,40 +92,26 @@
     <p class="body">種は2つ。<b>火を暴れさせない部屋（燃焼器）</b>と、<b>涼しさを着る翼（タービン）</b>。まず部屋から一周しましょう。</p>
 
     <div class="fig">
-      <svg width="340" height="260" viewBox="0 0 340 260">
-        <g id="p-noz" class="hot">
-          <rect class="shape stroke" style="fill:#e8b98a" x="34" y="106" width="26" height="28" rx="6"/>
-          <path class="shape" style="fill:none; stroke:var(--ink); stroke-width:2" d="M60 112 q14 6 0 14 M66 108 q20 10 0 22"/>
-        </g>
-        <g id="p-liner" class="hot">
-          <path class="shape stroke" style="fill:none" d="M64 84 L206 84 M64 156 L206 156"/>
-          <g class="shape" style="fill:#9cc0d4">
-            <circle cx="86" cy="84" r="2.6"/><circle cx="110" cy="84" r="2.6"/><circle cx="134" cy="84" r="2.6"/><circle cx="158" cy="84" r="2.6"/><circle cx="182" cy="84" r="2.6"/>
-            <circle cx="86" cy="156" r="2.6"/><circle cx="110" cy="156" r="2.6"/><circle cx="134" cy="156" r="2.6"/><circle cx="158" cy="156" r="2.6"/><circle cx="182" cy="156" r="2.6"/>
-          </g>
-        </g>
-        <g id="p-flame" class="hot">
-          <path class="shape stroke" style="fill:#f0b285" d="M78 120 q16 -22 34 -8 q20 -18 34 2 q18 -10 26 6 q-14 22 -46 18 q-30 6 -48 -18"/>
-        </g>
-        <g id="p-blade" class="hot">
-          <path class="shape stroke" style="fill:#eef1f4" d="M244 70 Q268 82 270 120 Q272 158 252 182 L232 176 Q248 150 246 118 Q244 92 234 76 Z"/>
-          <g class="shape" style="fill:#9cc0d4">
-            <circle cx="243" cy="88" r="2.4"/><circle cx="247" cy="104" r="2.4"/><circle cx="249" cy="120" r="2.4"/><circle cx="249" cy="136" r="2.4"/><circle cx="246" cy="152" r="2.4"/><circle cx="241" cy="167" r="2.4"/>
-          </g>
-        </g>
-        <g id="p-cool" class="hot">
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:3" d="M70 208 L236 208 Q252 208 252 192"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:3; stroke-linecap:round" d="M252 192 L246 202 M252 192 L258 201"/>
-        </g>
-        <line x1="44" y1="100" x2="36" y2="80" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="16" y="70" font-size="13" fill="#77808a">燃料ノズルとスワーラ</text>
-        <line x1="130" y1="78" x2="130" y2="56" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="96" y="46" font-size="13" fill="#77808a">ライナ（多孔の壁）</text>
-        <line x1="256" y1="80" x2="282" y2="60" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="252" y="48" font-size="13" fill="#77808a">タービン動翼</text>
-        <line x1="150" y1="212" x2="150" y2="232" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="96" y="250" font-size="13" fill="#77808a">冷却空気（圧縮機から拝借）</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-07-combustor.jpg" alt="燃焼器の断面図と、冷却孔の並ぶ高圧タービン動翼のクローズアップ">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-flame"><ellipse cx="590" cy="500" rx="280" ry="150"/></g>
+          <g class="zone" id="p-noz"><rect x="40" y="390" width="300" height="230" rx="30"/></g>
+          <g class="zone" id="p-liner"><rect x="290" y="290" width="600" height="115" rx="26"/><rect x="290" y="580" width="600" height="115" rx="26"/></g>
+          <g class="zone" id="p-blade"><rect x="1010" y="40" width="440" height="950" rx="36"/></g>
+          <g class="zone" id="p-cool"><rect x="1080" y="70" width="110" height="640" rx="30"/></g>
+          <line x1="180" y1="300" x2="210" y2="420" stroke="#c47a4f" stroke-width="4"/>
+          <text x="40" y="260" font-size="36" fill="#5a636d">燃料ノズルとスワーラ</text>
+          <line x1="500" y1="200" x2="520" y2="300" stroke="#c47a4f" stroke-width="4"/>
+          <text x="380" y="170" font-size="36" fill="#5a636d">ライナ（多孔の壁）</text>
+          <line x1="620" y1="850" x2="600" y2="670" stroke="#c47a4f" stroke-width="4"/>
+          <text x="560" y="910" font-size="36" fill="#5a636d">ほのお</text>
+          <line x1="1310" y1="90" x2="1290" y2="150" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1170" y="60" font-size="36" fill="#5a636d">タービン動翼</text>
+          <line x1="1000" y1="180" x2="1105" y2="230" stroke="#c47a4f" stroke-width="4"/>
+          <text x="880" y="150" font-size="36" fill="#5a636d">冷却孔</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -229,7 +221,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

@@ -33,6 +33,12 @@
 
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -93,41 +99,24 @@
     <p class="body">ところで、有名な説明を聞いたことがあるはずです——「翼の上面はふくらんでいて道のりが長い。<b>同じ時刻に後縁へ着くためには</b>上の空気が速く流れる必要がある。速いと圧力が下がるから浮く」。この説明、<b>太字の部分がまちがい</b>です。実験で流れに煙を入れて見ると、上面の空気は「同時」どころか<b>下面より先に</b>後縁へ着いてしまいます。実際の流れがどうなっているのか、絵で見ましょう。</p>
 
     <div class="fig">
-      <svg width="340" height="300" viewBox="0 0 340 300">
-        <g id="p-up" class="hot">
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M14 128 C 70 106, 140 84, 205 98 C 252 110, 296 138, 326 158"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M14 148 C 70 132, 132 108, 200 118 C 250 128, 300 152, 328 172"/>
-          <path class="shape" style="fill:none; stroke:var(--blue); stroke-width:2.4; stroke-linecap:round" d="M326 158 L316 151 M326 158 L317 162 M328 172 L318 165 M328 172 L319 176"/>
-          <path style="fill:none; stroke:transparent; stroke-width:20" d="M14 138 C 70 118, 136 96, 202 108 C 251 119, 298 145, 327 165"/>
-        </g>
-        <g id="p-low" class="hot">
-          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M14 182 C 80 184, 150 190, 215 186 C 262 182, 300 196, 326 210"/>
-          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M14 202 C 80 206, 155 212, 225 206 C 270 200, 304 212, 328 222"/>
-          <path class="shape" style="fill:none; stroke:#c8b590; stroke-width:2.4; stroke-linecap:round" d="M326 210 L316 204 M326 210 L317 214 M328 222 L318 216 M328 222 L319 226"/>
-          <path style="fill:none; stroke:transparent; stroke-width:20" d="M14 192 C 80 195, 152 201, 220 196 C 266 191, 302 204, 327 216"/>
-        </g>
-        <g id="p-body" class="hot">
-          <path class="shape stroke" style="fill:var(--sand)" d="M56 158 C 90 124, 160 114, 216 126 C 252 134, 276 148, 284 154 C 252 164, 160 169, 106 167 C 78 165, 62 161, 56 158 Z"/>
-          <circle class="shape" cx="57.5" cy="159.5" r="3.5" fill="#c47a4f"/>
-        </g>
-        <g id="p-trail" class="hot">
-          <circle class="shape" cx="282" cy="154" r="5.5" fill="#e8b98a" stroke="var(--ink)" stroke-width="2"/>
-          <circle cx="282" cy="154" r="17" fill="transparent"/>
-        </g>
-        <g id="p-down" class="hot">
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:3" d="M290 172 C 304 182, 317 191, 328 199"/>
-          <path class="shape" style="fill:none; stroke:#e08a4e; stroke-width:3; stroke-linecap:round" d="M328 199 L317 197 M328 199 L320 190"/>
-          <path style="fill:none; stroke:transparent; stroke-width:22" d="M290 172 C 304 182, 317 191, 328 199"/>
-        </g>
-        <line x1="150" y1="86" x2="150" y2="70" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="112" y="62" font-size="13" fill="#77808a">上面 はやい（低圧）</text>
-        <line x1="140" y1="208" x2="140" y2="240" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="86" y="258" font-size="13" fill="#77808a">下面 ゆっくり（高圧）</text>
-        <line x1="286" y1="146" x2="296" y2="136" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="290" y="128" font-size="13" fill="#77808a">後縁</text>
-        <line x1="300" y1="238" x2="312" y2="228" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="236" y="256" font-size="13" fill="#77808a">下にまがった流れ</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-01-airfoil.jpg" alt="翼型のまわりの流れ。上面と下面の流線が後縁で下向きに曲がる">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-up"><rect x="130" y="270" width="1000" height="170" rx="24"/></g>
+          <g class="zone" id="p-low"><rect x="130" y="610" width="1000" height="150" rx="24"/></g>
+          <g class="zone" id="p-body"><ellipse cx="770" cy="520" rx="460" ry="100"/></g>
+          <g class="zone" id="p-trail"><circle cx="1215" cy="578" r="70"/></g>
+          <g class="zone" id="p-down"><rect x="1255" y="500" width="260" height="300" rx="24"/></g>
+          <line x1="700" y1="280" x2="760" y2="370" stroke="#c47a4f" stroke-width="4"/>
+          <text x="440" y="250" font-size="38" fill="#5a636d">上面 はやい（低圧）</text>
+          <line x1="640" y1="800" x2="700" y2="690" stroke="#c47a4f" stroke-width="4"/>
+          <text x="400" y="855" font-size="38" fill="#5a636d">下面 ゆっくり（高圧）</text>
+          <line x1="1280" y1="470" x2="1225" y2="555" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1230" y="440" font-size="38" fill="#5a636d">後縁</text>
+          <line x1="1300" y1="870" x2="1360" y2="740" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1040" y="930" font-size="38" fill="#5a636d">下にまがった流れ</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -245,7 +234,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();

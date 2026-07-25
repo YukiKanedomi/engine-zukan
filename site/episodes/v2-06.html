@@ -30,6 +30,12 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .fig{margin:26px 0 8px; text-align:center}
   .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
   .hot{cursor:pointer}
   .hot .shape{transition:opacity .15s}
   .hot.dim .shape{opacity:.35}
@@ -86,51 +92,23 @@
     <p class="body">その解決が「はねの行列」。<b>回る翼の列（動翼）と止まった翼の列（静翼）を交互に並べ</b>、1段あたりおよそ1.2〜1.4倍（段と設計によります）というささやかな坂を、10数段かけて登り切ります。欲張らないことが、この機械の知恵です。</p>
 
     <div class="fig">
-      <svg width="340" height="250" viewBox="0 0 340 250">
-        <g id="p-path" class="hot">
-          <path class="shape stroke" style="fill:none" d="M36 62 L304 92 M36 190 L304 160"/>
-          <path class="shape stroke" style="fill:#eef1f4" d="M36 116 L304 118 L304 134 L36 136 Z"/>
-        </g>
-        <g id="p-rotor" class="hot">
-          <g class="shape">
-            <rect class="stroke" style="fill:var(--sand)" x="58" y="70" width="9" height="44" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="58" y="138" width="9" height="44" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="118" y="78" width="9" height="36" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="118" y="138" width="9" height="36" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="178" y="85" width="9" height="30" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="178" y="138" width="9" height="30" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="238" y="92" width="9" height="24" rx="3"/>
-            <rect class="stroke" style="fill:var(--sand)" x="238" y="138" width="9" height="24" rx="3"/>
-          </g>
-        </g>
-        <g id="p-stator" class="hot">
-          <g class="shape">
-            <rect class="stroke" style="fill:var(--blue)" x="88" y="74" width="9" height="40" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="88" y="138" width="9" height="40" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="148" y="82" width="9" height="32" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="148" y="138" width="9" height="32" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="208" y="88" width="9" height="27" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="208" y="138" width="9" height="27" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="268" y="95" width="9" height="21" rx="3"/>
-            <rect class="stroke" style="fill:var(--blue)" x="268" y="138" width="9" height="21" rx="3"/>
-          </g>
-        </g>
-        <g id="p-bleed" class="hot">
-          <rect class="shape stroke" style="fill:#e8b98a" x="192" y="52" width="26" height="14" rx="4"/>
-          <path class="shape" style="fill:none; stroke:#e8b98a; stroke-width:2.6" d="M205 50 L205 30"/>
-          <path class="shape" style="fill:none; stroke:#e8b98a; stroke-width:2.6; stroke-linecap:round" d="M205 30 L199 39 M205 30 L211 39"/>
-        </g>
-        <path style="fill:none; stroke:#77808a; stroke-width:2.6" d="M8 126 L30 126 M30 126 L22 121 M30 126 L22 131"/>
-        <path style="fill:none; stroke:#77808a; stroke-width:2.6" d="M310 126 L330 126 M330 126 L322 121 M330 126 L322 131"/>
-        <line x1="62" y1="196" x2="62" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="34" y="230" font-size="13" fill="#77808a">動翼（回る）</text>
-        <line x1="152" y1="196" x2="152" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="126" y="230" font-size="13" fill="#77808a">静翼（止まる）</text>
-        <line x1="262" y1="196" x2="276" y2="212" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="238" y="230" font-size="13" fill="#77808a">すぼむ通路</text>
-        <line x1="218" y1="56" x2="238" y2="44" stroke="#c47a4f" stroke-width="1.5"/>
-        <text x="242" y="38" font-size="13" fill="#77808a">抽気弁</text>
-      </svg>
+      <div class="cutwrap">
+        <img src="../assets/fig/v2-06-compressor.jpg" alt="軸流圧縮機の断面図。動翼と静翼の列が交互に並び、通路が奥へ行くほどすぼむ">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-path"><polygon points="90,140 1320,400 1320,455 90,215"/><polygon points="90,885 1320,625 1320,570 90,810"/></g>
+          <g class="zone" id="p-rotor"><rect x="245" y="160" width="110" height="700" rx="24"/><rect x="700" y="250" width="95" height="520" rx="24"/><rect x="1080" y="330" width="80" height="360" rx="22"/></g>
+          <g class="zone" id="p-stator"><rect x="385" y="185" width="100" height="650" rx="24"/><rect x="845" y="280" width="85" height="465" rx="22"/><rect x="1195" y="355" width="70" height="310" rx="20"/></g>
+          <g class="zone" id="p-bleed"><circle cx="690" cy="290" r="80"/></g>
+          <line x1="300" y1="930" x2="295" y2="800" stroke="#c47a4f" stroke-width="4"/>
+          <text x="180" y="990" font-size="38" fill="#5a636d">動翼（回る）</text>
+          <line x1="560" y1="930" x2="435" y2="760" stroke="#c47a4f" stroke-width="4"/>
+          <text x="470" y="990" font-size="38" fill="#5a636d">静翼（止まる）</text>
+          <line x1="1240" y1="890" x2="1265" y2="660" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1120" y="950" font-size="38" fill="#5a636d">すぼむ通路</text>
+          <line x1="620" y1="110" x2="680" y2="240" stroke="#c47a4f" stroke-width="4"/>
+          <text x="330" y="80" font-size="38" fill="#5a636d">抽気弁（この壁のとちゅうに）</text>
+        </svg>
+      </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
     </div>
 
@@ -243,7 +221,7 @@ function render(){
   document.getElementById("card-name").textContent = p.name;
   document.querySelector("#card .dot").style.background = p.color;
   document.getElementById("card-text").textContent = p.t;
-  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("dim", id !== cur);
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
 }
 for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
 render();
