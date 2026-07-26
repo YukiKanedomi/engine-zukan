@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編01 — 心臓を、ひらいてみる</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編01 — 心臓を、ひらいてみる" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch01.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-01.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+  .pager .off{opacity:.45}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch01.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep01.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい1わ ── しんぞうの章</div>
+    <h1 class="kyoka">心臓を、ひらいてみる</h1>
+
+    <p class="body">第3巻は、これまでと勝手がちがいます。第1巻は宇宙を、第2巻は空を、広く歩きました。今度は<b>1つの機械だけを、まるごと1巻かけて解剖します</b>——ロケットの心臓、ターボポンプ。第1巻第5話で扉の隙間からのぞいたあの機械の、扉を全部あけていく巻です。そしてこの機械は、これからあなたが毎日つきあう相手でもあります。</p>
+
+    <p class="body">まず「なぜ心臓が要るのか」から。燃焼室の圧力はLE-9で<b>10MPa</b>——100気圧です。推進剤をそこへ押し込むには、それより高い圧力が要る。いっぽうタンクの中は<b>数気圧</b>しかありません。この差を埋める方法は2つだけ: タンク全体を100気圧超——燃焼室圧に噴射器や流路の損失を上乗せした圧力——に耐える容器にするか（壁が分厚くなり、タンクが戦車になる）、<b>タンクは薄いまま、途中に小さな昇圧の心臓を置くか</b>。ポンプ供給式とは、この2択の答えです。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-01-turbopump.jpg" alt="ターボポンプの断面図。1本の軸にインデューサ・インペラ・シール・軸受・タービンが並ぶ">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-ind"><rect x="40" y="430" width="360" height="220" rx="30"/></g>
+          <g class="zone" id="p-imp"><circle cx="555" cy="520" r="258"/></g>
+          <g class="zone" id="p-seal"><rect x="690" y="430" width="115" height="210" rx="26"/></g>
+          <g class="zone" id="p-brg"><rect x="815" y="425" width="330" height="220" rx="30"/></g>
+          <g class="zone" id="p-turb"><rect x="1150" y="200" width="340" height="540" rx="34"/></g>
+          <line x1="200" y1="720" x2="230" y2="620" stroke="#c47a4f" stroke-width="4"/>
+          <text x="70" y="790" font-size="38" fill="#5a636d">インデューサ</text>
+          <line x1="380" y1="150" x2="470" y2="300" stroke="#c47a4f" stroke-width="4"/>
+          <text x="130" y="120" font-size="38" fill="#5a636d">インペラと うずまき部屋</text>
+          <line x1="700" y1="850" x2="745" y2="650" stroke="#c47a4f" stroke-width="4"/>
+          <text x="610" y="915" font-size="38" fill="#5a636d">シール</text>
+          <line x1="960" y1="850" x2="975" y2="650" stroke="#c47a4f" stroke-width="4"/>
+          <text x="900" y="915" font-size="38" fill="#5a636d">軸受</text>
+          <line x1="1330" y1="850" x2="1330" y2="740" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1250" y="915" font-size="38" fill="#5a636d">タービン</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">この機械のむずかしさを、1枚の絵で言えるとしたら——<b>1本の軸の、両端の温度</b>です。切り替えて見てください。</p>
+
+    <div class="chips">
+      <span class="chip" id="t-cold">ポンプの端</span>
+      <span class="chip" id="t-mid">まんなか</span>
+      <span class="chip" id="t-hot">タービンの端</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-cold" src="../assets/fig/v3-01-t1.jpg" alt="">
+        <img id="sc-mid" src="../assets/fig/v3-01-t2.jpg" alt="" style="display:none">
+        <img id="sc-hot" src="../assets/fig/v3-01-t3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ おなじ1本の軸の上に、氷の世界と火の世界が同居しています</div>
+    </div>
+
+    <div class="partcard" id="tcard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="tcard-name"></span></div>
+      <p id="tcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>タンクで押してはいけないのか</summary>
+      <div class="inner">
+        <p>押してもいいのです——小さければ。姿勢制御スラスタや小型衛星の推進系は、いまも<b>圧力供給式</b>（タンク圧だけで押し込む）が現役です。問題は大きさの物理: 内圧に耐えるタンクの壁厚は圧力×半径に比例して増えるので、<b>大きなロケットの巨大タンクを100気圧仕様にすると、構造重量が壊滅します</b>。第1巻第1話の質量比の税金がここを直撃する。だから大型エンジンはタンクを数気圧の薄皮にして、昇圧はぜんぶ小さな心臓に任せる——ターボポンプは「タンクの壁厚を燃料に換える機械」とも言えます。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>V8エンジンの重さで、機関車28台ぶん</summary>
+      <div class="inner">
+        <p>NASAがシャトルの資料に残した比較が痛快です——SSMEの高圧燃料ターボポンプ（HPFTP）は<b>「重さはV8自動車エンジン並み、出力はその310倍」</b>。定格で71,140馬力、全力運転では約77,000馬力・毎分37,000回転超（時速100kmで走る車のエンジンが2,000回転です）。液体水素を1.9MPaから<b>45MPa</b>まで押し上げる。<b>「機関車28台ぶんの馬力」</b>が洗濯機ほどの箱から出てくる——このパワー密度こそがロケットの心臓の正体で、そしてこの巻でこれから見ていく難しさ（キャビテーション・振動・過渡）は、ぜんぶこの密度の代償です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート — この巻の地図</summary>
+      <div class="inner">
+        <p>この巻はあなたの母国語圏なので、以後は現場の言葉で書きます。設計空間の座標系はまず<b>比速度N<sub>s</sub></b>（形式選定）と<b>吸込比速度N<sub>ss</sub></b>（キャビテーション余裕）。LE-9のFTPは41,600rpm・吐出19.1MPa、OTPは17,000rpm・17.9MPa（IHI技報）——この運転点に流量・段揚程・NPSHを添えて初めてN<sub>s</sub>・N<sub>ss</sub>の平面に置け、設計者の選択が読めるようになります。以後の章立ては「高パワー密度の代償」を1つずつ潰す旅です: 吸い込み側の戦い（02 キャビテーション）、羽根車の仕事（03）、駆動side（04）、両端の世界の綱渡り（05 軸受・シール）、回る軸の動力学（06）、過渡（07）、そして作って試す（08）。教科書はSutton ch.10と<b>NASA SP-8107</b>、一次資料はIHI技報が最良の伴走者です。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-01.jpg" alt="展示されたLE-7A液体水素ターボポンプの実機" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜H-IIAの第1段エンジンLE-7Aの液体水素ターボポンプ、実機の展示品（神戸・2015年）。インデューサからタービンまでが、この一抱えに全部入っています。LE-9のポンプはこの直系の子孫——IHIの技報には2世代の比較表がそのまま載っています。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Mitsubishi_LE-7A_FTP(Liquid_Hydrogen_Turbopump)_at_Kobe_International_Conference_Center_20150704.JPG" style="color:inherit">Hunini（CC BY-SA 4.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>02 すいこみ口の たたかい</b>: 数気圧しかない吸い込み口で、泡（キャビテーション）とどう戦うか。インデューサの螺旋に込められた知恵と、NPSHという通貨の話。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・IHI技報 Vol.58 No.2（2025）「LE-9エンジン用ターボポンプの開発状況」（FTP 41,600rpm・19.1MPa／OTP 17,000rpm・17.9MPa／燃焼圧10.0MPa）<br>
+      ・NASA SP-8107, <i>Turbopump Systems for Liquid Rocket Engines</i>（1974）<br>
+      ・NASA "Space Shuttle Propulsion Trivia"（FS-2005-04-027-MSFC）／Wikipedia "RS-25"（HPFTP 71,140hp・1.9→45MPa）<br>
+      ・G. P. Sutton &amp; O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.10
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="../index.html">← もくじ</a>
+  <span class="off">つぎ: 02 すいこみ口の たたかい（じゅんびちゅう）</span>
+</div>
+
+<script>
+const PARTS = {
+  "p-ind": { name:"インデューサ — さきぶれの螺旋", color:"var(--blue)",
+    t:"吸い込み口で最初に液を掴む、ゆるやかなスクリューです。入口で使える元手は、タンクの数気圧に液柱や機体加速のぶんを足し、配管の損失を差し引いた「吸込余裕」（NPSH）だけ。乱暴に吸うと液が蒸気圧を割って泡が立つ（キャビテーション）。だから先発隊はそっと、少ない余裕でも泡を立てにくい形で液を持ち上げ、本隊に手渡します。この螺旋だけで1話ぶんの戦いがある——第2話の主役です。" },
+  "p-imp": { name:"インペラと うずまき部屋", color:"var(--blue)",
+    t:"心臓の本隊。回転する羽根車が液に軸動力を渡して圧力と速度を与え、続くうずまき部屋（ボリュート）が残りの速度を圧力に回収して出口へ集めます。LE-9の燃料ポンプ全体で毎分41,600回転・吐出19.1MPa（IHI技報）——第2巻の圧縮機が10数段かけた仕事を、液体相手にほぼ一撃で。速度三角形の話は第3話で。" },
+  "p-seal": { name:"シール — 出会ってはいけない二人の仕切り", color:"#e8b98a",
+    t:"回る軸の上で、ポンプ液やタービンガスの漏れを設計値以下に抑え、あいだの部屋を隔てる持ち場です。とくに酸素ポンプでは、駆動ガスと酸素が出会えば爆発——だからシール・パージ・ドレンを何重にも組み合わせて、二人を絶対に会わせない。この機械でいちばん地味で、いちばん命がけの仕事です。第5話でじっくり。" },
+  "p-brg": { name:"軸受 — -253℃で回る玉", color:"var(--blue)",
+    t:"毎分数万回転の軸を支える玉軸受。ふつうの潤滑油は極低温で凍り、液体水素や液体酸素そのものにはほとんど潤滑性がありません。そこで流れる推進剤には主に熱を運ばせ、潤滑はPTFE系の保持器から移る固体潤滑の膜などに任せる——極低温トライボロジーの見せ場です。第5話の主役のひとり。" },
+  "p-turb": { name:"タービン — まわす火", color:"#e08a4e",
+    t:"心臓の動力源。ガスでこの翼車を回し、同じ軸でポンプを駆動します。ガスをどう作るかが第1巻第4話のサイクルの話そのもの——LE-9は燃やさず、冷却路で温めた高圧水素で回すエキスパンダーブリード（第1巻の「沸かして回す」は比喩で、この圧力の水素は超臨界——はっきりした沸騰は起きません）。駆動側の設計は第4話で。" }
+};
+let cur = "p-imp";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const TT = {
+  "t-cold": { name:"ポンプの端 — -253℃の世界", scene:"sc-cold",
+    t:"液体水素が流れる側は-253℃。配管には霜がつき、金属は縮み、ゴムはガラスのように砕ける温度です。この端では「凍らない材料」「縮みを見込んだ隙間」が設計の言葉になります。" },
+  "t-mid": { name:"まんなか — 数十cmの休戦地帯", scene:"sc-mid",
+    t:"氷の世界と火の世界のあいだは、大人の手のひらいくつかぶんしかありません。この短い区間でシールとパージが二つの世界を仕切り、熱が伝わりすぎないよう軸の形まで工夫される——温度勾配との交渉地帯です。" },
+  "t-hot": { name:"タービンの端 — 火の世界", scene:"sc-hot",
+    t:"駆動ガス側は、ガス発生器サイクルの機種では数百℃——液体水素側との環境温度差が800℃を超える組み合わせもあります。これは流体環境の差で、軸の金属温度そのものではありません（伝導・冷却・パージが間を取り持ちます）が、それでもこの温度勾配を抱えて毎分数万回転する機械は他にない。ちなみにLE-9はタービン側がずっと低温で、それ自体が「安全なエンジン」思想の一部です。この1枚が、第3巻ぜんぶの予告編。" }
+};
+let curT = "t-cold";
+function renderT(){
+  const t = TT[curT];
+  document.getElementById("tcard-name").textContent = t.name;
+  document.getElementById("tcard-text").textContent = t.t;
+  for (const id of Object.keys(TT)) {
+    document.getElementById(id).classList.toggle("sel", id === curT);
+    document.getElementById(TT[id].scene).style.display = (id === curT) ? "" : "none";
+  }
+}
+for (const id of Object.keys(TT)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
+
+try { localStorage.setItem("read:v3-01", "1"); } catch(e) {}
+</script>
+</body>
+</html>
