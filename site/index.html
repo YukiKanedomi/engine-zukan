@@ -46,7 +46,6 @@
   .shelf li.soon .row{color:#b6bcc2}
   .shelf li.soon .no{color:#cfc4ae}
   .shelf .tag{margin-left:auto; font-size:.66rem; color:var(--sub); flex:none}
-  .shelf .tag.new{color:var(--acc); border:1px solid var(--acc); border-radius:999px; padding:0 8px}
   .shelf .tag.read{color:#4e6b49}
   .howto{font-size:.74rem; color:var(--sub); margin-top:18px; padding:8px 10px; background:#fff;
     border-radius:8px; border:1px solid var(--line)}
@@ -65,7 +64,7 @@
 
 <script>
 const SHELF = [
-  { vol:"第1巻 ロケット編", episodes:[
+  { vol:"第1巻 ロケット編", id:"v1", episodes:[
     { no:"01", title:"ロケットは、すてながら とんでいく", href:"episodes/01.html", ico:"ep01" },
     { no:"02", title:"うしろに投げると、まえにすすむ",     href:"episodes/02.html", ico:"ep02" },
     { no:"03", title:"かたい燃料、ながれる燃料",           href:"episodes/03.html", ico:"ep03" },
@@ -76,7 +75,7 @@ const SHELF = [
     { no:"08", title:"爆音とふるえを、てなずける",         href:"episodes/08.html", ico:"ep08" },
     { no:"09", title:"じっさいの機体で、答え合わせ",       href:"episodes/09.html", ico:"ep09" },
   ]},
-  { vol:"第2巻 飛行機編", episodes:[
+  { vol:"第2巻 飛行機編", id:"v2", episodes:[
     { no:"01", title:"ひこうきは、空気をまげて とんでいく", href:"episodes/v2-01.html", ico:"v2ep01", key:"v2-01" },
     { no:"02", title:"つばさの かたち",                     href:"episodes/v2-02.html", ico:"v2ep02", key:"v2-02" },
     { no:"03", title:"きたいは、そらの やじろべえ",         href:"episodes/v2-03.html", ico:"v2ep03", key:"v2-03" },
@@ -87,7 +86,7 @@ const SHELF = [
     { no:"08", title:"うたうエンジン、ふるえる はね",       href:"episodes/v2-08.html", ico:"v2ep08", key:"v2-08" },
     { no:"09", title:"じっさいのエンジンで、答え合わせ",     href:"episodes/v2-09.html", ico:"v2ep09", key:"v2-09" },
   ]},
-  { vol:"第3巻 ターボポンプ編", episodes:[
+  { vol:"第3巻 ターボポンプ編", id:"v3", episodes:[
     { no:"01", title:"心臓を、ひらいてみる",       href:"episodes/v3-01.html", ico:"v3ep01", key:"v3-01" },
     { no:"02", title:"すいこみ口の たたかい",     href:"episodes/v3-02.html", ico:"v3ep02", key:"v3-02" },
     { no:"03", title:"とばす円盤",                 href:"episodes/v3-03.html", ico:"v3ep03", key:"v3-03" },
@@ -98,7 +97,7 @@ const SHELF = [
     { no:"08", title:"つくって、ためす",           href:"episodes/v3-08.html", ico:"v3ep08", key:"v3-08" },
     { no:"09", title:"じっさいのポンプで、答え合わせ", href:"episodes/v3-09.html", ico:"v3ep09", key:"v3-09" },
   ]},
-  { vol:"えほんの たな（EX）", episodes:[
+  { vol:"えほんの たな（EX）", id:"ex", episodes:[
     { no:"EX1", title:"ロケットは どうして とべるの？", href:"ex/ehon-01/index.html", ico:"book" },
     { no:"EX2", title:"エンジンの なかは どうなってるの？", href:"ex/ehon-02/index.html", ico:"book" },
     { no:"EX3", title:"ロケットの ごはんは なあに？", href:"ex/ehon-03/index.html", ico:"book" },
@@ -109,7 +108,6 @@ const SHELF = [
     { no:"EX8", title:"おおきな おとと、みずの まほう", href:"ex/ehon-08/index.html", ico:"book" },
     { no:"EX9", title:"いつか、そらの むこうへ", href:"ex/ehon-09/index.html", ico:"book" },
   ]},
-  // 第2巻 飛行機編は、ここにブロックを1つ足すだけ
 ];
 
 const root = document.getElementById("shelf");
@@ -117,6 +115,7 @@ for (const vol of SHELF) {
   if (!vol.episodes.length) continue;
   const h = document.createElement("h2");
   h.className = "kyoka"; h.textContent = vol.vol;
+  if (vol.id) h.id = vol.id;
   root.appendChild(h);
   const ol = document.createElement("ol");
   for (const ep of vol.episodes) {
@@ -129,7 +128,7 @@ for (const vol of SHELF) {
     inner.className = "row";
     if (isUp) inner.href = ep.href;
     const tag = isUp ? (read ? '<span class="tag read" title="よんだ"><img src="assets/icons/hanamaru.jpg" alt="よんだ" style="width:30px; height:30px; display:block; transform:rotate(-8deg)"></span>'
-                             : '<span class="tag new">よめるよ</span>')
+                             : '')
                      : '<span class="tag">じゅんびちゅう</span>';
     inner.innerHTML = (ep.ico ? '<img class="ico" src="assets/icons/' + ep.ico + '.jpg" alt="" loading="lazy">' : '')
       + '<span class="no">' + ep.no + '</span><span class="kyoka">' + ep.title + '</span>' + tag;
@@ -137,6 +136,10 @@ for (const vol of SHELF) {
     ol.appendChild(li);
   }
   root.appendChild(ol);
+}
+if (location.hash) {
+  const t = document.getElementById(location.hash.slice(1));
+  if (t) t.scrollIntoView();
 }
 </script>
 </body>
