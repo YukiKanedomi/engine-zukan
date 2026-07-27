@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編08 — つくって、ためす</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編08 — つくって、ためす" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch08.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-08.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch08.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep08.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい8わ ── 試験の章</div>
+    <h1 class="kyoka">つくって、ためす</h1>
+
+    <p class="body">設計の話を7話してきました。最終話のカタログの前に、その設計が<b>現実の金属になり、証明される工程</b>を見ておきましょう。ターボポンプ開発の合言葉は「解析を信じ、試験で確かめる」。そして極低温の実流体でいきなり試すのは高くつくので、試験には<b>賢い階段</b>があります——水で見て、窒素で冷やして、最後に本物の火で。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-08-test.jpg" alt="水槽試験のようす。ガラスの試験部の中のインデューサをハイスピードカメラで観察する">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-tunnel"><rect x="290" y="280" width="830" height="430" rx="34"/></g>
+          <g class="zone" id="p-cam"><rect x="45" y="470" width="250" height="460" rx="34"/></g>
+          <g class="zone" id="p-mon"><rect x="1130" y="520" width="300" height="420" rx="34"/></g>
+          <g class="zone" id="p-note"><rect x="470" y="780" width="360" height="200" rx="30"/></g>
+          <line x1="700" y1="200" x2="700" y2="280" stroke="#c47a4f" stroke-width="4"/>
+          <text x="530" y="170" font-size="38" fill="#5a636d">水のトンネル</text>
+          <line x1="180" y1="400" x2="170" y2="470" stroke="#c47a4f" stroke-width="4"/>
+          <text x="50" y="370" font-size="38" fill="#5a636d">高速カメラ</text>
+          <line x1="1310" y1="450" x2="1290" y2="520" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1210" y="420" font-size="38" fill="#5a636d">計測</text>
+          <line x1="800" y1="1000" x2="740" y2="950" stroke="#c47a4f" stroke-width="4"/>
+          <text x="820" y="1010" font-size="38" fill="#5a636d">ノート</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">試験の階段を、3段で切り替えてみてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="ts-water">水で見る</span>
+      <span class="chip" id="ts-cryo">冷やして回す</span>
+      <span class="chip" id="ts-fire">本番の火で</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-water" src="../assets/fig/v3-08-s1.jpg" alt="">
+        <img id="sc-cryo" src="../assets/fig/v3-08-s2.jpg" alt="" style="display:none">
+        <img id="sc-fire" src="../assets/fig/v3-08-s3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ 安い流体から順に、確からしさを積み上げる</div>
+    </div>
+
+    <div class="partcard" id="tscard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="tscard-name"></span></div>
+      <p id="tscard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>角田の水槽 — 泡を「見る」場所</summary>
+      <div class="inner">
+        <p>キャビテーションは音と振動で「聞く」ことはできても、金属のポンプの中では見えません。だから開発の主力は<b>水槽（キャビテーション・トンネル）</b>——透明な試験部の中でインデューサを回し、高速度カメラで泡の生き死にを直接観察します。JAXA角田宇宙センターはこの分野の名門で、<b>回転するインデューサ上のキャビテーションを極低温流体でも可視化する世界初の設備</b>を築きました。第2話の旋回キャビテーションの発見と理論（Kamijo、Tsujimoto）も、この「見る」文化の系譜です。読者のあなたにとっては、いちばん近い聖地かもしれません。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>3Dプリンタは、ポンプをどこまで変えるか</summary>
+      <div class="inner">
+        <p>製造側の新しい波が積層造形（AM）です。NASAはマーシャル宇宙飛行センターで<b>主要部品を3Dプリントで作ったターボポンプ</b>を組み、液体メタンを流す全力試験まで実施しました（2015〜16年。ページ末尾の写真がその現場です）——部品点数を大幅に減らし、鋳型なしで複雑な流路を作れることを実証した記念碑です。日本では、LE-9でAMが適用されているのは公開資料では<b>噴射器頭部など燃焼系部品</b>で、ターボポンプ本体については、IHIはオープンインペラやブリスク、ハイブリッド軸受といった機械加工側の技術でコストを削っています。どこにAMを使い、どこに使わないか——その線引き自体が、いまいちばん動いている設計判断です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>水試験が成立する根拠は<b>相似則</b>——無次元（流量係数・揚程係数・キャビテーション数σ）を合わせれば、水の結果を実流体へ持ち込めます。ただし持ち込めない項がある: 第2話の<b>熱力学的効果</b>は水では弱く極低温では強いので、水槽のσは実機より辛口の評価になることが多い（ただし「常に安全側」とまでは言えず、不安定現象の種類によっては水と実流体で出方が違う例も報告されています）。液体窒素試験はその橋渡しで、Yamadaらは1985年に毎分16,500回転のLN2インデューサ試験を報告しています。LE-9のポンプも角田で実流体のコールドフロー試験（ポンプは液水/液酸、タービンは高圧水素ガス駆動）を経てからエンジン燃焼試験へ進みました。計測の主役は振動スペクトル（第6話の聴診器）と圧力脈動、そして回転バランスと過回転（オーバースピン）の構造証明——「回る前に、回りすぎても壊れないことを示す」のが回転機械の礼儀です。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-08.jpg" alt="3Dプリント製ターボポンプの試験準備をするNASAのエンジニアたち" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜NASAマーシャル宇宙飛行センターで、3Dプリント製ターボポンプの試験準備をするエンジニアたち（2016年）。このポンプは液体メタン毎分600ガロンの全力試験に挑みました。設計・製造・試験——この巻で歩いた道の全部が、この一枚の作業台に載っています。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://images.nasa.gov/details/MSFC-1600485" style="color:inherit">NASA/MSFC/Emmett Given（パブリックドメイン）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>09 じっさいのポンプで、答え合わせ</b>: 最終話。SSMEの怪物、歯車で回すRL10、1本の軸で2つを回すMerlin、そして短い軸のLE-9——8話ぶんの言葉で読む、心臓のカタログ。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・角田の極低温インデューサ可視化: ASME J. Fluids Eng.（2021）／LN2インデューサ試験: Yamada et al. (1985)<br>
+      ・NASA 3Dプリントターボポンプ試験: NASA/MSFC（2015-16, 画像ID MSFC-1600485）<br>
+      ・LE-9のAM適用（噴射器頭部）: MHI技報53-4／LE-9ポンプのコールドフロー試験: IHI技報 Vol.58 No.2
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-07.html">← 07 めざめの3秒</a>
+  <a href="v3-09.html">つぎ: 09 答え合わせ →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-tunnel": { name:"水のトンネル — 実機の身代わり", color:"var(--blue)",
+    t:"透明な試験部に供試体（ここではインデューサ）を入れ、条件を無次元で合わせて回す試験設備です。水は安全で安く、何より「見える」。キャビテーションの初生からブレークダウンまで、第2話の物語はこういう場所で撮影されてきました。" },
+  "p-cam": { name:"高速カメラ — 泡の生き死にを撮る", color:"var(--blue)",
+    t:"泡の発生と崩壊はミリ秒の出来事なので、毎秒数千〜数万コマの高速度撮影で追います。映像と圧力・振動の計測を突き合わせると、どの泡の挙動がどの不安定に対応するかが読める——旋回キャビテーションの同定も、この突き合わせから生まれました。" },
+  "p-mon": { name:"計測 — 数字にする仕事", color:"var(--sand)",
+    t:"圧力脈動、振動スペクトル、流量、温度。試験の価値は計測の設計で決まります。とくに振動スペクトルは回転機械の聴診器（第6話）——どの周波数に何が出たかで、危険速度・ホワール・キャビテーション不安定の犯人当てをします。" },
+  "p-note": { name:"ノート — いちばん長持ちする部品", color:"#e8b98a",
+    t:"試験の条件、気づき、失敗の記録。H-II 8号機の教訓（第2話)も、SSMEのホワール事件（第6話）も、誰かのノートと報告書が次の世代の設計基準になったものです。あなたがこれから書く記録も、この系譜に連なります。" }
+};
+let cur = "p-tunnel";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const TS = {
+  "ts-water": { name:"水で見る — 安くて、見える", scene:"sc-water",
+    t:"幾何相似を前提にσや流量係数を合わせれば、水で主要な性能傾向を比較できます（相似則）。透明で安全で安いので、形状の比較や不安定の観察はまず水で。ただしRe・翼端隙間・そして熱力学的効果は別勘定で、不安定の出方まで水と実流体で一致するとは限りません——その分は理屈と極低温試験で埋めます（ノート参照）。" },
+  "ts-cryo": { name:"冷やして回す — 実流体への橋", scene:"sc-cryo",
+    t:"液体窒素などの極低温流体で、熱の効果と材料の挙動を含めて確かめる段階です。1985年には毎分16,500回転のLN2インデューサ試験が報告され、いまの角田には極低温での可視化設備まであります。水と本番のあいだの、大事な踊り場です。" },
+  "ts-fire": { name:"本番の火で — 最後の証明", scene:"sc-fire",
+    t:"最後は実推進剤・実運転条件のホットファイア。LE-9のポンプも角田でのコールドフロー試験を経て、エンジンとしての燃焼試験で証明されました。ここまでの階段を全部登った設計だけが、機体の下に吊るされます。" }
+};
+let curT = "ts-water";
+function renderT(){
+  const t = TS[curT];
+  document.getElementById("tscard-name").textContent = t.name;
+  document.getElementById("tscard-text").textContent = t.t;
+  for (const id of Object.keys(TS)) {
+    document.getElementById(id).classList.toggle("sel", id === curT);
+    document.getElementById(TS[id].scene).style.display = (id === curT) ? "" : "none";
+  }
+}
+for (const id of Object.keys(TS)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
+
+try { localStorage.setItem("read:v3-08", "1"); } catch(e) {}
+</script>
+</body>
+</html>

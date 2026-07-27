@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編06 — まわる軸の ふるえ</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編06 — まわる軸の ふるえ" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch06.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-06.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch06.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep06.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい6わ ── 回転の章</div>
+    <h1 class="kyoka">まわる軸の ふるえ</h1>
+
+    <p class="body">ここまで流体の話をしてきましたが、それを全部載せて回っているのは<b>1本の細い軸</b>です。毎分数万回転の軸は、じつはただ回っているのではありません——<b>回りながら、たわみ、ふれまわろうとしています</b>。回転体の力学（ロータダイナミクス）は、ターボポンプ開発でいちばん多くの夜を奪ってきた分野。今日はその主役、危険速度とホワールの話です。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-06-rotor.jpg" alt="軸系の模式図。インデューサ・円盤・タービンを載せた軸が軸受に支えられ、ふれまわりの軌道を描く">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-mass"><rect x="50" y="330" width="320" height="360" rx="34"/><rect x="1110" y="310" width="320" height="440" rx="34"/></g>
+          <g class="zone" id="p-brgs"><circle cx="458" cy="545" r="130"/><circle cx="1000" cy="545" r="130"/></g>
+          <g class="zone" id="p-orbit"><ellipse cx="730" cy="530" rx="330" ry="230"/></g>
+          <line x1="180" y1="260" x2="210" y2="330" stroke="#c47a4f" stroke-width="4"/>
+          <text x="55" y="230" font-size="38" fill="#5a636d">おもりたち</text>
+          <line x1="420" y1="930" x2="450" y2="690" stroke="#c47a4f" stroke-width="4"/>
+          <text x="330" y="985" font-size="38" fill="#5a636d">軸受（支点）</text>
+          <line x1="800" y1="230" x2="770" y2="330" stroke="#c47a4f" stroke-width="4"/>
+          <text x="700" y="200" font-size="38" fill="#5a636d">ふれまわり</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">軸のふるえには3つの顔があります。順番に切り替えてみてください——2つめが、この分野でいちばん怖い顔です。</p>
+
+    <div class="chips">
+      <span class="chip" id="rt-crit">危険速度</span>
+      <span class="chip" id="rt-whirl">ホワール</span>
+      <span class="chip" id="rt-damp">しずめる</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-crit" src="../assets/fig/v3-06-s1.jpg" alt="">
+        <img id="sc-whirl" src="../assets/fig/v3-06-s2.jpg" alt="" style="display:none">
+        <img id="sc-damp" src="../assets/fig/v3-06-s3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ 通り抜けられる山と、通り抜けられない渦</div>
+    </div>
+
+    <div class="partcard" id="rtcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="rtcard-name"></span></div>
+      <p id="rtcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">事故調ファイル</span>1976年 — SSMEを止めた見えない渦</summary>
+      <div class="inner">
+        <p>スペースシャトル開発の初期、SSMEの高圧燃料ターボポンプ（HPFTP）は<b>サブシンクロナス・ホワール</b>——回転数の半分程度の周波数で軸がふれまわる自励振動——に襲われ、<b>1976年の数ヶ月間、全力運転を封じられました</b>。外から叩かれる振動ではなく、シール隙間などの流体力が自分で自分を育てるループ（第2巻08話のフラッター、第1巻08話のPOGOと同じ文法）。解決策が鮮やかでした——<b>ロータを固くし、そして段間シールを「軸受のように働く減衰シール」に作り替えて</b>、系に剛性と減衰を注ぎ込んだのです。漏れ止めだったはずのシールが、振動を鎮める部品に化けた瞬間で、以後のポンプ設計の常識になりました。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>すきまの流体は、ばねになる</summary>
+      <div class="inner">
+        <p>SSMEの解決策の裏には、美しい物理があります。軸がシール隙間の中で片側に寄ると、狭くなった側と広くなった側で流れの絞られ方が変わり、圧力の分布が偏って<b>軸を中心へ押し戻す力</b>が生まれる——<b>ロマキン効果</b>です。つまり適切に設計された環状シールは、漏れを絞りながら<b>中心向きの直接剛性（ばね）を生み、設計次第で直接減衰も併せ持たせられる</b>——ただし旋回流の与える交差剛性は逆に不安定化にも働くので、表面形状や入口旋回の制御まで含めて設計します。前話の浮動リングが「自分で中心に寄る」のも同じ力でした。極低温では油の膜も油のダンパも使えないぶん、<b>推進剤そのものの流体力を減衰に使う</b>のがロケットポンプの流儀です。そしてLE-9は、もっと根本的な手を打ちました——<b>軸を短くして剛性を上げ、LE-7Aで必要だったダンパ機構そのものを不要にした</b>（IHI技報）。ふるえは、鎮めるより生まれさせないのが上策です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>道具立ての地図: 危険速度は回転同期（1×）の共振で、通過設計（マージンを取るか素早く通り抜けるか）の問題。怖いのは<b>非同期の自励系</b>——シール・インペラ隙間などの交差剛性（cross-coupled stiffness）が入れる接線方向の力が系の有効減衰に打ち勝つと、不安定化したモードの固有振動数近傍（SSMEの事例では約0.5×）でホワールが育ちます。会計はChilds流のバルクフロー模型でシールの剛性・減衰係数を見積もり、ロータのモード解析と結合する。第2話の旋回キャビテーション（超同期）と合わせると、周波数スペクトルのどこに何が出るかで犯人当てができる——<b>振動スペクトルはターボポンプの聴診器</b>です。タービンの部分流入ノック（第4話）もこの帳簿に載ります。次話は、この繊細な機械の、いちばん乱暴な数秒間。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-06.jpg" alt="SSMEに高圧燃料ターボポンプを組み付ける作業" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜SSMEに組み付けられる高圧燃料ターボポンプ（1994年）。この箱の中の軸が毎分3万7千回転——1976年、この機械の見えないふれまわりが開発者たちの数ヶ月を奪い、そして「シールを軸受に変える」という発明で鎮められました。第1巻第5話で「心臓の実物」として見た写真を、いまのあなたは振動屋の目でも読めるはずです。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Turbopump_Installation_(94-434-8).jpeg" style="color:inherit">NASA Stennis（パブリックドメイン）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>07 めざめの3秒</b>: 凍らせて、点火して、数秒で数万回転へ。ターボポンプのいちばん乱暴な時間、始動過渡の話。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・SSME HPFTPホワール: Ek, "Solution of the Subsynchronous Whirl Problem..."（NTRS 19770045710ほか）<br>
+      ・ロマキン効果・シール動特性: Brennen ch.10／Childs, <i>Turbomachinery Rotordynamics</i><br>
+      ・LE-9の短軸化でダンパ不要: IHI技報 Vol.58 No.2
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-05.html">← 05 -253℃と火のあいだ</a>
+  <a href="v3-07.html">つぎ: 07 めざめの3秒 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-mass": { name:"おもりたち — 軸に載る住人", color:"var(--blue)",
+    t:"インデューサ、インペラ、タービン——ここまでの話の主役たちは、力学の目で見ればぜんぶ「軸に載ったおもり」です。おもりの重さと位置が軸の固有振動数を決め、残った小さな不釣り合いが回転ごとに軸を揺する加振源になる。だから回転体はミリグラム単位でバランス取りされます。" },
+  "p-brgs": { name:"軸受 — 支点であり、ばねであり", color:"var(--blue)",
+    t:"軸受は単なる支点ではなく、剛性と減衰を持つ「ばね付きの支え」です。その硬さが危険速度の位置を動かし、減衰がふるえの育ちやすさを決める。前話の玉軸受に加え、じつはシールの隙間も支えとして働く——下の「すきまの流体は、ばねになる」へ。" },
+  "p-orbit": { name:"ふれまわり — 軸の見えない踊り", color:"#e8b98a",
+    t:"回転する軸の中心は、じっとしておらず小さな軌道（オービット）を描きます。ふつうは髪の毛より細い円。これが共振で膨らむのが危険速度、流体力に育てられて勝手に膨らみ続けるのがホワールです。切り替え図で3つの顔を見比べてください。" }
+};
+let cur = "p-orbit";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const RT = {
+  "rt-crit": { name:"危険速度 — 通り抜ける山", scene:"sc-crit",
+    t:"不釣り合いによる回転同期（1×）の加振が、ロータ系の前向き固有振動数と一致すると、小さな不釣り合いでもたわみが大きく増幅されます。ただしこれは「山」であって「壁」ではない——設計はマージンを取って山の下で運転するか、加速中に素早く通過します。予測可能で、行儀のよい敵です。" },
+  "rt-whirl": { name:"ホワール — 自分で育つ渦", scene:"sc-whirl",
+    t:"ふれまわり（ホワール）自体は軸中心の軌道運動の総称ですが、怖いのは自励のそれ。シールやインペラ隙間の流体力が軸の振れを「接線方向に押して回す」向きに働き、系の減衰に打ち勝つと、不安定化したモードの固有振動数近傍——SSMEの事例では回転数のおよそ半分——でふれまわりが自分で自分を育てます。回転を上げても逃げられない自励振動で、1976年にSSMEを止めた犯人——下の事故調ファイルへ。" },
+  "rt-damp": { name:"しずめる — 減衰の注ぎ方", scene:"sc-damp",
+    t:"処方箋は「剛く、短く、減衰を注ぐ」。ロータを固くして山を運転域の外へ動かし、シールを減衰シールに作り替えて振動のエネルギーを流体に食わせる。LE-9はさらに軸そのものを短くして、LE-7Aで要ったダンパ機構を不要にしました——生まれさせないのが、いちばん強い対策です。" }
+};
+let curR = "rt-whirl";
+function renderR(){
+  const r = RT[curR];
+  document.getElementById("rtcard-name").textContent = r.name;
+  document.getElementById("rtcard-text").textContent = r.t;
+  for (const id of Object.keys(RT)) {
+    document.getElementById(id).classList.toggle("sel", id === curR);
+    document.getElementById(RT[id].scene).style.display = (id === curR) ? "" : "none";
+  }
+}
+for (const id of Object.keys(RT)) document.getElementById(id).addEventListener("click", () => { curR = id; renderR(); });
+renderR();
+
+try { localStorage.setItem("read:v3-06", "1"); } catch(e) {}
+</script>
+</body>
+</html>

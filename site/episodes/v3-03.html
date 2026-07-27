@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編03 — とばす円盤</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編03 — とばす円盤" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch03.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-03.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch03.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep03.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい3わ ── 円盤の章</div>
+    <h1 class="kyoka">とばす円盤</h1>
+
+    <p class="body">先発隊が泡を飼いならしながら持ち上げた液を、いよいよ本隊が受け取ります。<b>インペラ</b>——毎分数万回転で回る、羽根の生えた円盤。液は円盤の中心（目）から入り、羽根に乗って外周へ振り飛ばされるあいだに<b>回転の勢いを受け取り</b>、それが下流で圧力に変わる。第2巻の圧縮機が10数段の行列でこつこつ登った坂を、液体相手だからこそ、<b>ほぼ一撃で</b>駆け上がります。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-03-impeller.jpg" alt="インペラを正面から見た図。中心の目から入った液が羽根で外周へ飛ばされ、うずまき部屋を回って吐出口へ">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-volute"><circle cx="700" cy="560" r="465"/></g>
+          <g class="zone" id="p-vane"><circle cx="700" cy="560" r="335"/></g>
+          <g class="zone" id="p-eye"><circle cx="700" cy="560" r="115"/></g>
+          <g class="zone" id="p-out"><rect x="500" y="30" width="250" height="220" rx="30"/></g>
+          <line x1="470" y1="890" x2="620" y2="660" stroke="#c47a4f" stroke-width="4"/>
+          <text x="270" y="950" font-size="38" fill="#5a636d">目（入口）</text>
+          <line x1="1130" y1="280" x2="960" y2="420" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1140" y="250" font-size="38" fill="#5a636d">はね</text>
+          <line x1="1180" y1="880" x2="1060" y2="780" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1100" y="945" font-size="38" fill="#5a636d">うずまき部屋</text>
+          <line x1="420" y1="140" x2="510" y2="150" stroke="#c47a4f" stroke-width="4"/>
+          <text x="140" y="155" font-size="38" fill="#5a636d">吐出口</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">じつは羽根車には家族がいます。回転数N・流量Q・揚程Hの組み合わせ——<b>比速度 N<sub>s</sub>=N√Q/H<sup>3/4</sup></b>——で、最適な体つきが決まるのです。切り替えてみてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="im-rad">遠心</span>
+      <span class="chip" id="im-mix">斜流</span>
+      <span class="chip" id="im-ax">軸流</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-rad" src="../assets/fig/v3-03-s1.jpg" alt="">
+        <img id="sc-mix" src="../assets/fig/v3-03-s2.jpg" alt="" style="display:none">
+        <img id="sc-ax" src="../assets/fig/v3-03-s3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ 流量と揚程の比率で、羽根車の体つきが決まります</div>
+    </div>
+
+    <div class="partcard" id="imcard" style="min-height:120px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="imcard-name"></span></div>
+      <p id="imcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>オイラーの式 — 渡しているのは「回転の勢い」</summary>
+      <div class="inner">
+        <div class="eq">gH = U₂C<sub>u2</sub> − U₁C<sub>u1</sub></div>
+        <p>ポンプが液に渡す理想仕事は、入口と出口の角運動量の差——この1行に尽きます。実務の主なレバーは<b>周速U₂</b>（大径か高回転か）と<b>出口旋回C<sub>u2</sub></b>（羽根出口角とすべりが決める）で、入口の予旋回 U₁C<sub>u1</sub> も設計の道具です。ロケットポンプが数万rpmに賭けるのは、径を小さく軽く保ったまま U₂ を稼ぐため。第2巻06話の圧縮機と同じ式が、液体では1段で桁違いに働けます——液体は密度が大きいので同じ仕事が大きな圧力上昇になり、圧縮性の制約（マッハ数・温度上昇）もないからです。ただし液体でも拡散のしすぎは剥離を招く——段負荷に限界があること自体は、翼列の宿命として共通です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>液体水素で、27kmぶんの揚程</summary>
+      <div class="inner">
+        <p>LE-9の燃料ポンプの吐出は19.1MPa。ポンプ屋の通貨「揚程」に直すと、液体水素（密度約71kg/m³）では<b>19.1×10⁶ ÷ (71×9.8) ≒ 27,000m</b>——エベレスト3つ分、成層圏に届く高さの液体水素の柱を支える圧力です（吐出圧をそのまま換算した目安で、入口圧のぶん実際の揚程上昇はすこし小さくなります）。軽い液体ほど同じ圧力でも揚程が莫大になる——液体水素ポンプが世界のポンプの中でも別格の回転数を要求される理由が、この換算ひとつに入っています。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>形式選定の座標は<b>比速度N<sub>s</sub></b>——低N<sub>s</sub>なら遠心（大揚程・小流量）、高N<sub>s</sub>なら軸流（大流量・小揚程）、あいだが斜流。ページ末尾の写真はまさにこの家族写真です。実物の設計では、無限枚数羽根の理想出口旋回を<b>すべり係数</b>で実際の値に割り引いてから（羽根出口で液が羽根ほど回りきらない分）、摩擦・二次流れ・チップリーク（第2巻06話の言葉がそのまま使えます）の損失を別途差し引く。製造側の潮流としては、IHIがLE-9のコスト技術として<b>オープン形インペラ</b>（シュラウドなし）やブリスク化を挙げています——空力・構造・製造の三者面談は、ここでも日常です。次話は、この円盤を回す動力の話。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-03.jpg" alt="軸流から遠心まで4種類のポンプ羽根車を並べた実物展示" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜羽根車の家族写真。左の軸流プロペラから右の遠心円盤まで、比速度の違いがそのまま体つきの違いになっています。切り替え図で見た3兄弟の、実物版です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Pump_Impellers-1.jpg" style="color:inherit">Meisam（CC BY-SA 3.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>04 まわす火</b>: 円盤を回す動力の正体。衝動と反動、そして「翼車の4分の1にしかガスを当てない」という不思議な割り切りの話。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・C. Brennen, <i>Hydrodynamics of Pumps</i>（オイラー式・比速度）<br>
+      ・IHI技報 Vol.58 No.2（LE-9 FTP 吐出19.1MPa・オープンインペラ等のコスト技術）<br>
+      ・液体水素密度 約71kg/m³: Wikipedia "Liquid hydrogen"（沸点近傍）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-02.html">← 02 すいこみ口の たたかい</a>
+  <a href="v3-04.html">つぎ: 04 まわす火 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-eye": { name:"目 — 中心の入口", color:"var(--blue)",
+    t:"液は円盤の中心、「目」と呼ばれる穴から軸方向に入ります。ここはインデューサが守ってくれた低圧の最後の砦で、目の設計が悪いとせっかくの吸込余裕を食いつぶします。前話と今話は、この目でつながっています。" },
+  "p-vane": { name:"はね — 勢いを渡す腕", color:"var(--blue)",
+    t:"回転する羽根が液を掴み、外周へ導きながら旋回の勢い（角運動量）を渡します。羽根の曲がり方（後向きに寝かせるのが普通）が、渡す勢いと安定性の性格を決める。オイラーの式（よりみち）の Cu2 を作っているのが、この羽根の出口角です。" },
+  "p-volute": { name:"うずまき部屋 — 勢いを圧力に", color:"var(--sand)",
+    t:"羽根を出た液はまだ速度の形でエネルギーを持っています。外周を巻くうずまき部屋（ボリュート）や案内羽根（ディフューザ）が流れを受け止めて減速させ、速度を圧力に回収する。第1巻のノズルのちょうど逆向きの仕事です。回収のへたな設計は、そのまま効率の損になります。" },
+  "p-out": { name:"吐出口 — 心臓の出口", color:"#e8b98a",
+    t:"昇圧を終えた液の出口です。LE-9の燃料ポンプならここで19.1MPa——この先の水素は燃焼室の壁を冷やして温まり（第1巻06話）、大半はそのまま燃焼室へ。一部だけがブリードとして分かれてタービンを回し（次話）、回し終えたら捨てられます。心臓の出口は、エンジン全体の物語の入口でもあります。" }
+};
+let cur = "p-vane";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const IM = {
+  "im-rad": { name:"遠心 — 大揚程の主役", scene:"sc-rad",
+    t:"低い比速度（小流量・大揚程）の答え。液を半径方向へ大きく振り出して、周速の差 U2−U1 を最大限に使います。ロケットの主ポンプはほぼこの型——1段で桁違いの揚程を稼ぐ必要があるからです。" },
+  "im-mix": { name:"斜流 — あいだの知恵", scene:"sc-mix",
+    t:"流量も揚程もそこそこ欲しいときの中間解。液を斜めに送り出します。インデューサは実はこの家系の親戚で、軸流に近い形でそっと昇圧してから遠心の本隊に渡す——前話と今話の橋渡し役です。" },
+  "im-ax": { name:"軸流 — 大流量の運び屋", scene:"sc-ax",
+    t:"高い比速度（大流量・小揚程）の答え。プロペラのように液を軸方向へ送ります。第2巻の圧縮機はこの型の気体版で、1段の揚程が小さいから多段の行列になる——同じ設計空間の別の端です。" }
+};
+let curI = "im-rad";
+function renderI(){
+  const i = IM[curI];
+  document.getElementById("imcard-name").textContent = i.name;
+  document.getElementById("imcard-text").textContent = i.t;
+  for (const id of Object.keys(IM)) {
+    document.getElementById(id).classList.toggle("sel", id === curI);
+    document.getElementById(IM[id].scene).style.display = (id === curI) ? "" : "none";
+  }
+}
+for (const id of Object.keys(IM)) document.getElementById(id).addEventListener("click", () => { curI = id; renderI(); });
+renderI();
+
+try { localStorage.setItem("read:v3-03", "1"); } catch(e) {}
+</script>
+</body>
+</html>

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編04 — まわす火</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編04 — まわす火" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch04.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-04.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch04.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep04.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい4わ ── 動力の章</div>
+    <h1 class="kyoka">まわす火</h1>
+
+    <p class="body">円盤を回すには動力が要ります——SSMEの燃料ポンプなら<b>数万馬力ぶん</b>。それを供給するのが、軸の反対側に座る<b>駆動タービン</b>です。ガスをどう用意するかは第1巻第4話で見たサイクルの選択そのもの: ガス発生器なら燃やした数百℃の富、エキスパンダーブリードなら冷却路で温めた倹約の水素。今日はそのガスを<b>「回す力」に換える翼車側</b>の設計を解剖します。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-04-turbine.jpg" alt="駆動タービンの断面図。ノズルから吹き付けたガスが翼車を回して排気される">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-gin"><rect x="45" y="395" width="250" height="250" rx="30"/></g>
+          <g class="zone" id="p-noz"><rect x="300" y="205" width="345" height="235" rx="30"/></g>
+          <g class="zone" id="p-wheel"><circle cx="620" cy="565" r="285"/></g>
+          <g class="zone" id="p-gout"><rect x="910" y="260" width="560" height="560" rx="40"/></g>
+          <line x1="150" y1="300" x2="170" y2="395" stroke="#c47a4f" stroke-width="4"/>
+          <text x="40" y="270" font-size="38" fill="#5a636d">入ってくるガス</text>
+          <line x1="700" y1="150" x2="560" y2="270" stroke="#c47a4f" stroke-width="4"/>
+          <text x="670" y="120" font-size="38" fill="#5a636d">ノズル（静翼）</text>
+          <line x1="400" y1="930" x2="520" y2="770" stroke="#c47a4f" stroke-width="4"/>
+          <text x="290" y="985" font-size="38" fill="#5a636d">翼車</text>
+          <line x1="1180" y1="920" x2="1160" y2="800" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1050" y="980" font-size="38" fill="#5a636d">出ていくガス</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:#e08a4e"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">タービンの働かせ方には流儀があります。3つの顔を切り替えてみてください——3つめは、初めて見ると不思議な割り切りです。</p>
+
+    <div class="chips">
+      <span class="chip" id="tb-imp">衝動</span>
+      <span class="chip" id="tb-rea">反動</span>
+      <span class="chip" id="tb-par">部分流入</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-imp" src="../assets/fig/v3-04-s1.jpg" alt="">
+        <img id="sc-rea" src="../assets/fig/v3-04-s2.jpg" alt="" style="display:none">
+        <img id="sc-par" src="../assets/fig/v3-04-s3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ ガスの当て方の3つの流儀</div>
+    </div>
+
+    <div class="partcard" id="tbcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:#e08a4e"></span><span id="tbcard-name"></span></div>
+      <p id="tbcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>バケツに当てるか、通り道で加速するか</summary>
+      <div class="inner">
+        <p><b>衝動タービン</b>は、静止ノズルでガスを一気に加速してから、バケツ形の羽根に当てて向きを変えさせ、運動量の変化で回します——圧力の落差はほぼ全部ノズルで使い切る。<b>反動タービン</b>は、圧力の落差の一部を回る羽根の中でも使う——動翼の中でも静圧が下がり、動翼相対系で流れが加速する段です（庭のスプリンクラーが水の噴き出しで回るのと同じ理屈）。ロケットのタービンは衝動型が主流。落差が大きく流量が少ない条件では、ノズルに仕事を集めて羽根はシンプルに保つほうが強いからです。第2巻07話の航空タービン（反動成分の大きい多段）と見比べると、同じ「タービン」の言葉の下の設計思想の距離がよく見えます。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>翼車の一部にしか、ガスを当てない</summary>
+      <div class="inner">
+        <p>切り替え図の3つめ——ノズルが翼車の一部の弧にしか付いていない<b>部分流入</b>は、ロケットタービンの名物です（当てる弧の割合は設計それぞれで、数%から数十%まで様々）。流量が少なく落差が大きいと、全周にノズルを並べる設計では通路が細くなりすぎて損が膨らむ。それなら<b>一部の弧に絞って、そこだけ堂々と吹く</b>ほうが総合で得——という割り切りです。代償は、翼が1回転ごとに「吹かれる区間」と「無風の区間」を横切ること。翼には周期的な力のノックが入り、振動設計（第6話）への宿題になります。効率の数%と単純さ・軽さを天秤にかける、いかにもロケットらしい選択です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>設計の物差しは<b>速度比 u/c₀</b>（周速÷ノズル理論噴出速度）。衝動段の最適はおよそ0.5弱ですが、ロケットではポンプ側の回転数で u が縛られ、大落差で c₀ が巨大になるため、<b>最適よりずっと低い u/c₀ で我慢して効率を捨てる</b>判断がしばしば正解になります（だから2段衝動やベロシティコンパウンドが出てくる）。駆動ガスの素性はサイクル直結: 代表的なLOX/LH₂やケロシン系のGGでは、タービン材の都合で温度を絞るためfuel-richの数百℃級を使うことが多く（酸化剤リッチという流儀もあります）、エキスパンダーブリードの水素はずっと低温で、材料も酸化の心配も軽い——LE-9の「安全なエンジン」の設計思想はタービンの部屋でいちばん分かりやすく現れます。動力の桁の再確認: HPFTPはこの小さな翼車から約77,000馬力(FPL)を引き出していました。次話は、この火と氷を隔てる国境の話。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-04.jpg" alt="M-1ロケットエンジン用ターボポンプのロータ。軸端の大きなタービン翼車" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜幻の巨大エンジンM-1（1960年代の米国の液体水素エンジン計画・開発中止）のターボポンプ・ロータ。軸の端の大きなタービン翼車が、多段のポンプ翼列をまとめて駆動する構成が一目でわかります。翼車のまわりに並ぶ小さなバケツ形の羽根——今日の主役の実物です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:M-1_rocket_turbopump.JPG" style="color:inherit">Selevercin（CC BY 3.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>05 -253℃と火のあいだ</b>: 氷の世界と火の世界の国境地帯。油の使えない場所で回る玉軸受と、出会ってはいけない二人を隔てるシールの知恵。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・G. P. Sutton &amp; O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed., ch.10（駆動タービン・部分流入）<br>
+      ・NASA SP-8107, <i>Turbopump Systems for Liquid Rocket Engines</i><br>
+      ・HPFTP出力: NTRS 19900003334（FPLで約77,000hp）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-03.html">← 03 とばす円盤</a>
+  <a href="v3-05.html">つぎ: 05 -253℃と火のあいだ →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-gin": { name:"入ってくるガス — サイクルからの届け物", color:"#e08a4e",
+    t:"このガスの素性が第1巻第4話の答えです。ガス発生器サイクルなら専用に燃やした燃焼ガス（多くはタービン温度を抑えるためfuel-rich）、エキスパンダーブリードなら燃焼室の壁で温めた高圧水素。温度も圧力もサイクルごとに違い、タービンの材料と設計はそこから逆算されます。" },
+  "p-noz": { name:"ノズル（静翼） — 落差を速度に", color:"#e8b98a",
+    t:"圧力の落差をここで一気に速度へ変換します。第1巻第6話のノズルと同じ物理で、落差が大きいと噴流は超音速に。衝動タービンでは仕事の仕込みはほぼ全部ここで済ませて、回る翼車には「速い流れの向きを変える」仕事だけを残します。" },
+  "p-wheel": { name:"翼車 — 運動量の受け取り係", color:"var(--blue)",
+    t:"バケツ形の羽根が超音速の噴流を受け、向きを変えさせた反作用で回ります。この小さな円盤がポンプの数万馬力をまかなう——SSMEのHPFTPなら全力で約77,000馬力。羽根1枚あたりの荷重も温度も苛烈で、第2巻07話のタービン翼と同じ言葉（冷却・クリープ・振動）がここでも生きています。" },
+  "p-gout": { name:"出ていくガス — 使いのこりの行方", color:"var(--sand)",
+    t:"仕事を渡し終えたガスの出口です。行き先もサイクルの個性: ガス発生器系では脇のノズルから捨てる（比推力の税金）、エキスパンダーブリード（LE-9）でもタービン排気は主流に混ぜず捨てる——「ブリード（少し抜く）」の名前の由来です。二段燃焼なら主燃焼室へ送って「捨てる損」を原理上なくします（タービン損失や漏れの分は残りますが）。" }
+};
+let cur = "p-wheel";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const TB = {
+  "tb-imp": { name:"衝動 — ノズルで仕込み、バケツで受ける", scene:"sc-imp",
+    t:"落差はノズルで全部速度に変え、回る羽根はその噴流の向きを変えるだけ。羽根の前後で圧力がほぼ変わらないので、漏れに寛容で構造も単純。大落差・小流量のロケットタービンの主流です。" },
+  "tb-rea": { name:"反動 — 通り道で加速する", scene:"sc-rea",
+    t:"回る羽根の通路そのものが絞られていて、羽根の中でもガスが加速する型。スプリンクラーの理屈です。効率は稼ぎやすい一方、羽根前後に圧力差が立つので漏れとスラスト（軸を押す力）の管理が重くなる。航空エンジンのタービン（第2巻07話）はこちらの血が濃い設計です。" },
+  "tb-par": { name:"部分流入 — 4分の1だけ吹く", scene:"sc-par",
+    t:"ノズルを全周に置かず、一部の弧だけに絞る割り切り。小流量・大落差では通路を細くしすぎるより、一部だけ堂々と吹くほうが総合で得だからです。代償は翼への周期的なノック——1回転ごとに吹かれる区間と無風区間を横切るため、振動の設計（第6話）に宿題を残します。" }
+};
+let curT = "tb-imp";
+function renderT(){
+  const t = TB[curT];
+  document.getElementById("tbcard-name").textContent = t.name;
+  document.getElementById("tbcard-text").textContent = t.t;
+  for (const id of Object.keys(TB)) {
+    document.getElementById(id).classList.toggle("sel", id === curT);
+    document.getElementById(TB[id].scene).style.display = (id === curT) ? "" : "none";
+  }
+}
+for (const id of Object.keys(TB)) document.getElementById(id).addEventListener("click", () => { curT = id; renderT(); });
+renderT();
+
+try { localStorage.setItem("read:v3-04", "1"); } catch(e) {}
+</script>
+</body>
+</html>

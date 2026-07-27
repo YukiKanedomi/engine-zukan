@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編09 — じっさいのポンプで、答え合わせ</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編09 — じっさいのポンプで、答え合わせ" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch09.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-09.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:140px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.8rem; padding:4px 12px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  table.vals{width:100%; border-collapse:collapse; font-size:.8rem; margin:10px 0}
+  table.vals th, table.vals td{padding:6px 6px; border-bottom:1px dashed var(--line); text-align:left}
+  table.vals th{color:var(--sub); font-weight:400; font-size:.72rem}
+  table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc); white-space:nowrap}
+  .fin{margin-top:30px; background:#fff; border:2px solid var(--ink); border-radius:12px; padding:16px 18px; font-size:.9rem; text-align:center}
+  .fin b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch09.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep09.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい9わ（さいしゅうわ）── 実機の章</div>
+    <h1 class="kyoka">じっさいのポンプで、答え合わせ</h1>
+
+    <p class="body">卒業試験です。8話ぶんの言葉——NPSH、比速度、部分流入、移着膜、ホワール、チルダウン——を道具に、<b>歴史に残る4つの心臓</b>を読み解きます。同じ物理に、4つのチームが出した4つの答え。第1巻・第2巻の卒業試験と同じ構図が、機械のいちばん深いところでも繰り返されます。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-09-lineup.jpg" alt="4種類のターボポンプのシルエットが棚に並ぶ" style="width:100%">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="e-ssme"><rect x="60" y="220" width="390" height="620" rx="36"/></g>
+          <g class="zone" id="e-merlin"><rect x="460" y="280" width="340" height="560" rx="36"/></g>
+          <g class="zone" id="e-rl10"><rect x="815" y="320" width="300" height="520" rx="36"/></g>
+          <g class="zone" id="e-le9"><rect x="1130" y="320" width="330" height="520" rx="36"/></g>
+          <text x="120" y="160" font-size="36" fill="#5a636d">SSME</text>
+          <text x="540" y="160" font-size="36" fill="#5a636d">Merlin</text>
+          <text x="880" y="160" font-size="36" fill="#5a636d">RL10</text>
+          <text x="1210" y="160" font-size="36" fill="#5a636d">LE-9</text>
+        </svg>
+      </div>
+      <div class="hint">▲ ポンプをタップすると、その設計思想にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <table class="vals">
+      <tr><th></th><th>SSME HPFTP</th><th>Merlin 1D</th><th>RL10</th><th>LE-9 FTP/OTP</th></tr>
+      <tr><td>思想</td><td class="num">極限の性能</td><td class="num">単純と量産</td><td class="num">歯車の知恵</td><td class="num">安全と単純</td></tr>
+      <tr><td>回転数</td><td class="num">約37,000rpm</td><td class="num">約36,000rpm</td><td class="num">2軸(歯車比)</td><td class="num">41,600/17,000</td></tr>
+      <tr><td>動力</td><td class="num">約7.7万hp(FPL)</td><td class="num">約1万hp</td><td class="num">数千hp級</td><td class="num">—</td></tr>
+      <tr><td>ひとこと</td><td class="num">V8の重さで310倍</td><td class="num">1軸で2液</td><td class="num">燃料側が歯車で酸素側を回す</td><td class="num">短軸でダンパ不要</td></tr>
+    </table>
+    <div style="font-size:.7rem; color:var(--sub); margin-top:-4px">※数値は公称・公開値の代表。Merlinの出力はメーカー公称です。</div>
+
+    <p class="body">そして総復習。章番号をタップすると、その章の言葉でこの4つを読み解きます。</p>
+
+    <div class="chips">
+      <span class="chip" id="r-01">01 心臓</span>
+      <span class="chip" id="r-02">02 泡</span>
+      <span class="chip" id="r-03">03 円盤</span>
+      <span class="chip" id="r-04">04 動力</span>
+      <span class="chip" id="r-05">05 さかいめ</span>
+      <span class="chip" id="r-06">06 ふるえ</span>
+      <span class="chip" id="r-07">07 めざめ</span>
+      <span class="chip" id="r-08">08 ためす</span>
+    </div>
+
+    <div class="partcard" id="rcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--acc)"></span><span id="rcard-name"></span></div>
+      <p id="rcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>歯車で回す、という古典の知恵</summary>
+      <div class="inner">
+        <p>1960年代生まれのRL10は、いまも現役の長寿エンジンです。その心臓の特徴は<b>歯車箱</b>——タービンと液体水素ポンプが載る軸から、<b>歯車列を介して液体酸素ポンプを減速駆動</b>します。軽い水素は速く回したい、重い酸素はゆっくりでいい——第2巻04話のGTFとまったく同じ「回転数のジレンマ」への、60年前の答えです。水素環境で歯車の歯が溶着するトラブルには、浸炭鋼と二硫化モリブデンで応じた記録も残っています。機械要素の教科書とロケットが、こんなところで握手しています。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>1本の軸で、2つの液を送る</summary>
+      <div class="inner">
+        <p>SpaceXのMerlinは対照的に、<b>1本の軸の両側にRP-1（ケロシン）ポンプと液体酸素ポンプを背中合わせに載せ、1つのタービンでまとめて回す</b>単軸構成です。回転数の最適はそれぞれ妥協になりますが、部品は減り、作るのも整備も速い——毎週のように打ち上げる商売には、その単純さこそが性能です。約36,000rpm・約1万馬力（メーカー公称）。「最適」ではなく「十分」を選ぶ勇気の見本で、LE-9の「安全なエンジン」思想と、違う言葉で同じ谷を渡っています。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート — 第3巻の地図、そして現場へ</summary>
+      <div class="inner">
+        <p>この巻を1枚に畳みます。<b>高パワー密度</b>という一点から、すべての難しさが放射していました——吸い込みの泡（02）、1段の大仕事（03）、小さな翼車の数万馬力（04）、油のない国境（05）、細い軸の自励振動（06）、地図の外の数秒（07）。そして答えは1つではない——SSMEは性能へ、Merlinは単純へ、RL10は歯車へ、LE-9は安全へ。設計思想とは、<b>同じ物理のどの怖さを最も恐れるかの表明</b>です。この3巻ぶんの言葉が、あなたの現場の議論のどこかで、小さな共通言語として働きますように。角田の水槽で、いつか本物の泡を見てきてください。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-09.jpg" alt="展示されたRL10ロケットエンジン。ノズル脇にターボポンプと配管が見える" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜史上初の液体水素エンジンにして現役最長老、RL10の展示機。ノズルの脇に張り付いた小さな箱がターボポンプ——中では歯車が水素と酸素の回転数をとりもっています。60年前の答えが、いまも月へ向かう機体に載っている——機械の歴史の、いちばん美しい種類の話です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:PRATT_%26_WHITNEY_RL-10_ROCKET_ENGINE_(5003286786).jpg" style="color:inherit">Steve Jurvetson（CC BY 2.0・Wikimedia Commons）</a></div>
+    </div>
+
+    <div class="fin kyoka">
+      <p><b>第3巻 ターボポンプ編 ── かんけつ</b></p>
+      <p style="margin-top:8px; font-size:.85rem">うちゅうと、そらと、心臓。<br>3冊の図鑑は、ここでひと区切り。<br>つづきは、あなたの手で回してください 🫀</p>
+    </div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・SSME HPFTP: NTRS 19900003334・NASA Shuttle Propulsion Trivia／LE-9: IHI技報 Vol.58 No.2<br>
+      ・RL10歯車駆動: NASA TM-107318／Merlin単軸・約36,000rpm・約1万hp: Wikipedia "SpaceX Merlin"（メーカー公称）<br>
+      ・G. P. Sutton, 9th ed., ch.10／NASA SP-8107
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-08.html">← 08 つくって、ためす</a>
+  <a href="../index.html">もくじへ（第3巻かんけつ！）→</a>
+</div>
+
+<script>
+const PARTS = {
+  "e-ssme": { name:"SSME HPFTP — 極限の性能", color:"var(--blue)",
+    t:"再使用×最高性能を狙った、パワー密度の記念碑。V8エンジンの重さで約7.7万馬力（FPL）、液体水素を45MPaへ。その代償が1976年のホワール事件（第6話）であり、開発の苦闘の歴史でもあります。「どこまでやれるか」の上限を示した心臓です。" },
+  "e-merlin": { name:"Merlin — 単純と量産", color:"var(--blue)",
+    t:"1本の軸の両側にRP-1と液体酸素のポンプを載せ、1つのタービンで回す単軸構成。回転数の最適は妥協して、部品点数と製造速度を取りました。毎週飛ぶロケットの心臓に必要なのは、最高効率より「壊れず、すぐ作れる」こと——商売と設計の直結した答えです。" },
+  "e-rl10": { name:"RL10 — 歯車の知恵", color:"var(--blue)",
+    t:"1960年代生まれの現役最長老。タービン＋水素ポンプの軸から、歯車列で酸素ポンプを減速駆動します。軽い水素は速く、重い酸素はゆっくり——回転数のジレンマ（第2巻04話のGTFと同じ問い）への最初期の答え。小さな上段エンジンだから成立する、エレガントな古典です。" },
+  "e-le9": { name:"LE-9 FTP/OTP — 安全と単純", color:"var(--blue)",
+    t:"FTP 41,600rpm・OTP 17,000rpm（IHI技報）。軸を短くしてLE-7Aで必要だったダンパを不要にし（第6話）、ハイブリッドセラミック軸受（第5話）やオープンインペラで作りやすさも稼ぐ。エキスパンダーブリードの穏やかなタービンと合わせて、「壊れ方の少なさ」を性能として設計した心臓です。" }
+};
+let cur = "e-le9";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const RECAP = {
+  "r-01": { name:"01 心臓のことば", t:"4つとも答えている問いは同じ——「タンクを戦車にしないために、どれだけ小さな箱で何万馬力を出すか」。パワー密度の選び方が、そのまま4つの個性になりました。" },
+  "r-02": { name:"02 泡のことば", t:"どの心臓もインデューサを持ち、数気圧の元手で泡と戦っています。H-II 8号機の教訓は、いまのLE-9のインデューサに直接流れ込んでいる——事故調ファイルは現役の設計基準です。" },
+  "r-03": { name:"03 円盤のことば", t:"SSMEは多段遠心で45MPaへ、Merlinは1段ずつを背中合わせに、LE-9はオープンインペラで作りやすく。同じオイラーの式の上で、揚程・段数・製造性の置き方がそれぞれ違います。" },
+  "r-04": { name:"04 動力のことば", t:"駆動ガスの素性が性格を決めます——SSMEは二段燃焼の高圧ガス、MerlinはGGの捨てガス、RL10は温めた水素そのもの（エキスパンダー）、LE-9はその倹約版。タービンの部屋の温度が、そのまま安全思想の温度です。" },
+  "r-05": { name:"05 さかいめのことば", t:"4つとも油なしで回り、酸素側には多重の検問所を置く。LE-9のハイブリッドセラミック軸受は、この国境警備の最新装備です。地味な数十cmが信頼性の本丸なのは、どの心臓でも同じ。" },
+  "r-06": { name:"06 ふるえのことば", t:"SSMEはホワールと戦って減衰シールを発明し、LE-9は軸を短くしてダンパ機構そのものを不要にした（振動問題が全部消えたわけではなく、タービン翼の振動対策などは開発課題でした）。対策の歴史は「鎮める→生まれさせない」へ。スペクトルという聴診器は全機種共通の言葉です。" },
+  "r-07": { name:"07 めざめのことば", t:"RL10は打上げ90分前から予冷し、LE-9はガス発生器なしのシンプルな目覚めの系譜。始動の振り付けはエンジンごとの秘伝のタレで、性能表には載らない設計の腕の見せ所です。" },
+  "r-08": { name:"08 ためすのことば", t:"水で見る・極低温代替流体で確かめる・実機で証明する——どの段をどう踏むかは機種と開発計画ごとに違いますが、段階を踏んで確からしさを積む文化は共通です。角田の水槽も、ステニスの試験台も、マーシャルの3Dプリンタも、同じ「解析を信じ、試験で確かめる」の道具。" }
+};
+let curR = "r-01";
+function renderR(){
+  const r = RECAP[curR];
+  document.getElementById("rcard-name").textContent = r.name;
+  document.getElementById("rcard-text").textContent = r.t;
+  for (const id of Object.keys(RECAP)) document.getElementById(id).classList.toggle("sel", id === curR);
+}
+for (const id of Object.keys(RECAP)) document.getElementById(id).addEventListener("click", () => { curR = id; renderR(); });
+renderR();
+
+try { localStorage.setItem("read:v3-09", "1"); } catch(e) {}
+</script>
+</body>
+</html>

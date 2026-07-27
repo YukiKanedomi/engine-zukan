@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ ターボポンプ編02 — すいこみ口の たたかい</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ ターボポンプ編02 — すいこみ口の たたかい" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch02.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-02.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .fig{margin:26px 0 8px; text-align:center}
+  .fig svg{max-width:100%; height:auto}
+  .cutwrap{position:relative; border:1.5px solid var(--line); border-radius:12px; overflow:hidden; background:#fdf6ea; margin:0 auto}
+  .cutwrap img{width:100%; display:block}
+  .cutwrap svg{position:absolute; inset:0; width:100%; height:100%; max-width:none}
+  .zone{cursor:pointer}
+  .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
+  .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink); display:inline-block}
+  .partcard p{font-size:.88rem; margin-top:6px}
+  .hint{font-size:.72rem; color:var(--acc); text-align:center}
+  .chips{display:flex; gap:8px; justify-content:center; margin:18px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.82rem; padding:4px 14px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff; transition:.15s}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.side .eq{font-family:"Georgia","Times New Roman",serif; font-size:1.15rem; text-align:center; padding:10px 0}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; padding-top:0; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch02.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep02.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第3巻 だい2わ ── 泡の章</div>
+    <h1 class="kyoka">すいこみ口の たたかい</h1>
+
+    <p class="body">前話の宿題から始めます。ポンプの入口で使える元手は、<b>入口の全圧がその温度の蒸気圧をどれだけ上回っているか</b>——タンク圧に液柱や機体加速の水頭を足し、配管損失を引いた<b>吸込余裕（NPSH）</b>だけでした。ここに液体の意地悪な性質が重なります——<b>液体は「引っぱれない」</b>。羽根が液を吸おうと局所の圧力を下げすぎると、液はその場の蒸気圧を割って<b>沸騰</b>し、泡が生まれる。沸点よりずっと冷たい液でも、圧力が蒸気圧を割ればその場で沸きます。これが<b>キャビテーション</b>——ロケットポンプの吸い込み口で毎秒起きている、静かな戦いです。</p>
+
+    <p class="body">泡そのものより怖いのは、泡の<b>最期</b>です。下流で圧力が回復すると泡は一瞬でつぶれ、局所に強烈な圧力パルスを叩き込む（第2巻05話の水撃と同じ文法）。金属を少しずつ齧り、羽根を揺さぶり、ひどければ揚程そのものが崩れ落ちる。だから吸い込み口には専任の先発隊——<b>インデューサ</b>——が立っています。</p>
+
+    <div class="fig">
+      <div class="cutwrap">
+        <img src="../assets/fig/v3-02-inducer.jpg" alt="配管内のインデューサ断面図。翼端に泡が発生し、下流でつぶれる">
+        <svg viewBox="0 0 1536 1024">
+          <g class="zone" id="p-in"><rect x="20" y="330" width="215" height="360" rx="30"/></g>
+          <g class="zone" id="p-helix"><rect x="245" y="220" width="700" height="580" rx="34"/></g>
+          <g class="zone" id="p-cloud"><circle cx="1065" cy="380" r="135"/></g>
+          <line x1="120" y1="260" x2="140" y2="330" stroke="#c47a4f" stroke-width="4"/>
+          <text x="40" y="230" font-size="38" fill="#5a636d">入ってくる液</text>
+          <line x1="580" y1="900" x2="610" y2="800" stroke="#c47a4f" stroke-width="4"/>
+          <text x="440" y="960" font-size="38" fill="#5a636d">らせんのはね</text>
+          <line x1="1150" y1="740" x2="1100" y2="510" stroke="#c47a4f" stroke-width="4"/>
+          <text x="1000" y="800" font-size="38" fill="#5a636d">泡のさいご</text>
+        </svg>
+      </div>
+      <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>
+    </div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <p class="body">吸い込みの状態は、余裕の残り方で3つの顔を見せます。切り替えてみてください。</p>
+
+    <div class="chips">
+      <span class="chip" id="cv-ok">よゆうあり</span>
+      <span class="chip" id="cv-inc">泡がたつ</span>
+      <span class="chip" id="cv-bd">くずれる</span>
+    </div>
+
+    <div class="fig" style="margin-top:12px">
+      <div class="cutwrap">
+        <img id="sc-ok" src="../assets/fig/v3-02-s1.jpg" alt="">
+        <img id="sc-inc" src="../assets/fig/v3-02-s2.jpg" alt="" style="display:none">
+        <img id="sc-bd" src="../assets/fig/v3-02-s3.jpg" alt="" style="display:none">
+      </div>
+      <div class="hint">▲ 吸込余裕がへるほど、泡が育ちます</div>
+    </div>
+
+    <div class="partcard" id="cvcard" style="min-height:130px">
+      <div class="pname"><span class="dot" style="background:var(--blue)"></span><span id="cvcard-name"></span></div>
+      <p id="cvcard-text"></p>
+    </div>
+
+    <details class="side">
+      <summary><span class="badge">事故調ファイル</span>1999年11月15日 — H-IIロケット8号機</summary>
+      <div class="inner">
+        <p>打上げ約4分後、第1段エンジンLE-7が突然停止し、機体は指令破壊——日本のロケット史に残る事故です。調査チームは太平洋の<b>水深約3,000mの海底からエンジンを回収し</b>、原因を突き止めました: <b>液体水素ターボポンプのインデューサ翼の疲労破断</b>。起点は翼面のわずか<b>十数µmの加工キズ</b>。そこに、旋回キャビテーションや入口圧力振動と翼の共振の重なりなど、<b>複合した変動応力</b>が亀裂を育てたと推定されています。吸い込み口の泡は、羽根を叩く「見えない金づち」でもある——この教訓がLE-7Aの、そしてLE-9のインデューサ設計に流れ込んでいます。あなたがこれから読む解析レポートの何枚かは、この日に始まった系譜です。</p>
+      </div>
+    </details>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>水素は、すこしやさしい</summary>
+      <div class="inner">
+        <p>意外な救いもあります。泡が育つには液を蒸気に変える<b>気化潜熱</b>が要り、その熱は泡のまわりの液から奪われます。すると局所が冷えて蒸気圧が下がり、<b>泡が自分の成長に自分でブレーキをかける</b>——熱力学的効果と呼ばれる現象です。この効果は液体水素のような極低温流体で特に強く働き、同じ余裕なら冷水よりも吸い込みが粘る。NASAが1960〜70年代に水素インデューサで実測した古典的な結果で、極低温ポンプ設計のありがたい味方です。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
+      <div class="inner">
+        <p>会計はキャビテーション数σと<b>吸込比速度N<sub>ss</sub></b>で。そして定常の性能曲線だけでは足りないのがこの分野の面白さで、インデューサには<b>旋回キャビテーション</b>という固有の不安定があります——泡の偏りが翼列を回転より速く伝播し、軸振動に<b>超同期成分</b>（LE-7の事例では約1.1倍）が現れる。LE-7の液体酸素ポンプ開発では、この超同期振動の原因を旋回キャビテーションと同定し、インデューサ上流ケーシング形状の変更で抑制することに成功しました（Kamijoら, 1993）。理論はTsujimotoらが整えました——つまりこの現象の教科書は、かなりの部分が日本語圏で書かれています。もうひとつの糸: 泡の集まりは入口に「気体のばね」（キャビテーションコンプライアンス）を作り、これが第1巻08話のPOGOループの重要な柔らかさになる（NASA SP-8055）。吸い込み口の泡は、機体全体の振動にまでつながっています。</p>
+      </div>
+    </details>
+
+    <div class="fig" style="margin-top:26px">
+      <div style="border-radius:12px; overflow:hidden; border:1.5px solid var(--ink); box-shadow:3px 3px 0 var(--line)">
+        <img src="../assets/photo/v3-02.jpg" alt="水槽試験中のプロペラ翼端から発生するキャビテーションの白い渦" style="width:100%; display:block" loading="lazy">
+      </div>
+      <div style="text-align:left; font-size:.8rem; margin-top:10px; line-height:1.8"><b style="color:var(--acc)">ほんものの一枚</b>｜水槽試験中のプロペラ翼端から、白い泡の紐が渦になって伸びる瞬間（米海軍デービッド・テイラー水槽）。船もロケットも、回る羽根が液体と出会う場所では同じ敵と戦っています——これがキャビテーションの素顔です。</div>
+      <div style="text-align:left; font-size:.68rem; color:var(--sub); margin-top:2px">写真: <a href="https://commons.wikimedia.org/wiki/File:Cavitating-prop.jpg" style="color:inherit">U.S. Navy（パブリックドメイン）</a></div>
+    </div>
+
+    <div class="next"><img src="../assets/icons/plane.jpg" alt="" style="float:right; width:40px; height:40px; border-radius:50%; border:1.5px solid var(--line); margin:2px 0 6px 10px">つぎの話 → <b>03 とばす円盤</b>: 先発隊が持ち上げた液を、本隊のインペラが一撃で数十MPaへ。オイラーの式と、羽根車の家族（遠心・斜流・軸流）の話。</div>
+
+    <img src="../assets/icons/stroke.jpg" alt="" style="width:100%; height:9px; display:block; margin-top:26px">
+    <div class="src">
+      <b>出典・もっと知りたい人へ</b><br>
+      ・H-II 8号機事故: Wikipedia "LE-7"／MHI "H-IIA Rocket Engine Development"（NASA掲載資料）<br>
+      ・熱力学的効果: NASA TN（水素インデューサ試験, NTRS 19700008299ほか）<br>
+      ・旋回キャビテーション: Kamijo et al. (1993)・Tsujimoto理論／POGO: NASA SP-8055<br>
+      ・C. Brennen, <i>Hydrodynamics of Pumps</i>／G. P. Sutton, 9th ed., ch.10
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="v3-01.html">← 01 心臓を、ひらいてみる</a>
+  <a href="v3-03.html">つぎ: 03 とばす円盤 →</a>
+</div>
+
+<script>
+const PARTS = {
+  "p-in": { name:"入ってくる液 — わずかな元手", color:"var(--blue)",
+    t:"タンクから届いた液体です。持たされた圧力の余裕（NPSH）はごくわずか。しかも飛行中は機体の加速や液面の低下で余裕そのものが動きます。この乏しい元手で、毎秒何百リットルを数万回転の機械に吸い込ませる——それが入口の仕事です。" },
+  "p-helix": { name:"らせんのはね — そっと持ち上げる", color:"var(--blue)",
+    t:"インデューサの翼は、わざとゆるい角度で長く巻いてあります。急いで圧力を上げようとすると翼の背側が深い低圧になって泡だらけになるので、長い螺旋でそっと、少しずつ昇圧する。多少の泡を抱えたままでも働けるように設計された、「泡と共存する翼」です。" },
+  "p-cloud": { name:"泡のさいご — つぶれる瞬間", color:"#e8b98a",
+    t:"泡は圧力が回復する場所で一斉につぶれます。崩壊の瞬間、局所には強烈な圧力パルスとマイクロジェットが立ち、金属表面を少しずつ齧る（壊食）。さらに泡の量が揺らぐと羽根への荷重も揺らぎ、振動の源になる——H-II 8号機の事故調ファイル（下）へつながる話です。" }
+};
+let cur = "p-helix";
+function render(){
+  const p = PARTS[cur];
+  document.getElementById("card-name").textContent = p.name;
+  document.querySelector("#card .dot").style.background = p.color;
+  document.getElementById("card-text").textContent = p.t;
+  for (const id of Object.keys(PARTS)) document.getElementById(id).classList.toggle("sel", id === cur);
+}
+for (const id of Object.keys(PARTS)) document.getElementById(id).addEventListener("click", () => { cur = id; render(); });
+render();
+
+const CV = {
+  "cv-ok": { name:"よゆうあり — しずかな運転点", scene:"sc-ok",
+    t:"吸込余裕が十分あれば、翼のどこも蒸気圧を割らず、泡は生まれません。設計はこの状態を「保証」するのではなく、次の段階（泡がたつ）をどこまで許すかの線引きで決まります——余裕はいつも有限だからです。" },
+  "cv-inc": { name:"泡がたつ — 初生と共存", scene:"sc-inc",
+    t:"余裕が減ると、まず翼端の隙間渦や前縁の低圧部に泡が現れます（初生）。インデューサはこの段階でも性能をほぼ保てるように作られた翼で、ある程度の泡とは共存します。ただし泡の量が揺らぎ始めると、旋回キャビテーションなどの不安定の入口になる——ノート参照。" },
+  "cv-bd": { name:"くずれる — ブレークダウン", scene:"sc-bd",
+    t:"さらに余裕を失うと、泡が翼の通路を塞ぎ、揚程が崖のように落ちます（ブレークダウン）。ポンプは吸えなくなり、下流のエンジン全体が飢える。設計ではこの崖と運転点の距離が吸込側の生命線で、それを1つの数字に畳んだのが吸込比速度Nssです。" }
+};
+let curC = "cv-inc";
+function renderC(){
+  const c = CV[curC];
+  document.getElementById("cvcard-name").textContent = c.name;
+  document.getElementById("cvcard-text").textContent = c.t;
+  for (const id of Object.keys(CV)) {
+    document.getElementById(id).classList.toggle("sel", id === curC);
+    document.getElementById(CV[id].scene).style.display = (id === curC) ? "" : "none";
+  }
+}
+for (const id of Object.keys(CV)) document.getElementById(id).addEventListener("click", () => { curC = id; renderC(); });
+renderC();
+
+try { localStorage.setItem("read:v3-02", "1"); } catch(e) {}
+</script>
+</body>
+</html>
