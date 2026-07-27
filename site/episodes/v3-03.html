@@ -41,6 +41,8 @@
   .zone{cursor:pointer}
   .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
   .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .cutwrap svg text{font-size:46px; paint-order:stroke; stroke:#fdf9f0; stroke-width:9; stroke-linejoin:round}
+  .cutwrap svg line{stroke-width:5}
   .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
     margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:130px}
   .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
@@ -97,15 +99,14 @@
           <g class="zone" id="p-volute"><circle cx="700" cy="560" r="465"/></g>
           <g class="zone" id="p-vane"><circle cx="700" cy="560" r="335"/></g>
           <g class="zone" id="p-eye"><circle cx="700" cy="560" r="115"/></g>
-          <g class="zone" id="p-out"><rect x="500" y="30" width="250" height="220" rx="30"/></g>
+          <g class="zone" id="p-out"><rect x="230" y="14" width="160" height="240" rx="26"/></g>
           <line x1="470" y1="890" x2="620" y2="660" stroke="#c47a4f" stroke-width="4"/>
           <text x="270" y="950" font-size="38" fill="#5a636d">目（入口）</text>
           <line x1="1130" y1="280" x2="960" y2="420" stroke="#c47a4f" stroke-width="4"/>
           <text x="1140" y="250" font-size="38" fill="#5a636d">はね</text>
           <line x1="1180" y1="880" x2="1060" y2="780" stroke="#c47a4f" stroke-width="4"/>
           <text x="1100" y="945" font-size="38" fill="#5a636d">うずまき部屋</text>
-          <line x1="420" y1="140" x2="510" y2="150" stroke="#c47a4f" stroke-width="4"/>
-          <text x="140" y="155" font-size="38" fill="#5a636d">吐出口</text>
+          <text x="90" y="150" font-size="38" fill="#5a636d">吐出口</text>
         </svg>
       </div>
       <div class="hint">▲ 図をタップすると、その部分の解説にかわります</div>

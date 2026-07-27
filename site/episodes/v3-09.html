@@ -41,6 +41,8 @@
   .zone{cursor:pointer}
   .zone rect, .zone circle, .zone ellipse, .zone polygon{fill:transparent; stroke:transparent; stroke-width:8}
   .zone.sel rect, .zone.sel circle, .zone.sel ellipse, .zone.sel polygon{stroke:var(--acc)}
+  .cutwrap svg text{font-size:46px; paint-order:stroke; stroke:#fdf9f0; stroke-width:9; stroke-linejoin:round}
+  .cutwrap svg line{stroke-width:5}
   .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
     margin:14px 0 22px; box-shadow:3px 3px 0 var(--line); min-height:140px}
   .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px}
@@ -65,6 +67,7 @@
   table.vals{width:100%; border-collapse:collapse; font-size:.8rem; margin:10px 0}
   table.vals th, table.vals td{padding:6px 6px; border-bottom:1px dashed var(--line); text-align:left}
   table.vals th{color:var(--sub); font-weight:400; font-size:.72rem}
+  table.vals td:first-child{white-space:nowrap; color:var(--sub); font-size:.72rem}
   table.vals td.num{font-family:ui-monospace,monospace; color:var(--acc); white-space:nowrap}
   .fin{margin-top:30px; background:#fff; border:2px solid var(--ink); border-radius:12px; padding:16px 18px; font-size:.9rem; text-align:center}
   .fin b{color:var(--acc)}
@@ -115,6 +118,7 @@
       <p id="card-text"></p>
     </div>
 
+    <div style="overflow-x:auto">
     <table class="vals">
       <tr><th></th><th>SSME HPFTP</th><th>Merlin 1D</th><th>RL10</th><th>LE-9 FTP/OTP</th></tr>
       <tr><td>思想</td><td class="num">極限の性能</td><td class="num">単純と量産</td><td class="num">歯車の知恵</td><td class="num">安全と単純</td></tr>
@@ -122,6 +126,7 @@
       <tr><td>動力</td><td class="num">約7.7万hp(FPL)</td><td class="num">約1万hp</td><td class="num">数千hp級</td><td class="num">—</td></tr>
       <tr><td>ひとこと</td><td class="num">V8の重さで310倍</td><td class="num">1軸で2液</td><td class="num">燃料側が歯車で酸素側を回す</td><td class="num">短軸でダンパ不要</td></tr>
     </table>
+    </div>
     <div style="font-size:.7rem; color:var(--sub); margin-top:-4px">※数値は公称・公開値の代表。Merlinの出力はメーカー公称です。</div>
 
     <p class="body">そして総復習。章番号をタップすると、その章の言葉でこの4つを読み解きます。</p>
