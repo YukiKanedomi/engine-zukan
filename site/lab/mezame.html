@@ -35,8 +35,31 @@
   .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
   .caution{border:1.5px dashed var(--acc); border-radius:12px; background:#fdf3e7;
     padding:10px 14px; font-size:.82rem; margin:16px 0}
-  .filmbox{border:1.5px solid var(--line); border-radius:12px; background:#fdf6ea; overflow:hidden}
-  .filmbox svg{display:block; width:100%; height:auto}
+  /* --- 舞台（貼り付く絵） --- */
+  .theater{position:relative}
+  .stage{position:sticky; top:0; z-index:5; background:var(--paper); padding:6px 0 4px}
+  .stagebox{border:1.5px solid var(--line); border-radius:12px; background:#fdf6ea; overflow:hidden}
+  .stagebox svg{display:block; width:100%; height:auto}
+  .stagebar{display:flex; justify-content:space-between; align-items:center;
+    font-size:.74rem; color:var(--sub); padding:3px 4px 0}
+  .stagebar .ph{color:var(--acc); font-weight:700}
+  .stagebar .tt{font-family:ui-monospace,Consolas,monospace}
+  /* --- 場面 --- */
+  .step{min-height:72vh; display:flex; flex-direction:column; justify-content:center; padding:20px 0}
+  .flat .step{min-height:auto}
+  .step .card{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:14px 16px;
+    box-shadow:3px 3px 0 var(--line)}
+  .step .card .pname{font-weight:700; display:flex; align-items:center; gap:8px; font-size:.95rem}
+  .step .card .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink);
+    display:inline-block; background:var(--sand); flex:none}
+  .step .card p{font-size:.88rem; margin-top:8px}
+  .mini{margin-top:12px}
+  .mini .mhead{display:flex; justify-content:space-between; font-size:.74rem; color:var(--sub)}
+  .mini .mhead .mv{font-family:ui-monospace,Consolas,monospace; color:var(--acc)}
+  .mini canvas{width:100%; height:64px; display:block; border:1px solid var(--line);
+    border-radius:8px; background:#fdfaf3}
+  .scrollhint{text-align:center; color:var(--acc); font-size:.78rem; margin:6px 0 0}
+  /* --- 自由にこする --- */
   .ctrl{display:flex; align-items:center; gap:10px; margin:10px 0 2px}
   .ctrl button{font-family:inherit; font-size:.9rem; border:1.5px solid var(--ink); background:#fff;
     border-radius:10px; padding:6px 14px; cursor:pointer; color:var(--ink)}
@@ -47,12 +70,6 @@
   .chips .chip{cursor:pointer; font-size:.78rem; padding:4px 12px; border-radius:999px;
     border:1.5px solid var(--line); background:#fff}
   .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
-  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:12px 16px;
-    margin:14px 0; box-shadow:3px 3px 0 var(--line); min-height:112px}
-  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px; font-size:.92rem}
-  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink);
-    display:inline-block; background:var(--sand); flex:none}
-  .partcard p{font-size:.86rem; margin-top:6px}
   .lane{margin:10px 0}
   .lane .lhead{display:flex; justify-content:space-between; font-size:.74rem; color:var(--sub)}
   .lane .lhead .lv{font-family:ui-monospace,Consolas,monospace; color:var(--acc)}
@@ -77,8 +94,9 @@
   .src{margin-top:10px; font-size:.72rem; color:var(--sub)}
   .src b{color:var(--ink)}
   .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
-    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem; z-index:6}
   .pager a{color:inherit; text-decoration:none}
+  h2.kyoka{font-size:1.05rem; margin:34px 0 6px; letter-spacing:.06em}
 </style>
 </head>
 <body>
@@ -99,92 +117,84 @@
 
     <div class="caution">この話の主役は<b>架空の教材エンジン「あさひ」</b>（水素/酸素・エキスパンダーブリード・300kN級という設定）です。数値は教材用で、実在のどのエンジンのものでもありません。ほんものなのは<b>因果の形</b>だけ——出典の実資料への橋は、ページの終わりにあります。弁の開閉順序・時刻・しきい値もすべて演出用で、実機の運用には一切使えません。</div>
 
-    <p class="body">第3巻07話で、めざめの物語を3枚の絵で見ました。今日はその完全版です。ふだん、始動を語るとき、弁の人は弁を、ポンプの人は回転数を、燃焼の人は室圧を見ています。でも実際のエンジンの朝は、<b>ぜんぶが同時に</b>起きている。下の映画を、指でこすってみてください。朝は4種類あります——うまくいく朝と、<b>うまくいかない3つの朝</b>。</p>
+    <p class="body">第3巻07話で、めざめの物語を3枚の絵で見ました。今日はその完全版です。読み方はかんたん——<b>ふつうに下へ読み進めるだけ</b>。上に貼りついた絵が、あなたの読む速さに合わせて動きます。場面ごとに「いま見るべきグラフ」を1本だけお見せします。</p>
 
-    <div class="chips" id="scens" style="margin:0 0 10px"></div>
+    <div class="chips" id="scens" style="margin:0 0 4px"></div>
 
-    <div class="filmbox">
-      <svg id="anim" viewBox="0 0 560 300">
-        <defs>
-          <linearGradient id="flameG" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0" stop-color="#f6d9b8"/><stop offset="0.45" stop-color="#e8a25c"/><stop offset="1" stop-color="#c4602f" stop-opacity="0.85"/>
-          </linearGradient>
-        </defs>
-        <g stroke="#3a4550" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
-          <!-- 酸素側（上段） -->
-          <rect x="30" y="22" width="78" height="52" rx="10" fill="#eef4ed"/>
-          <path d="M108,48 H140"/>
-          <g id="movV"><polygon points="140,40 150,48 140,56" fill="#fff"/><polygon points="160,40 150,48 160,56" fill="#fff"/></g>
-          <path d="M160,48 H185"/>
-          <circle cx="205" cy="48" r="18" fill="#fff"/>
-          <g id="otpG"><path d="M205,32 V64 M191,40 L219,56 M191,56 L219,40" stroke-width="1.8"/></g>
-          <path d="M223,48 H392 V116" id="oxpipe"/>
-          <!-- 水素側（下段） -->
-          <rect x="30" y="190" width="78" height="62" rx="10" fill="#eaf1f7"/>
-          <path d="M108,220 H140"/>
-          <g id="mfvV"><polygon points="140,212 150,220 140,228" fill="#fff"/><polygon points="160,212 150,220 160,228" fill="#fff"/></g>
-          <path d="M160,220 H179"/>
-          <circle cx="205" cy="220" r="24" fill="#fff"/>
-          <g id="ftpG"><path d="M205,199 V241 M187,209 L223,231 M187,231 L223,209" stroke-width="1.8"/></g>
-          <!-- ポンプ→ジャケット入口（ノズル端の下から入る） -->
-          <path d="M229,220 C280,220 300,262 340,262 H520 C528,262 532,240 532,226"/>
-          <!-- 冷却ジャケット（燃焼室の外殻。色が温度） -->
-          <path id="jkt1" d="M386,116 H452 Q468,116 472,146 L532,108" stroke-width="6.5" stroke="#7fa8c9"/>
-          <path id="jkt2" d="M386,204 H452 Q468,204 472,174 L532,212" stroke-width="6.5" stroke="#7fa8c9"/>
-          <!-- 燃焼室・ノズルの内壁 -->
-          <path d="M390,124 H450 Q463,124 468,148 L526,114 M390,196 H450 Q463,196 468,172 L526,206 M390,124 V196" fill="#fff"/>
-          <!-- ジャケット出口→分岐: タービンへ / 噴射器へ -->
-          <path d="M386,112 C360,96 350,90 322,90" />
-          <path d="M352,92 C368,102 378,110 388,122" stroke-width="1.6"/>
-          <g id="tcvV"><polygon points="322,82 312,90 322,98" fill="#fff"/><polygon points="302,82 312,90 302,98" fill="#fff"/></g>
-          <circle cx="277" cy="90" r="17" fill="#fff"/>
-          <g id="turbG"><path d="M277,75 V105 M264,82 L290,98 M264,98 L290,82" stroke-width="1.8"/></g>
-          <path d="M260,90 H228 L210,76" />
-          <path d="M214,86 L206,72 L220,74" stroke-width="1.6"/>
-          <!-- 点火器 -->
-          <g id="ign" opacity="0"><polygon points="398,150 408,158 402,160 412,170 400,163 406,161" fill="#c4602f" stroke="none"/></g>
-        </g>
-        <!-- 炎（ノズル出口から右へ） -->
-        <g transform="translate(526,160)"><g id="flameS" transform="scale(0.02,0.1)"><path d="M0,-46 Q20,-22 31,0 Q20,22 0,46 Q7,0 0,-46 Z" fill="url(#flameG)" stroke="none" opacity="0.9"/></g></g>
-        <!-- ラベル -->
-        <g font-size="10" fill="#77808a" stroke="none" font-family="sans-serif">
-          <text x="40" y="40">酸素タンク</text>
-          <text x="186" y="16">酸素ポンプ</text>
-          <text x="40" y="210">水素タンク</text>
-          <text x="182" y="258">水素ポンプ</text>
-          <text x="258" y="122">タービン</text>
-          <text x="184" y="66">すてる↑</text>
-          <text x="416" y="286">冷却ジャケット</text>
-          <text x="143" y="238">弁</text>
-          <text x="143" y="66">弁</text>
-        </g>
-        <!-- 計器 -->
-        <g font-size="11" fill="#3a4550" stroke="none" font-family="ui-monospace,Consolas,monospace">
-          <text x="246" y="244" id="roN">0 rpm</text>
-          <text x="232" y="36" id="roNox">0 rpm</text>
-          <text x="398" y="164" id="roPc">0.00 MPa</text>
-          <text x="458" y="246" id="roF" fill="#c47a4f">0 kN</text>
-        </g>
-      </svg>
+    <div class="theater" id="theater">
+      <div class="stage" id="stage">
+        <div class="stagebox">
+          <svg id="anim" viewBox="0 0 560 300">
+            <defs>
+              <linearGradient id="flameG" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0" stop-color="#f6d9b8"/><stop offset="0.45" stop-color="#e8a25c"/><stop offset="1" stop-color="#c4602f" stop-opacity="0.85"/>
+              </linearGradient>
+            </defs>
+            <g stroke="#3a4550" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+              <!-- 酸素側（上段） -->
+              <rect x="30" y="22" width="78" height="52" rx="10" fill="#eef4ed"/>
+              <path d="M108,48 H140"/>
+              <g id="movV"><polygon points="140,40 150,48 140,56" fill="#fff"/><polygon points="160,40 150,48 160,56" fill="#fff"/></g>
+              <path d="M160,48 H185"/>
+              <circle cx="205" cy="48" r="18" fill="#fff"/>
+              <g id="otpG"><path d="M205,32 V64 M191,40 L219,56 M191,56 L219,40" stroke-width="1.8"/></g>
+              <path d="M223,48 H392 V116" id="oxpipe"/>
+              <!-- 水素側（下段） -->
+              <rect x="30" y="190" width="78" height="62" rx="10" fill="#eaf1f7"/>
+              <path d="M108,220 H140"/>
+              <g id="mfvV"><polygon points="140,212 150,220 140,228" fill="#fff"/><polygon points="160,212 150,220 160,228" fill="#fff"/></g>
+              <path d="M160,220 H179"/>
+              <circle cx="205" cy="220" r="24" fill="#fff"/>
+              <g id="ftpG"><path d="M205,199 V241 M187,209 L223,231 M187,231 L223,209" stroke-width="1.8"/></g>
+              <path d="M229,220 C280,220 300,262 340,262 H520 C528,262 532,240 532,226"/>
+              <path id="jkt1" d="M386,116 H452 Q468,116 472,146 L532,108" stroke-width="6.5" stroke="#7fa8c9"/>
+              <path id="jkt2" d="M386,204 H452 Q468,204 472,174 L532,212" stroke-width="6.5" stroke="#7fa8c9"/>
+              <path d="M390,124 H450 Q463,124 468,148 L526,114 M390,196 H450 Q463,196 468,172 L526,206 M390,124 V196" fill="#fff"/>
+              <path d="M386,112 C360,96 350,90 322,90" />
+              <path d="M352,92 C368,102 378,110 388,122" stroke-width="1.6"/>
+              <g id="tcvV"><polygon points="322,82 312,90 322,98" fill="#fff"/><polygon points="302,82 312,90 302,98" fill="#fff"/></g>
+              <circle cx="277" cy="90" r="17" fill="#fff"/>
+              <g id="turbG"><path d="M277,75 V105 M264,82 L290,98 M264,98 L290,82" stroke-width="1.8"/></g>
+              <path d="M260,90 H228 L210,76" />
+              <path d="M214,86 L206,72 L220,74" stroke-width="1.6"/>
+              <g id="ign" opacity="0"><polygon points="398,150 408,158 402,160 412,170 400,163 406,161" fill="#c4602f" stroke="none"/></g>
+            </g>
+            <g transform="translate(526,160)"><g id="flameS" transform="scale(0.02,0.1)"><path d="M0,-46 Q20,-22 31,0 Q20,22 0,46 Q7,0 0,-46 Z" fill="url(#flameG)" stroke="none" opacity="0.9"/></g></g>
+            <g font-size="10" fill="#77808a" stroke="none" font-family="sans-serif">
+              <text x="40" y="40">酸素タンク</text>
+              <text x="186" y="16">酸素ポンプ</text>
+              <text x="40" y="210">水素タンク</text>
+              <text x="182" y="258">水素ポンプ</text>
+              <text x="258" y="122">タービン</text>
+              <text x="184" y="66">すてる↑</text>
+              <text x="416" y="286">冷却ジャケット</text>
+              <text x="143" y="238">弁</text>
+              <text x="143" y="66">弁</text>
+            </g>
+            <g font-size="11" fill="#3a4550" stroke="none" font-family="ui-monospace,Consolas,monospace">
+              <text x="246" y="244" id="roN">0 rpm</text>
+              <text x="232" y="36" id="roNox">0 rpm</text>
+              <text x="398" y="164" id="roPc">0.00 MPa</text>
+              <text x="458" y="246" id="roF" fill="#c47a4f">0 kN</text>
+            </g>
+          </svg>
+        </div>
+        <div class="stagebar"><span class="ph" id="phlabel">しずかな朝</span><span id="scenlabel">きほんの朝</span><span class="tt" id="tval">-0.50s</span></div>
+      </div>
+
+      <div class="scrollhint">▼ このまま下へ読み進めてください。絵がついてきます</div>
+      <div id="steps"></div>
     </div>
 
+    <h2 class="kyoka" id="free-title">じぶんで こする</h2>
+    <p class="body" style="margin-top:4px">物語をもう一度、こんどは自分の指で。バーをこすると上の絵が動きます。▶ でゆっくり再生もできます。</p>
     <div class="ctrl">
       <button class="play" id="btnPlay">▶</button>
       <button id="btnSpd">×½</button>
       <input type="range" id="scrub" min="-0.5" max="5" step="0.01" value="-0.5">
-      <span class="tval" id="tval">-0.50s</span>
     </div>
-    <div class="chips" id="chapters"></div>
-
-    <div class="partcard" id="card">
-      <div class="pname"><span class="dot"></span><span id="card-name"></span></div>
-      <p id="card-text"></p>
-    </div>
-
     <div id="lanes"></div>
     <button class="morebtn" id="btnMore">ぜんぶ見る（温度・混合比・弁・酸素ポンプ）</button>
-
-    <p class="body">見どころを3つ。①点火の前から、ポンプは<b>タンクの圧だけでそっと回りはじめて</b>います（外部の高圧ガスに頼らないタンクヘッドスタート。点火器や弁を動かす電気は別です）。②点火のあとの加速は、誰かが踏むアクセルではなく、<b>回る→流れる→温まる→もっと回る</b>という自励の輪（ブートストラップ）。③回転が定格へ近づくほど、<b>吸込余裕比が細っていく</b>——必要な余裕は回転の2乗で膨らむのに、追加のタンク加圧はゆっくりだからです。</p>
 
     <details class="side">
       <summary><span class="badge">よりみち</span>この映画の正体（模型の中身）</summary>
@@ -204,7 +214,7 @@
       </div>
     </details>
 
-    <div class="next"><b>4本の朝、そろいました。</b>おすすめの見かたは「きほんの朝」を1回通してから、失敗テイク3本を同じ場面で止めて見比べること。車線の増減・速度・説明の深さなど、注文があればいつでも。</div>
+    <div class="next"><b>4本の朝、そろいました。</b>おすすめの見かたは「きほんの朝」を1回読み通してから、上のチップで失敗テイク3本へ。読む速さがそのまま映画の速さです。</div>
 
     <div class="src">
       <b>形の出典</b>（数値は教材値。実機の始動はこちらで）<br>
@@ -234,158 +244,161 @@ function val(key, t){
   return S[key][i]*(1-f) + S[key][i+1]*f;
 }
 
-// ---- シナリオごとの章と因果カード ----
-const CHAPSETS = {
-  nominal: [
-    {t:0.0, label:"弁ひらく"}, {t:1.0, label:"点火"}, {t:1.7, label:"ブートストラップ"}, {t:4.2, label:"主段化"},
-  ],
-  chill: [
-    {t:0.0, label:"弁ひらく"}, {t:1.0, label:"点火"}, {t:3.0, label:"中止"}, {t:3.6, label:"片づけ"},
-  ],
-  tank: [
-    {t:0.0, label:"弁ひらく"}, {t:2.6, label:"削れはじめ"}, {t:3.8, label:"悲鳴"}, {t:4.6, label:"回復"},
-  ],
-  ign: [
-    {t:0.5, label:"火花"}, {t:1.8, label:"ハードスタート"}, {t:2.4, label:"立ちなおり"}, {t:4.4, label:"主段化ちかく"},
-  ],
+// ---- 信号の定義（ミニグラフ・車線 共用） ----
+const SIGDEFS = {
+  N:     {label:"回転数（燃料ポンプ）", unit:" rpm", max:50000, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
+  pc:    {label:"燃焼室圧", unit:" MPa", max:7, fmt:v=>v.toFixed(2)},
+  F:     {label:"推力", unit:" kN", max:330, fmt:v=>v.toFixed(0)},
+  npshm: {label:"吸込余裕比（酸素側 NPSHa/NPSHr・教材基準）", unit:" 倍", max:5.3, warn:1.3, fmt:v=>v.toFixed(2)},
+  Th:    {label:"ジャケット出口温度", unit:" K", max:270, fmt:v=>v.toFixed(0)},
+  Twall: {label:"燃焼室の壁温（冷却側の実効節点）", unit:" K", max:620, fmt:v=>v.toFixed(0)},
+  MR:    {label:"混合比 O/F", unit:"", max:8, ref:5.5, fmt:v=>v.toFixed(1)},
+  mfv:   {label:"燃料弁のひらき", unit:"", max:1.08, fmt:v=>v.toFixed(2)},
+  mov:   {label:"酸素弁のひらき", unit:"", max:1.08, fmt:v=>v.toFixed(2)},
+  tcv:   {label:"TCV（ブリード絞り弁）のひらき", unit:"", max:1.08, fmt:v=>v.toFixed(2)},
+  Nox:   {label:"回転数（酸素ポンプ）", unit:" rpm", max:18500, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
 };
-const CARDSETS = {
+
+// ---- 場面（シナリオごと） ----
+const STEPSETS = {
   nominal: [
-    {t0:-0.5, t1:0.0, name:"しずかな朝", text:"まだ何も動いていません。チルダウン（予冷）は済んでいて、配管も金属も液体水素の温度まで冷やし込まれています。急いで冷やすとどうなるかは、07話のとおり。"},
-    {t0:0.0, t1:0.5, name:"弁がひらく", text:"燃料の弁（MFV）がひらきました。ポンプはまだ仕事をしていないのに、タンクの圧だけで水素が流れはじめ、通り道の残り熱でほんのり温まったガスがタービンをそっと回します。外の高圧ガスは借りない——タンクヘッドスタートです。"},
-    {t0:0.5, t1:1.0, name:"点火のしたく", text:"点火器が火花を切りはじめ、酸素の弁（MOV）が2割だけひらきます。まだ火はありません。回転計だけが、静かに数字を増やしていきます。"},
-    {t0:1.0, t1:1.7, name:"小さな火", text:"点火。酸素はまだ2割の弁ぶんだけ——全体としてかなり燃料リッチの、やわらかい火が壁を内側から温めはじめます。壁が温まると、ジャケットの水素が拾える熱が増える——自励の輪の、最初のひと回りです。"},
-    {t0:1.7, t1:2.6, name:"ブートストラップ", text:"回る→流れる→温まる→もっと回る。誰もアクセルを踏んでいないのに、輪が自分で速くなっていきます。回転が上がるほどタービンの取り分（教材モデルでは駆動立ち上がり係数）が育つので、加速はS字を描きます。"},
-    {t0:2.6, t1:3.6, name:"酸素、全開", text:"MOVが全開へ。火が本気になり、混合比が薄い側から5.5へ登っていきます。室圧と推力が立ち上がり、壁の実効温度は500K台へ。"},
-    {t0:3.6, t1:4.2, name:"手綱をしめる", text:"回転が38,000rpmを超えると、TCVがタービンへのブリードを絞りはじめます。時計ではなく回転数に連動する弁スケジュール——この教材では「ガバナ」と呼びます。"},
-    {t0:4.2, t1:5.01, name:"主段化", text:"点火からおよそ3秒で定格の約9割——主段化です。残りはゆっくり整定していきます。下の「吸込余裕比」も見てください。必要な余裕は回転の2乗で膨らむので、追加加圧が済むまで、余裕比は1.7あたりまで細っていきます。"},
+    {t0:-0.5, t1:0.0, name:"しずかな朝", sig:null, text:"まだ何も動いていません。チルダウン（予冷）は済んでいて、配管も金属も液体水素の温度まで冷やし込まれています。急いで冷やすとどうなるかは、07話のとおり。"},
+    {t0:0.0, t1:0.5, name:"弁がひらく", sig:"N", text:"燃料の弁（MFV）がひらきました。ポンプはまだ仕事をしていないのに、タンクの圧だけで水素が流れはじめ、通り道の残り熱でほんのり温まったガスがタービンをそっと回します。外の高圧ガスは借りない——タンクヘッドスタートです。"},
+    {t0:0.5, t1:1.0, name:"点火のしたく", sig:"mov", text:"点火器が火花を切りはじめ、酸素の弁（MOV）が2割だけひらきます。まだ火はありません。回転計だけが、静かに数字を増やしていきます。"},
+    {t0:1.0, t1:1.7, name:"小さな火", sig:"Twall", text:"点火。酸素はまだ2割の弁ぶんだけ——全体としてかなり燃料リッチの、やわらかい火が壁を内側から温めはじめます。壁が温まると、ジャケットの水素が拾える熱が増える——自励の輪の、最初のひと回りです。"},
+    {t0:1.7, t1:2.6, name:"ブートストラップ", sig:"N", text:"回る→流れる→温まる→もっと回る。誰もアクセルを踏んでいないのに、輪が自分で速くなっていきます。回転が上がるほどタービンの取り分が育つので、加速はS字を描きます。"},
+    {t0:2.6, t1:3.6, name:"酸素、全開", sig:"MR", text:"MOVが全開へ。火が本気になり、混合比が薄い側から5.5へ登っていきます。室圧と推力が立ち上がり、壁の実効温度は500K台へ。"},
+    {t0:3.6, t1:4.2, name:"手綱をしめる", sig:"tcv", text:"回転が38,000rpmを超えると、TCVがタービンへのブリードを絞りはじめます。時計ではなく回転数に連動する弁スケジュール——この教材では「ガバナ」と呼びます。"},
+    {t0:4.2, t1:5.0, name:"主段化", sig:"npshm", text:"点火からおよそ3秒で定格の約9割——主段化です。残りはゆっくり整定していきます。このグラフは吸込余裕比。必要な余裕は回転の2乗で膨らむので、追加加圧が済むまで、余裕比は1.7あたりまで細っていきます。"},
   ],
   chill: [
-    {t0:-0.5, t1:0.0, name:"急いだ朝", text:"今日はチルダウンを途中で切り上げました。配管の見た目は同じ静けさ。でもポンプ入口の金属は、まだ液体水素の温度まで冷え切っていません。"},
-    {t0:0.0, t1:1.0, name:"出だしから鈍い", text:"弁は開いたのに、流れがいつもより細い。ぬるい入口で水素が沸き、ポンプは泡まじりの流体を掴まされています。回転の伸びも普段より鈍い——液体を運ぶはずの羽根が、半分は蒸気を運んでいるからです。"},
-    {t0:1.0, t1:2.2, name:"回るのに、押せない", text:"点火はしました。でも泡まじりのポンプは液を押し込めず、室圧が立ちません。回る→流れる→温まる、の輪のうち「流れる」が欠けたまま。"},
-    {t0:2.2, t1:3.0, name:"届かない", text:"入口は流れ自身の冷たさで少しずつ冷えていきます。でも間に合わない。所定の時刻が迫るのに、室圧は定格の2割弱です。"},
-    {t0:3.0, t1:3.6, name:"中止", text:"レッドラインの宣告——「この時刻までに室圧が届かなければ止める」。始動前に決めてあった約束どおり、弁を閉じます（この止め方の順序・時刻は演出です。実機の停止シーケンスは機種ごとに厳密に設計されます）。"},
-    {t0:3.6, t1:5.01, name:"静かな片づけ", text:"羽根が惰性でゆっくり止まっていきます。何も壊さず止まれたこと——それが今日いちばんの成果です。チルダウンをやり直して、朝はまた来ます。"},
+    {t0:-0.5, t1:0.0, name:"急いだ朝", sig:null, text:"今日はチルダウンを途中で切り上げました。配管の見た目は同じ静けさ。でもポンプ入口の金属は、まだ液体水素の温度まで冷え切っていません。"},
+    {t0:0.0, t1:1.0, name:"出だしから鈍い", sig:"N", text:"弁は開いたのに、流れがいつもより細い。ぬるい入口で水素が沸き、ポンプは泡まじりの流体を掴まされています。回転の伸びも普段より鈍い——液体を運ぶはずの羽根が、半分は蒸気を運んでいるからです。"},
+    {t0:1.0, t1:2.2, name:"回るのに、押せない", sig:"pc", text:"点火はしました。でも泡まじりのポンプは液を押し込めず、室圧が立ちません。回る→流れる→温まる、の輪のうち「流れる」が欠けたまま。"},
+    {t0:2.2, t1:3.0, name:"届かない", sig:"pc", text:"入口は流れ自身の冷たさで少しずつ冷えていきます。でも間に合わない。所定の時刻が迫るのに、室圧は定格の2割弱です。"},
+    {t0:3.0, t1:3.6, name:"中止", sig:"mfv", text:"レッドラインの宣告——「この時刻までに室圧が届かなければ止める」。始動前に決めてあった約束どおり、弁を閉じます（この止め方の順序・時刻は演出です。実機の停止シーケンスは機種ごとに厳密に設計されます）。"},
+    {t0:3.6, t1:5.0, name:"静かな片づけ", sig:"N", text:"羽根が惰性でゆっくり止まっていきます。何も壊さず止まれたこと——それが今日いちばんの成果です。チルダウンをやり直して、朝はまた来ます。"},
   ],
   tank: [
-    {t0:-0.5, t1:0.0, name:"元手の薄い朝", text:"今日はタンクの加圧が渋く、吸込余裕の元手が薄い。最初は何も起きません——問題は、回転が上がってから来ます。"},
-    {t0:0.0, t1:2.6, name:"いつもどおりの前半", text:"出だしは普段と同じです。必要な余裕（NPSHr）は回転の2乗でしか増えないので、低回転のうちは薄い元手でも十分に足りています。"},
-    {t0:2.6, t1:3.8, name:"余裕が削れる", text:"回転が伸びるほど必要余裕が2乗で膨らみ、手持ちがみるみる薄くなる。余裕比の車線が崖を下っていきます。"},
-    {t0:3.8, t1:4.6, name:"静かな悲鳴", text:"余裕比1.2。酸素ポンプの吸い込みで泡が生まれては潰れ、流量が痩せて室圧と推力が目減りし、細かく震えます（この震えは様式化した演出です。実物の旋回キャビテーションはもっと意地悪）。壊れてはいない。でも約束の性能が出ていない——キャビテーションはこういう顔で来ます。"},
-    {t0:4.6, t1:5.01, name:"ぎりぎりの回復", text:"追加加圧が追いつき、震えが収まって定格へ。今日の教訓: 余裕は「あるかないか」ではなく「いつ薄いか」。いちばん薄い瞬間は、たいてい一番忙しい瞬間に重なります。"},
+    {t0:-0.5, t1:0.0, name:"元手の薄い朝", sig:null, text:"今日はタンクの加圧が渋く、吸込余裕の元手が薄い。最初は何も起きません——問題は、回転が上がってから来ます。"},
+    {t0:0.0, t1:2.6, name:"いつもどおりの前半", sig:"N", text:"出だしは普段と同じです。必要な余裕（NPSHr）は回転の2乗でしか増えないので、低回転のうちは薄い元手でも十分に足りています。"},
+    {t0:2.6, t1:3.8, name:"余裕が削れる", sig:"npshm", text:"回転が伸びるほど必要余裕が2乗で膨らみ、手持ちがみるみる薄くなる。余裕比の線が崖を下っていきます。"},
+    {t0:3.8, t1:4.6, name:"静かな悲鳴", sig:"pc", text:"余裕比1.2。酸素ポンプの吸い込みで泡が生まれては潰れ、流量が痩せて室圧と推力が目減りし、細かく震えます（この震えは様式化した演出です。実物の旋回キャビテーションはもっと意地悪）。壊れてはいない。でも約束の性能が出ていない——キャビテーションはこういう顔で来ます。"},
+    {t0:4.6, t1:5.0, name:"ぎりぎりの回復", sig:"npshm", text:"追加加圧が追いつき、震えが収まって定格へ。今日の教訓: 余裕は「あるかないか」ではなく「いつ薄いか」。いちばん薄い瞬間は、たいてい一番忙しい瞬間に重なります。"},
   ],
   ign: [
-    {t0:-0.5, t1:0.5, name:"ふつうの朝のはず", text:"弁が開き、水素が流れ、ポンプがそっと回りはじめる。ここまでは、何も違いません。"},
-    {t0:0.5, t1:1.8, name:"火花だけが飛ぶ", text:"点火器は働いているのに、火がつきません。その間も酸素の弁は2割開いたまま——燃えなかった相手が、部屋に溜まり続けています。"},
-    {t0:1.8, t1:2.4, name:"乱暴な目覚め", text:"溜まった推進剤にまとめて火がつきました——ハードスタート。室圧が一瞬、この時点としては桁違いの高さへ跳ね、鐘のように鳴って収まります（このパルスは合成の危険演出です。実物の点火遅れは「必ずこうなる」ではなく「こうなる危険を溜め込む」）。"},
-    {t0:2.4, t1:4.0, name:"何事もなかったように", text:"輪は回りはじめ、波形は普段の顔に戻っていきます。でも設計者は忘れません。さっきの一撃が噴射器や壁をどれだけ痛めたか、外からは見えないことを。"},
-    {t0:4.0, t1:5.01, name:"遅れて届く朝", text:"立ち上がりは約0.8秒遅れのまま。5秒の時点でまだ定格の95%です。実機なら、点火確認の窓を過ぎた時点で中止します——溜めてから点けるより、点かないなら止めるほうが、いつでも安い。"},
+    {t0:-0.5, t1:0.5, name:"ふつうの朝のはず", sig:null, text:"弁が開き、水素が流れ、ポンプがそっと回りはじめる。ここまでは、何も違いません。"},
+    {t0:0.5, t1:1.8, name:"火花だけが飛ぶ", sig:"pc", text:"点火器は働いているのに、火がつきません。その間も酸素の弁は2割開いたまま——燃えなかった相手が、部屋に溜まり続けています。室圧の線が、平らなまま息をひそめています。"},
+    {t0:1.8, t1:2.4, name:"乱暴な目覚め", sig:"pc", text:"溜まった推進剤にまとめて火がつきました——ハードスタート。室圧が一瞬、この時点としては桁違いの高さへ跳ね、鐘のように鳴って収まります（このパルスは合成の危険演出です。実物の点火遅れは「必ずこうなる」ではなく「こうなる危険を溜め込む」）。"},
+    {t0:2.4, t1:4.0, name:"何事もなかったように", sig:"N", text:"輪は回りはじめ、波形は普段の顔に戻っていきます。でも設計者は忘れません。さっきの一撃が噴射器や壁をどれだけ痛めたか、外からは見えないことを。"},
+    {t0:4.0, t1:5.0, name:"遅れて届く朝", sig:"pc", text:"立ち上がりは約0.8秒遅れのまま。5秒の時点でまだ定格の95%です。実機なら、点火確認の窓を過ぎた時点で中止します——溜めてから点けるより、点かないなら止めるほうが、いつでも安い。"},
   ],
 };
 
-// ---- 車線 ----
-const LANES = [
-  {key:"N",     label:"回転数（燃料ポンプ）", unit:" rpm", max:50000, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
-  {key:"pc",    label:"燃焼室圧", unit:" MPa", max:7,     fmt:v=>v.toFixed(2)},
-  {key:"F",     label:"推力", unit:" kN", max:330,       fmt:v=>v.toFixed(0)},
-  {key:"npshm", label:"吸込余裕比（酸素側 NPSHa/NPSHr・教材基準）", unit:" 倍", max:5.3, warn:1.3, fmt:v=>v.toFixed(2)},
-  {key:"Th",    label:"ジャケット出口温度", unit:" K", max:270, extra:true, fmt:v=>v.toFixed(0)},
-  {key:"Twall", label:"燃焼室の壁温", unit:" K", max:620, extra:true, fmt:v=>v.toFixed(0)},
-  {key:"MR",    label:"混合比 O/F", unit:"", max:8, ref:5.5, extra:true, fmt:v=>v.toFixed(1)},
-  {key:"mfv",   label:"弁ひらき（実線=燃料 破線=酸素 点線=TCV）", unit:"", max:1.08, extra:true, multi:["mfv","mov","tcv"], fmt:v=>v.toFixed(2)},
-  {key:"Nox",   label:"回転数（酸素ポンプ）", unit:" rpm", max:18500, extra:true, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
-];
-
-const lanesDiv = document.getElementById("lanes");
-for(const ln of LANES){
-  const d = document.createElement("div");
-  d.className = "lane"; if(ln.extra) d.style.display = "none";
-  d.innerHTML = '<div class="lhead"><span>'+ln.label+'</span><span class="lv" id="lv-'+ln.key+'"></span></div><canvas id="cv-'+ln.key+'"></canvas>';
-  lanesDiv.appendChild(d);
-  ln.el = d;
+// ---- 場面ブロックの構築 ----
+let STEPS = STEPSETS[scKey];
+const stepsDiv = document.getElementById("steps");
+function buildSteps(){
+  stepsDiv.innerHTML = "";
+  STEPS.forEach((st,i)=>{
+    const d = document.createElement("div");
+    d.className = "step";
+    let mini = "";
+    if(st.sig){
+      const def = SIGDEFS[st.sig];
+      mini = '<div class="mini"><div class="mhead"><span>'+def.label+'</span><span class="mv" id="mv-'+i+'"></span></div><canvas id="mc-'+i+'"></canvas></div>';
+    }
+    d.innerHTML = '<div class="card"><div class="pname"><span class="dot"></span>'+st.name+'</div><p>'+st.text+'</p>'+mini+'</div>';
+    stepsDiv.appendChild(d);
+    st.el = d;
+  });
 }
 
-function drawLane(ln, t){
-  const cv = document.getElementById("cv-"+ln.key);
+// ---- ミニグラフ ----
+function drawMini(st, i, t){
+  if(!st.sig) return;
+  const cv = document.getElementById("mc-"+i);
+  if(!cv) return;
+  const def = SIGDEFS[st.sig];
   const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio||1;
+  if(w === 0) return;
   if(cv.width !== w*dpr){ cv.width = w*dpr; cv.height = h*dpr; }
   const g = cv.getContext("2d");
   g.setTransform(dpr,0,0,dpr,0,0);
   g.clearRect(0,0,w,h);
   const X = tt => (tt-T0)/(TEND-T0)*w;
-  const Y = v => h-3-(v/ln.max)*(h-8);
-  // 基準線
-  if(ln.warn !== undefined || ln.ref !== undefined){
+  const Y = v => h-3-(v/def.max)*(h-8);
+  // この場面の時間帯を淡く塗る
+  g.fillStyle = "rgba(244,214,180,0.5)";
+  g.fillRect(X(st.t0), 0, X(st.t1)-X(st.t0), h);
+  if(def.warn !== undefined || def.ref !== undefined){
     g.strokeStyle = "#c47a4f"; g.setLineDash([4,4]); g.lineWidth = 1;
-    g.beginPath(); const yv = Y(ln.warn !== undefined ? ln.warn : ln.ref);
-    g.moveTo(0,yv); g.lineTo(w,yv); g.stroke(); g.setLineDash([]);
+    const yv = Y(def.warn !== undefined ? def.warn : def.ref);
+    g.beginPath(); g.moveTo(0,yv); g.lineTo(w,yv); g.stroke(); g.setLineDash([]);
   }
-  // 波形
-  const series = ln.multi || [ln.key];
-  const dash = [[],[6,4],[2,3]];
-  series.forEach((k,si)=>{
-    g.strokeStyle = si===0 ? "#5b87a8" : (si===1 ? "#4e6b49" : "#c47a4f");
-    g.lineWidth = 1.8; g.setLineDash(dash[si]||[]);
-    g.beginPath();
-    for(let i=0;i<NPT;i+=2){
-      const x = X(S.t[i]), y = Y(Math.min(S[k][i], ln.max));
-      if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
-    }
-    g.stroke();
-  });
-  g.setLineDash([]);
-  // 現在線
+  g.strokeStyle = "#5b87a8"; g.lineWidth = 1.8;
+  g.beginPath();
+  for(let k=0;k<NPT;k+=2){
+    const x = X(S.t[k]), y = Y(Math.min(S[st.sig][k], def.max));
+    if(k===0) g.moveTo(x,y); else g.lineTo(x,y);
+  }
+  g.stroke();
+  // 現在点
+  const cx = X(t), cy = Y(Math.min(val(st.sig,t), def.max));
+  g.fillStyle = "#c47a4f";
+  g.beginPath(); g.arc(cx, cy, 4, 0, 6.3); g.fill();
+  const mv = document.getElementById("mv-"+i);
+  if(mv) mv.textContent = def.fmt(val(st.sig,t)) + def.unit;
+}
+
+// ---- 自由モードの車線 ----
+const LANEKEYS = ["N","pc","F","npshm"];
+const LANEEXTRA = ["Th","Twall","MR","mov","Nox"];
+const lanesDiv = document.getElementById("lanes");
+[...LANEKEYS, ...LANEEXTRA].forEach(k=>{
+  const def = SIGDEFS[k];
+  const d = document.createElement("div");
+  d.className = "lane"; if(LANEEXTRA.includes(k)) d.style.display = "none";
+  d.innerHTML = '<div class="lhead"><span>'+def.label+'</span><span class="lv" id="lv-'+k+'"></span></div><canvas id="cv-'+k+'"></canvas>';
+  lanesDiv.appendChild(d);
+  def.laneEl = d;
+});
+function drawLane(k, t){
+  const cv = document.getElementById("cv-"+k);
+  const def = SIGDEFS[k];
+  const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio||1;
+  if(w === 0) return;
+  if(cv.width !== w*dpr){ cv.width = w*dpr; cv.height = h*dpr; }
+  const g = cv.getContext("2d");
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  const X = tt => (tt-T0)/(TEND-T0)*w;
+  const Y = v => h-3-(v/def.max)*(h-8);
+  if(def.warn !== undefined || def.ref !== undefined){
+    g.strokeStyle = "#c47a4f"; g.setLineDash([4,4]); g.lineWidth = 1;
+    const yv = Y(def.warn !== undefined ? def.warn : def.ref);
+    g.beginPath(); g.moveTo(0,yv); g.lineTo(w,yv); g.stroke(); g.setLineDash([]);
+  }
+  g.strokeStyle = "#5b87a8"; g.lineWidth = 1.8;
+  g.beginPath();
+  for(let k2=0;k2<NPT;k2+=2){
+    const x = X(S.t[k2]), y = Y(Math.min(S[k][k2], def.max));
+    if(k2===0) g.moveTo(x,y); else g.lineTo(x,y);
+  }
+  g.stroke();
   g.strokeStyle = "#3a4550"; g.lineWidth = 1.4;
   g.beginPath(); g.moveTo(X(t),0); g.lineTo(X(t),h); g.stroke();
-  document.getElementById("lv-"+ln.key).textContent = ln.fmt(val(ln.key,t)) + ln.unit;
+  document.getElementById("lv-"+k).textContent = def.fmt(val(k,t)) + def.unit;
 }
 
-// ---- 章チップ（シナリオごとに組み直し） ----
-let CHAPTERS = CHAPSETS[scKey], CARDS = CARDSETS[scKey];
-const chapDiv = document.getElementById("chapters");
-function buildChapters(){
-  chapDiv.innerHTML = "";
-  CHAPTERS.forEach(c=>{
-    const s = document.createElement("span");
-    s.className = "chip"; s.textContent = c.label;
-    s.onclick = ()=>{ setT(c.t); pause(); };
-    chapDiv.appendChild(s); c.el = s;
-  });
-}
-buildChapters();
-
-// ---- シナリオ切替 ----
-const SCENLIST = [["nominal","きほんの朝"],["chill","冷やしが足りない"],["tank","タンク圧低め"],["ign","点火が遅れた"]];
-const scenDiv = document.getElementById("scens");
-SCENLIST.forEach(([k,label])=>{
-  const s = document.createElement("span");
-  s.className = "chip" + (k===scKey ? " sel" : ""); s.textContent = label;
-  s.onclick = ()=>{ setScenario(k); };
-  scenDiv.appendChild(s); s.dataset.k = k;
-});
-function setScenario(k){
-  if(k === scKey) return;
-  scKey = k; S = MEZAME.scenarios[k];
-  CHAPTERS = CHAPSETS[k]; CARDS = CARDSETS[k];
-  buildChapters();
-  scenDiv.querySelectorAll(".chip").forEach(c=>c.classList.toggle("sel", c.dataset.k===k));
-  document.getElementById("card-name").textContent = "";
-  pause(); setT(T0);
-}
-
-// ---- 描画本体 ----
+// ---- 舞台の描画 ----
 const tempColor = th => {
   const f = Math.max(0, Math.min(1, (th-60)/160));
   const mix = (a,b)=>Math.round(a+(b-a)*f);
   return "rgb("+mix(127,196)+","+mix(168,122)+","+mix(201,79)+")";
 };
-let angF = 0, angT = 0, angO = 0, lastFrame = null;
-
+let curStep = -1;
 function render(t){
-  document.getElementById("scrub").value = t;
-  document.getElementById("tval").textContent = t.toFixed(2)+"s";
-  // SVG
   const N = val("N",t), Nox = val("Nox",t), pc = val("pc",t), F = val("F",t), Th = val("Th",t);
   document.getElementById("mfvV").querySelectorAll("polygon").forEach(p=>p.setAttribute("fill", val("mfv",t)>0.02 ? "#9cc0d4" : "#fff"));
   document.getElementById("movV").querySelectorAll("polygon").forEach(p=>p.setAttribute("fill", val("mov",t)>0.02 ? "#a9c4a4" : "#fff"));
@@ -399,33 +412,80 @@ function render(t){
   document.getElementById("roNox").textContent = Math.round(Nox).toLocaleString("ja-JP")+" rpm";
   document.getElementById("roPc").textContent = pc.toFixed(2)+" MPa";
   document.getElementById("roF").textContent = Math.round(F)+" kN";
-  // カード
-  const c = CARDS.find(c=>t>=c.t0 && t<c.t1) || CARDS[CARDS.length-1];
-  if(document.getElementById("card-name").textContent !== c.name){
-    document.getElementById("card-name").textContent = c.name;
-    document.getElementById("card-text").textContent = c.text;
+  document.getElementById("tval").textContent = t.toFixed(2)+"s";
+  // 現在の場面名
+  let si = STEPS.findIndex(st=>t>=st.t0 && t<st.t1);
+  if(si < 0) si = (t >= STEPS[STEPS.length-1].t0) ? STEPS.length-1 : 0;
+  document.getElementById("phlabel").textContent = STEPS[si].name;
+  // ミニグラフ（現在の場面と両隣だけ描く）
+  for(let i=Math.max(0,si-1); i<=Math.min(STEPS.length-1,si+1); i++) drawMini(STEPS[i], i, t);
+  // 自由モードの車線
+  if(mode === "free"){
+    for(const k of LANEKEYS) drawLane(k, t);
+    if(moreOn) for(const k of LANEEXTRA) drawLane(k, t);
   }
-  CHAPTERS.forEach(ch=>ch.el.classList.toggle("sel", t>=ch.t && (CHAPTERS.indexOf(ch)===CHAPTERS.length-1 || t<CHAPTERS[CHAPTERS.indexOf(ch)+1].t)));
-  // 車線
-  for(const ln of LANES){ if(!ln.extra || moreOn) drawLane(ln, t); }
+  document.getElementById("scrub").value = t;
 }
 
-// ---- 再生 ----
-let t = -0.5, playing = false, speed = 0.5, moreOn = false;
+// ---- スクロール→時間 ----
+let t = -0.5, mode = "scroll";
+function setT(x){ t = Math.max(T0, Math.min(TEND, x)); render(t); }
+function onScroll(){
+  if(mode !== "scroll") return;
+  const refY = window.innerHeight * 0.72;
+  let target = null;
+  for(const st of STEPS){
+    const r = st.el.getBoundingClientRect();
+    if(r.top <= refY && r.bottom >= refY){
+      const p = (refY - r.top)/r.height;
+      target = st.t0 + (st.t1 - st.t0)*Math.max(0, Math.min(1, p));
+      break;
+    }
+  }
+  if(target === null){
+    const first = STEPS[0].el.getBoundingClientRect();
+    const last = STEPS[STEPS.length-1].el.getBoundingClientRect();
+    if(first.top > refY) target = T0;
+    else if(last.bottom < refY) target = TEND;
+  }
+  if(target !== null) setT(target);
+}
+let ticking = false;
+window.addEventListener("scroll", ()=>{
+  if(!ticking){ ticking = true; requestAnimationFrame(()=>{ onScroll(); spin(); ticking = false; }); }
+}, {passive:true});
+
+// 自由セクションに入ったら scroll 駆動をやめる
+const freeTitle = document.getElementById("free-title");
+new IntersectionObserver(es=>{
+  es.forEach(e=>{ mode = e.isIntersecting || e.boundingClientRect.top < 0 ? "free" : "scroll"; if(mode==="free") render(t); });
+}, {rootMargin:"0px 0px -60% 0px"}).observe(freeTitle);
+
+// ---- 羽根の回転（常時） ----
+let angF = 0, angO = 0, lastSpin = null;
+function spin(ts){
+  const now = performance.now();
+  if(lastSpin !== null){
+    const dts = Math.min((now-lastSpin)/1000, 0.1);
+    angF += Math.min(val("N",t),45000)/45000*540*dts;
+    angO += Math.min(val("Nox",t),16500)/16500*400*dts;
+    document.getElementById("ftpG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 205 220)");
+    document.getElementById("turbG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 277 90)");
+    document.getElementById("otpG").setAttribute("transform","rotate("+ (angO%360).toFixed(1) +" 205 48)");
+  }
+  lastSpin = now;
+}
+setInterval(spin, 66);
+
+// ---- 自由モード: 再生とスクラブ ----
+let playing = false, speed = 0.5, moreOn = false, lastFrame = null;
 const SPEEDS = [[0.25,"×¼"],[0.5,"×½"],[1,"×1"]];
 let spdIdx = 1;
-function setT(x){ t = Math.max(T0, Math.min(TEND, x)); render(t); }
 function pause(){ playing = false; document.getElementById("btnPlay").textContent = "▶"; }
 function loop(ts){
   if(!playing) return;
   if(lastFrame !== null){
-    const dts = Math.min((ts-lastFrame)/1000, 0.1);
-    t += dts*speed;
-    const N = val("N",t);
-    angF += Math.min(N,45000)/45000*540*dts; angO += Math.min(val("Nox",t),16500)/16500*400*dts;
-    document.getElementById("ftpG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 205 220)");
-    document.getElementById("turbG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 277 90)");
-    document.getElementById("otpG").setAttribute("transform","rotate("+ (angO%360).toFixed(1) +" 205 48)");
+    t += Math.min((ts-lastFrame)/1000, 0.1)*speed;
     if(t >= TEND){ t = TEND; render(t); pause(); return; }
     render(t);
   }
@@ -433,6 +493,7 @@ function loop(ts){
   requestAnimationFrame(loop);
 }
 document.getElementById("btnPlay").onclick = ()=>{
+  mode = "free";
   if(playing){ pause(); return; }
   if(t >= TEND-0.01) t = T0;
   playing = true; lastFrame = null;
@@ -443,20 +504,44 @@ document.getElementById("btnSpd").onclick = ()=>{
   spdIdx = (spdIdx+1)%SPEEDS.length; speed = SPEEDS[spdIdx][0];
   document.getElementById("btnSpd").textContent = SPEEDS[spdIdx][1];
 };
-document.getElementById("scrub").addEventListener("input", e=>{ pause(); setT(parseFloat(e.target.value)); });
+document.getElementById("scrub").addEventListener("input", e=>{ mode = "free"; pause(); setT(parseFloat(e.target.value)); });
 document.getElementById("btnMore").onclick = ()=>{
   moreOn = !moreOn;
-  for(const ln of LANES){ if(ln.extra) ln.el.style.display = moreOn ? "" : "none"; }
+  for(const k of LANEEXTRA){ SIGDEFS[k].laneEl.style.display = moreOn ? "" : "none"; }
   document.getElementById("btnMore").textContent = moreOn ? "へらす（基本の4車線に）" : "ぜんぶ見る（温度・混合比・弁・酸素ポンプ）";
   render(t);
 };
 window.addEventListener("resize", ()=>render(t));
 
-// 初期位置（?s=tank&t=4.2 のように頭出し可能）
+// ---- シナリオ切替 ----
+const SCENLIST = [["nominal","きほんの朝"],["chill","冷やしが足りない"],["tank","タンク圧低め"],["ign","点火が遅れた"]];
+const scenDiv = document.getElementById("scens");
+SCENLIST.forEach(([k,label])=>{
+  const s = document.createElement("span");
+  s.className = "chip" + (k===scKey ? " sel" : ""); s.textContent = label;
+  s.onclick = ()=>{ setScenario(k, true); };
+  scenDiv.appendChild(s); s.dataset.k = k;
+});
+function drawAllMinis(){ requestAnimationFrame(()=>STEPS.forEach((st,i)=>drawMini(st,i,t))); }
+function setScenario(k, jump){
+  scKey = k; S = MEZAME.scenarios[k];
+  STEPS = STEPSETS[k];
+  buildSteps();
+  scenDiv.querySelectorAll(".chip").forEach(c=>c.classList.toggle("sel", c.dataset.k===k));
+  document.getElementById("scenlabel").textContent = S.name;
+  pause(); mode = "scroll"; setT(T0);
+  drawAllMinis();
+  if(jump) document.getElementById("theater").scrollIntoView({behavior:"smooth"});
+}
+
+// ---- 初期化 ----
+buildSteps();
 const qs = new URLSearchParams(location.search);
-if(qs.get("s") && MEZAME.scenarios[qs.get("s")]) setScenario(qs.get("s"));
+if(qs.get("flat")) document.body.classList.add("flat");   // 検証用: 場面の高さを詰める
+if(qs.get("s") && MEZAME.scenarios[qs.get("s")]) setScenario(qs.get("s"), false);
 const q = qs.get("t");
-setT(q !== null ? parseFloat(q) : T0);
+if(q !== null){ mode = "free"; setT(parseFloat(q)); } else { setT(T0); }
+drawAllMinis();
 try{ localStorage.setItem("read:lab-mezame","1"); }catch(e){}
 </script>
 </body>
