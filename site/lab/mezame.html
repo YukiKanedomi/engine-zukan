@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>エンジンのなかみ 特別編 — めざめの3秒 ぜんぶ同時に見る</title>
+<link rel="icon" href="../favicon.ico" sizes="32x32" />
+<link rel="icon" type="image/png" sizes="16x16" href="../favicon-16.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="../favicon-32.png" />
+<link rel="apple-touch-icon" href="../apple-touch-icon.png" />
+<link rel="manifest" href="../manifest.webmanifest" />
+<meta property="og:type" content="article" />
+<meta property="og:title" content="エンジンのなかみ 特別編 — めざめの3秒 ぜんぶ同時に見る" />
+<meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch07.jpg" />
+<meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/lab/mezame.html" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="theme-color" content="#fdf9f0" />
+<style>
+  :root{
+    --paper:#fdf9f0; --ink:#3a4550; --sub:#77808a; --line:#e5ddcc;
+    --acc:#c47a4f; --blue:#9cc0d4; --sand:#f6d9b8;
+    --note:#eef4ed; --note-line:#a9c4a4;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  body{background:var(--paper); color:var(--ink); line-height:2.0;
+    font-family:"Yu Gothic UI","Hiragino Kaku Gothic ProN",sans-serif; font-size:15px}
+  .page{max-width:560px; margin:0 auto; padding:20px 20px 90px}
+  .kyoka{font-family:"UD Digi Kyokasho NK-R","Yu Gothic UI",sans-serif}
+  .cover{text-align:center; padding:18px 0 10px; border-bottom:2px solid var(--ink); margin-bottom:22px}
+  .cover .series{font-size:.75rem; letter-spacing:.4em; color:var(--sub)}
+  .cover h1{font-size:1.15rem; letter-spacing:.12em; margin:8px 0 2px}
+  .story .ep{font-size:.78rem; color:var(--sub); letter-spacing:.2em}
+  .story h1{font-size:1.5rem; letter-spacing:.06em; margin:4px 0 16px; line-height:1.5}
+  .story p.body{margin:14px 0; font-size:.94rem}
+  .story p.body b{background:linear-gradient(transparent 62%, #f3ddc3 62%)}
+  .caution{border:1.5px dashed var(--acc); border-radius:12px; background:#fdf3e7;
+    padding:10px 14px; font-size:.82rem; margin:16px 0}
+  .filmbox{border:1.5px solid var(--line); border-radius:12px; background:#fdf6ea; overflow:hidden}
+  .filmbox svg{display:block; width:100%; height:auto}
+  .ctrl{display:flex; align-items:center; gap:10px; margin:10px 0 2px}
+  .ctrl button{font-family:inherit; font-size:.9rem; border:1.5px solid var(--ink); background:#fff;
+    border-radius:10px; padding:6px 14px; cursor:pointer; color:var(--ink)}
+  .ctrl button.play{min-width:56px; font-weight:700}
+  .ctrl input[type=range]{flex:1; accent-color:var(--acc); height:34px}
+  .ctrl .tval{font-family:ui-monospace,Consolas,monospace; font-size:.85rem; min-width:64px; text-align:right}
+  .chips{display:flex; gap:8px; justify-content:center; margin:8px 0 0; flex-wrap:wrap}
+  .chips .chip{cursor:pointer; font-size:.78rem; padding:4px 12px; border-radius:999px;
+    border:1.5px solid var(--line); background:#fff}
+  .chips .chip.sel{border-color:var(--ink); background:#fdf3e7; font-weight:700}
+  .partcard{background:#fff; border:1.5px solid var(--ink); border-radius:12px; padding:12px 16px;
+    margin:14px 0; box-shadow:3px 3px 0 var(--line); min-height:112px}
+  .partcard .pname{font-weight:700; display:flex; align-items:center; gap:8px; font-size:.92rem}
+  .partcard .pname .dot{width:12px; height:12px; border-radius:3px; border:1.5px solid var(--ink);
+    display:inline-block; background:var(--sand); flex:none}
+  .partcard p{font-size:.86rem; margin-top:6px}
+  .lane{margin:10px 0}
+  .lane .lhead{display:flex; justify-content:space-between; font-size:.74rem; color:var(--sub)}
+  .lane .lhead .lv{font-family:ui-monospace,Consolas,monospace; color:var(--acc)}
+  .lane canvas{width:100%; height:58px; display:block; border:1px solid var(--line);
+    border-radius:8px; background:#fff}
+  .morebtn{display:block; margin:14px auto 0; font-family:inherit; font-size:.82rem;
+    border:1.5px solid var(--line); background:#fff; border-radius:999px; padding:5px 18px;
+    cursor:pointer; color:var(--ink)}
+  details.side{margin:18px 0; border:1.5px solid var(--line); border-radius:12px; background:#fff; overflow:hidden}
+  details.side summary{list-style:none; cursor:pointer; padding:12px 16px; font-size:.88rem; font-weight:700;
+    display:flex; align-items:center; gap:8px}
+  details.side summary::-webkit-details-marker{display:none}
+  details.side summary .badge{font-size:.68rem; color:var(--acc); border:1px solid var(--acc);
+    border-radius:999px; padding:0 10px; flex:none}
+  details.side summary::after{content:"＋"; margin-left:auto; color:var(--sub)}
+  details.side[open] summary::after{content:"−"}
+  details.side .inner{padding:2px 16px 16px; font-size:.88rem; border-top:1px dashed var(--line)}
+  details.note{border:1.5px dashed var(--note-line); background:var(--note)}
+  details.note summary{color:#4e6b49}
+  .next{margin-top:30px; background:#fff; border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.85rem}
+  .next b{color:var(--acc)}
+  .src{margin-top:10px; font-size:.72rem; color:var(--sub)}
+  .src b{color:var(--ink)}
+  .pager{position:sticky; bottom:0; background:var(--ink); color:#fff;
+    display:flex; justify-content:space-between; padding:13px 22px; font-size:.85rem}
+  .pager a{color:inherit; text-decoration:none}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <a href="../index.html" style="text-decoration:none; color:inherit">
+    <div class="cover kyoka">
+      <div class="series">育てる機械図鑑</div>
+      <h1>エンジンのなかみ</h1>
+    </div>
+  </a>
+
+  <div style="margin:0 0 20px; border-radius:12px; overflow:hidden; border:1.5px solid var(--line)"><img src="../assets/ch/v3-ch07.jpg" alt="" style="width:100%; height:150px; object-fit:cover; display:block"></div>
+
+  <div class="story">
+    <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep07.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">特別編（じっけん棚）── めざめの3秒 かんぜんばん</div>
+    <h1 class="kyoka">めざめの3秒 — ぜんぶ同時に見る</h1>
+
+    <div class="caution">この話の主役は<b>架空の教材エンジン「あさひ」</b>（水素/酸素・エキスパンダーブリード・300kN級という設定）です。数値は教材用で、実在のどのエンジンのものでもありません。ほんものなのは<b>因果の形</b>だけ——出典の実資料への橋は、ページの終わりにあります。</div>
+
+    <p class="body">第3巻07話で、めざめの物語を3枚の絵で見ました。今日はその完全版です。ふだん、始動を語るとき、弁の人は弁を、ポンプの人は回転数を、燃焼の人は室圧を見ています。でも実際のエンジンの朝は、<b>ぜんぶが同時に</b>起きている。下の映画を、指でこすってみてください。</p>
+
+    <div class="filmbox">
+      <svg id="anim" viewBox="0 0 560 300">
+        <defs>
+          <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="n" seed="7"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/></filter>
+          <linearGradient id="flameG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#f6d9b8"/><stop offset="0.45" stop-color="#e8a25c"/><stop offset="1" stop-color="#c4602f" stop-opacity="0.85"/>
+          </linearGradient>
+        </defs>
+        <g filter="url(#rough)" stroke="#3a4550" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+          <!-- 酸素側（上段） -->
+          <rect x="30" y="22" width="78" height="52" rx="10" fill="#eef4ed"/>
+          <path d="M108,48 H140"/>
+          <g id="movV"><polygon points="140,40 150,48 140,56" fill="#fff"/><polygon points="160,40 150,48 160,56" fill="#fff"/></g>
+          <path d="M160,48 H185"/>
+          <circle cx="205" cy="48" r="18" fill="#fff"/>
+          <g id="otpG"><path d="M205,32 V64 M191,40 L219,56 M191,56 L219,40" stroke-width="1.8"/></g>
+          <path d="M223,48 H392 V116" id="oxpipe"/>
+          <!-- 水素側（下段） -->
+          <rect x="30" y="190" width="78" height="62" rx="10" fill="#eaf1f7"/>
+          <path d="M108,220 H140"/>
+          <g id="mfvV"><polygon points="140,212 150,220 140,228" fill="#fff"/><polygon points="160,212 150,220 160,228" fill="#fff"/></g>
+          <path d="M160,220 H179"/>
+          <circle cx="205" cy="220" r="24" fill="#fff"/>
+          <g id="ftpG"><path d="M205,199 V241 M187,209 L223,231 M187,231 L223,209" stroke-width="1.8"/></g>
+          <!-- ポンプ→ジャケット入口（ノズル端の下から入る） -->
+          <path d="M229,220 C280,220 300,262 340,262 H520 C528,262 532,240 532,226"/>
+          <!-- 冷却ジャケット（燃焼室の外殻。色が温度） -->
+          <path id="jkt1" d="M386,116 H452 Q468,116 472,146 L532,108" stroke-width="6.5" stroke="#7fa8c9"/>
+          <path id="jkt2" d="M386,204 H452 Q468,204 472,174 L532,212" stroke-width="6.5" stroke="#7fa8c9"/>
+          <!-- 燃焼室・ノズルの内壁 -->
+          <path d="M390,124 H450 Q463,124 468,148 L526,114 M390,196 H450 Q463,196 468,172 L526,206 M390,124 V196" fill="#fff"/>
+          <!-- ジャケット出口→分岐: タービンへ / 噴射器へ -->
+          <path d="M386,112 C360,96 350,90 322,90" />
+          <path d="M352,92 C368,102 378,110 388,122" stroke-width="1.6"/>
+          <g id="tcvV"><polygon points="322,82 312,90 322,98" fill="#fff"/><polygon points="302,82 312,90 302,98" fill="#fff"/></g>
+          <circle cx="277" cy="90" r="17" fill="#fff"/>
+          <g id="turbG"><path d="M277,75 V105 M264,82 L290,98 M264,98 L290,82" stroke-width="1.8"/></g>
+          <path d="M260,90 H228 L210,76" />
+          <path d="M214,86 L206,72 L220,74" stroke-width="1.6"/>
+          <!-- 点火器 -->
+          <g id="ign" opacity="0"><polygon points="398,150 408,158 402,160 412,170 400,163 406,161" fill="#c4602f" stroke="none"/></g>
+        </g>
+        <!-- 炎（ノズル出口から右へ） -->
+        <g transform="translate(526,160)"><g id="flameS" transform="scale(0.02,0.1)"><path d="M0,-46 Q20,-22 31,0 Q20,22 0,46 Q7,0 0,-46 Z" fill="url(#flameG)" stroke="none" opacity="0.9"/></g></g>
+        <!-- ラベル -->
+        <g font-size="10" fill="#77808a" stroke="none" font-family="sans-serif">
+          <text x="40" y="40">酸素タンク</text>
+          <text x="186" y="16">酸素ポンプ</text>
+          <text x="40" y="210">水素タンク</text>
+          <text x="182" y="258">水素ポンプ</text>
+          <text x="258" y="122">タービン</text>
+          <text x="184" y="66">すてる↑</text>
+          <text x="416" y="286">冷却ジャケット</text>
+          <text x="143" y="238">弁</text>
+          <text x="143" y="66">弁</text>
+        </g>
+        <!-- 計器 -->
+        <g font-size="11" fill="#3a4550" stroke="none" font-family="ui-monospace,Consolas,monospace">
+          <text x="246" y="244" id="roN">0 rpm</text>
+          <text x="232" y="36" id="roNox">0 rpm</text>
+          <text x="398" y="164" id="roPc">0.00 MPa</text>
+          <text x="458" y="246" id="roF" fill="#c47a4f">0 kN</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="ctrl">
+      <button class="play" id="btnPlay">▶</button>
+      <button id="btnSpd">×½</button>
+      <input type="range" id="scrub" min="-0.5" max="5" step="0.01" value="-0.5">
+      <span class="tval" id="tval">-0.50s</span>
+    </div>
+    <div class="chips" id="chapters"></div>
+
+    <div class="partcard" id="card">
+      <div class="pname"><span class="dot"></span><span id="card-name"></span></div>
+      <p id="card-text"></p>
+    </div>
+
+    <div id="lanes"></div>
+    <button class="morebtn" id="btnMore">ぜんぶ見る（温度・混合比・弁・酸素ポンプ）</button>
+
+    <p class="body">見どころを3つ。①点火の前から、ポンプは<b>タンクの圧だけでそっと回りはじめて</b>います（タンクヘッドスタート）。②点火のあとの加速は、誰かが踏むアクセルではなく、<b>回る→流れる→温まる→もっと回る</b>という自励の輪（ブートストラップ）。③主段化の直後、<b>吸込余裕がいちばん苦しい</b>——回転は定格なのに、タンクの加圧がまだ追いついていないからです。</p>
+
+    <details class="side">
+      <summary><span class="badge">よりみち</span>この映画の正体（模型の中身）</summary>
+      <div class="inner">
+        <p>この波形はリアルタイム計算ではなく、集中定数系の簡約モデルを50Hzで事前に解いた録画です。骨組みは4本だけ——</p>
+        <p style="font-family:Georgia,serif; text-align:center; padding:8px 0">dN/dt ∝ (P<sub>タービン</sub> − P<sub>ポンプ</sub>)/N</p>
+        <p>タービン出力は「流量 × ジャケットで拾った熱 × 圧力比の効き」。低回転では膨張比が取れないので弱く、回るほど強くなる——これがS字加速の正体です。ポンプ所要は回転数の3乗。壁温は火の強さを追いかけ、拾える熱を決める。定格では TCV が2〜3割ブリードを絞った状態で、タービンとポンプの力がちょうど釣り合います。定数はすべて教材値です（notes/lab-mezame-plan.md に全式）。</p>
+      </div>
+    </details>
+
+    <details class="side note">
+      <summary><span class="badge" style="border-color:#4e6b49; color:#4e6b49">🌀 流体屋のためのノート</span>どこまでが「本物の形」か</summary>
+      <div class="inner">
+        <p>本物の形: タンクヘッド自己始動→燃料リッチ点火→ブートストラップ→ガバナ整定という因果の順番。吸込余裕（NPSHa/NPSHr）が「回転の2乗で減り、タンク加圧で戻る」構図。混合比が薄い側から定格へ登る道筋。</p>
+        <p>省いたもの: 二相流とチャギング、点火遷移の圧力スパイク、弁の水撃、タービン側の温度応力、POGOとの連成。つまり<b>始動を難しくしている当のものたち</b>は、まだこの映画に出演していません。外乱編（冷やし不足・タンク圧低め・点火遅れ）で順に登場予定です。</p>
+      </div>
+    </details>
+
+    <div class="next"><b>これは試作品です。</b>さわってみて、車線の増減・速度・説明の深さなど、注文をください。次の拡張は「もしもスイッチ」——同じ映画の失敗テイク3本（冷やしが足りない朝・タンク圧低めの朝・点火が遅れた朝）です。</div>
+
+    <div class="src">
+      <b>形の出典</b>（数値は教材値。実機の始動はこちらで）<br>
+      ・G. P. Sutton & O. Biblarz, <i>Rocket Propulsion Elements</i>, 9th ed.（始動遷移の一般論）<br>
+      ・Boeing/Rocketdyne <i>Space Shuttle Main Engine Orientation</i>（実機始動シーケンスの公開記述）<br>
+      ・NASA TM-107318（RL10: エキスパンダサイクルの始動とチルダウン）<br>
+      ・JAXA/MHI 公開論文（LE-5B アイドルモード燃焼——タンクヘッド自己始動の実例）
+    </div>
+  </div>
+</div>
+
+<div class="pager kyoka">
+  <a href="../episodes/v3-07.html">← 第3巻07 めざめの3秒</a>
+  <a href="../index.html#v3">もくじへ →</a>
+</div>
+
+<script src="mezame-data.js"></script>
+<script>
+const S = MEZAME.scenarios.nominal;
+const T0 = S.t0, DT = S.dt, NPT = S.t.length, TEND = S.t[NPT-1];
+
+function val(key, t){
+  const x = (t - T0)/DT;
+  const i = Math.max(0, Math.min(NPT-2, Math.floor(x)));
+  const f = Math.max(0, Math.min(1, x - i));
+  return S[key][i]*(1-f) + S[key][i+1]*f;
+}
+
+// ---- 章と因果カード ----
+const CHAPTERS = [
+  {t:0.0, label:"弁ひらく"},
+  {t:1.0, label:"点火"},
+  {t:1.7, label:"ブートストラップ"},
+  {t:4.0, label:"主段化"},
+];
+const CARDS = [
+  {t0:-0.5, t1:0.0, name:"しずかな朝", text:"まだ何も動いていません。チルダウン（予冷）は済んでいて、配管も金属も液体水素の温度まで冷やし込まれています。急いで冷やすとどうなるかは、07話のとおり。"},
+  {t0:0.0, t1:0.5, name:"弁がひらく", text:"燃料の弁（MFV）がひらきました。ポンプはまだ仕事をしていないのに、タンクの圧だけで水素が流れはじめ、通り道の残り熱でほんのり温まったガスがタービンをそっと回します。外からのガスは一切借りない——タンクヘッドスタートです。"},
+  {t0:0.5, t1:1.0, name:"点火のしたく", text:"点火器が火花を切りはじめ、酸素の弁（MOV）が2割だけひらきます。まだ火はありません。回転計だけが、静かに数字を増やしていきます。"},
+  {t0:1.0, t1:1.7, name:"小さな火", text:"点火。燃料リッチ（混合比0.6ほど）のやわらかい火が、燃焼室の壁を内側から温めはじめます。壁が温まると、ジャケットの水素が拾える熱が増える——自励の輪の、最初のひと回りです。"},
+  {t0:1.7, t1:2.6, name:"ブートストラップ", text:"回る→流れる→温まる→もっと回る。誰もアクセルを踏んでいないのに、輪が自分で速くなっていきます。タービンは回転が上がるほど膨張比が取れて力が出るので、加速はS字を描きます。"},
+  {t0:2.6, t1:3.4, name:"酸素、全開", text:"MOVが全開へ。火が本気になり、混合比が0.6から5.5へ登っていきます。室圧と推力が立ち上がり、壁温は500Kへ。"},
+  {t0:3.4, t1:4.0, name:"手綱をしめる", text:"回転が定格に近づくと、TCVがタービンへのブリードを絞りはじめます。時計ではなく回転数を見て働く、ガバナ（調速機）です。"},
+  {t0:4.0, t1:5.01, name:"主段化", text:"点火からおよそ3秒。回転45,000rpm・室圧6MPa・推力300kN——定格の朝です。ただし下の「吸込余裕」を見てください。回転が定格なのにタンク加圧が追いつくまでの間が、いちばん余裕のない時間帯です。"},
+];
+
+// ---- 車線 ----
+const LANES = [
+  {key:"N",     label:"回転数（燃料ポンプ）", unit:" rpm", max:50000, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
+  {key:"pc",    label:"燃焼室圧", unit:" MPa", max:7,     fmt:v=>v.toFixed(2)},
+  {key:"F",     label:"推力", unit:" kN", max:330,       fmt:v=>v.toFixed(0)},
+  {key:"npshm", label:"吸込余裕（酸素側 NPSHa/NPSHr）", unit:" 倍", max:5.3, warn:1.3, fmt:v=>v.toFixed(2)},
+  {key:"Th",    label:"ジャケット出口温度", unit:" K", max:270, extra:true, fmt:v=>v.toFixed(0)},
+  {key:"Twall", label:"燃焼室の壁温", unit:" K", max:620, extra:true, fmt:v=>v.toFixed(0)},
+  {key:"MR",    label:"混合比 O/F", unit:"", max:8, ref:5.5, extra:true, fmt:v=>v.toFixed(1)},
+  {key:"mfv",   label:"弁ひらき（実線=燃料 破線=酸素 点線=TCV）", unit:"", max:1.08, extra:true, multi:["mfv","mov","tcv"], fmt:v=>v.toFixed(2)},
+  {key:"Nox",   label:"回転数（酸素ポンプ）", unit:" rpm", max:18500, extra:true, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
+];
+
+const lanesDiv = document.getElementById("lanes");
+for(const ln of LANES){
+  const d = document.createElement("div");
+  d.className = "lane"; if(ln.extra) d.style.display = "none";
+  d.innerHTML = '<div class="lhead"><span>'+ln.label+'</span><span class="lv" id="lv-'+ln.key+'"></span></div><canvas id="cv-'+ln.key+'"></canvas>';
+  lanesDiv.appendChild(d);
+  ln.el = d;
+}
+
+function drawLane(ln, t){
+  const cv = document.getElementById("cv-"+ln.key);
+  const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio||1;
+  if(cv.width !== w*dpr){ cv.width = w*dpr; cv.height = h*dpr; }
+  const g = cv.getContext("2d");
+  g.setTransform(dpr,0,0,dpr,0,0);
+  g.clearRect(0,0,w,h);
+  const X = tt => (tt-T0)/(TEND-T0)*w;
+  const Y = v => h-3-(v/ln.max)*(h-8);
+  // 基準線
+  if(ln.warn !== undefined || ln.ref !== undefined){
+    g.strokeStyle = "#c47a4f"; g.setLineDash([4,4]); g.lineWidth = 1;
+    g.beginPath(); const yv = Y(ln.warn !== undefined ? ln.warn : ln.ref);
+    g.moveTo(0,yv); g.lineTo(w,yv); g.stroke(); g.setLineDash([]);
+  }
+  // 波形
+  const series = ln.multi || [ln.key];
+  const dash = [[],[6,4],[2,3]];
+  series.forEach((k,si)=>{
+    g.strokeStyle = si===0 ? "#5b87a8" : (si===1 ? "#4e6b49" : "#c47a4f");
+    g.lineWidth = 1.8; g.setLineDash(dash[si]||[]);
+    g.beginPath();
+    for(let i=0;i<NPT;i+=2){
+      const x = X(S.t[i]), y = Y(Math.min(S[k][i], ln.max));
+      if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
+    }
+    g.stroke();
+  });
+  g.setLineDash([]);
+  // 現在線
+  g.strokeStyle = "#3a4550"; g.lineWidth = 1.4;
+  g.beginPath(); g.moveTo(X(t),0); g.lineTo(X(t),h); g.stroke();
+  document.getElementById("lv-"+ln.key).textContent = ln.fmt(val(ln.key,t)) + ln.unit;
+}
+
+// ---- 章チップ ----
+const chapDiv = document.getElementById("chapters");
+CHAPTERS.forEach(c=>{
+  const s = document.createElement("span");
+  s.className = "chip"; s.textContent = c.label;
+  s.onclick = ()=>{ setT(c.t); pause(); };
+  chapDiv.appendChild(s); c.el = s;
+});
+
+// ---- 描画本体 ----
+const tempColor = th => {
+  const f = Math.max(0, Math.min(1, (th-60)/160));
+  const mix = (a,b)=>Math.round(a+(b-a)*f);
+  return "rgb("+mix(127,196)+","+mix(168,122)+","+mix(201,79)+")";
+};
+let angF = 0, angT = 0, angO = 0, lastFrame = null;
+
+function render(t){
+  document.getElementById("scrub").value = t;
+  document.getElementById("tval").textContent = t.toFixed(2)+"s";
+  // SVG
+  const N = val("N",t), Nox = val("Nox",t), pc = val("pc",t), F = val("F",t), Th = val("Th",t);
+  document.getElementById("mfvV").querySelectorAll("polygon").forEach(p=>p.setAttribute("fill", val("mfv",t)>0.02 ? "#9cc0d4" : "#fff"));
+  document.getElementById("movV").querySelectorAll("polygon").forEach(p=>p.setAttribute("fill", val("mov",t)>0.02 ? "#a9c4a4" : "#fff"));
+  document.getElementById("tcvV").querySelectorAll("polygon").forEach(p=>p.setAttribute("fill", val("tcv",t)<0.99 ? "#f6d9b8" : "#fff"));
+  document.getElementById("jkt1").setAttribute("stroke", tempColor(Th));
+  document.getElementById("jkt2").setAttribute("stroke", tempColor(Th));
+  const fs = 0.02 + 0.98*Math.min(pc/6, 1.05);
+  document.getElementById("flameS").setAttribute("transform", "scale("+fs.toFixed(3)+","+(0.1+0.9*Math.min(pc/6,1)).toFixed(3)+")");
+  document.getElementById("ign").setAttribute("opacity", (t>=0.5 && t<=1.5) ? "1" : "0");
+  document.getElementById("roN").textContent = Math.round(N).toLocaleString("ja-JP")+" rpm";
+  document.getElementById("roNox").textContent = Math.round(Nox).toLocaleString("ja-JP")+" rpm";
+  document.getElementById("roPc").textContent = pc.toFixed(2)+" MPa";
+  document.getElementById("roF").textContent = Math.round(F)+" kN";
+  // カード
+  const c = CARDS.find(c=>t>=c.t0 && t<c.t1) || CARDS[CARDS.length-1];
+  if(document.getElementById("card-name").textContent !== c.name){
+    document.getElementById("card-name").textContent = c.name;
+    document.getElementById("card-text").textContent = c.text;
+  }
+  CHAPTERS.forEach(ch=>ch.el.classList.toggle("sel", t>=ch.t && (CHAPTERS.indexOf(ch)===CHAPTERS.length-1 || t<CHAPTERS[CHAPTERS.indexOf(ch)+1].t)));
+  // 車線
+  for(const ln of LANES){ if(!ln.extra || moreOn) drawLane(ln, t); }
+}
+
+// ---- 再生 ----
+let t = -0.5, playing = false, speed = 0.5, moreOn = false;
+const SPEEDS = [[0.25,"×¼"],[0.5,"×½"],[1,"×1"]];
+let spdIdx = 1;
+function setT(x){ t = Math.max(T0, Math.min(TEND, x)); render(t); }
+function pause(){ playing = false; document.getElementById("btnPlay").textContent = "▶"; }
+function loop(ts){
+  if(!playing) return;
+  if(lastFrame !== null){
+    const dts = Math.min((ts-lastFrame)/1000, 0.1);
+    t += dts*speed;
+    const N = val("N",t);
+    angF += Math.min(N,45000)/45000*540*dts; angO += Math.min(val("Nox",t),16500)/16500*400*dts;
+    document.getElementById("ftpG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 205 220)");
+    document.getElementById("turbG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 277 90)");
+    document.getElementById("otpG").setAttribute("transform","rotate("+ (angO%360).toFixed(1) +" 205 48)");
+    if(t >= TEND){ t = TEND; render(t); pause(); return; }
+    render(t);
+  }
+  lastFrame = ts;
+  requestAnimationFrame(loop);
+}
+document.getElementById("btnPlay").onclick = ()=>{
+  if(playing){ pause(); return; }
+  if(t >= TEND-0.01) t = T0;
+  playing = true; lastFrame = null;
+  document.getElementById("btnPlay").textContent = "⏸";
+  requestAnimationFrame(loop);
+};
+document.getElementById("btnSpd").onclick = ()=>{
+  spdIdx = (spdIdx+1)%SPEEDS.length; speed = SPEEDS[spdIdx][0];
+  document.getElementById("btnSpd").textContent = SPEEDS[spdIdx][1];
+};
+document.getElementById("scrub").addEventListener("input", e=>{ pause(); setT(parseFloat(e.target.value)); });
+document.getElementById("btnMore").onclick = ()=>{
+  moreOn = !moreOn;
+  for(const ln of LANES){ if(ln.extra) ln.el.style.display = moreOn ? "" : "none"; }
+  document.getElementById("btnMore").textContent = moreOn ? "へらす（基本の4車線に）" : "ぜんぶ見る（温度・混合比・弁・酸素ポンプ）";
+  render(t);
+};
+window.addEventListener("resize", ()=>render(t));
+
+// 初期位置（?t=2.5 で頭出し可能・検証用）
+const q = new URLSearchParams(location.search).get("t");
+setT(q !== null ? parseFloat(q) : T0);
+</script>
+</body>
+</html>
