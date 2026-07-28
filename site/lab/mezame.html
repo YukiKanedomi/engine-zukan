@@ -218,7 +218,7 @@
 
 <div class="pager kyoka">
   <a href="../episodes/v3-07.html">← 第3巻07 めざめの3秒</a>
-  <a href="../index.html#v3">もくじへ →</a>
+  <a href="../index.html#lab">もくじへ →</a>
 </div>
 
 <script src="mezame-data.js"></script>
@@ -457,6 +457,7 @@ const qs = new URLSearchParams(location.search);
 if(qs.get("s") && MEZAME.scenarios[qs.get("s")]) setScenario(qs.get("s"));
 const q = qs.get("t");
 setT(q !== null ? parseFloat(q) : T0);
+try{ localStorage.setItem("read:lab-mezame","1"); }catch(e){}
 </script>
 </body>
 </html>
