@@ -97,19 +97,20 @@
     <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/v3ep07.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">特別編（じっけん棚）── めざめの3秒 かんぜんばん</div>
     <h1 class="kyoka">めざめの3秒 — ぜんぶ同時に見る</h1>
 
-    <div class="caution">この話の主役は<b>架空の教材エンジン「あさひ」</b>（水素/酸素・エキスパンダーブリード・300kN級という設定）です。数値は教材用で、実在のどのエンジンのものでもありません。ほんものなのは<b>因果の形</b>だけ——出典の実資料への橋は、ページの終わりにあります。</div>
+    <div class="caution">この話の主役は<b>架空の教材エンジン「あさひ」</b>（水素/酸素・エキスパンダーブリード・300kN級という設定）です。数値は教材用で、実在のどのエンジンのものでもありません。ほんものなのは<b>因果の形</b>だけ——出典の実資料への橋は、ページの終わりにあります。弁の開閉順序・時刻・しきい値もすべて演出用で、実機の運用には一切使えません。</div>
 
-    <p class="body">第3巻07話で、めざめの物語を3枚の絵で見ました。今日はその完全版です。ふだん、始動を語るとき、弁の人は弁を、ポンプの人は回転数を、燃焼の人は室圧を見ています。でも実際のエンジンの朝は、<b>ぜんぶが同時に</b>起きている。下の映画を、指でこすってみてください。</p>
+    <p class="body">第3巻07話で、めざめの物語を3枚の絵で見ました。今日はその完全版です。ふだん、始動を語るとき、弁の人は弁を、ポンプの人は回転数を、燃焼の人は室圧を見ています。でも実際のエンジンの朝は、<b>ぜんぶが同時に</b>起きている。下の映画を、指でこすってみてください。朝は4種類あります——うまくいく朝と、<b>うまくいかない3つの朝</b>。</p>
+
+    <div class="chips" id="scens" style="margin:0 0 10px"></div>
 
     <div class="filmbox">
       <svg id="anim" viewBox="0 0 560 300">
         <defs>
-          <filter id="rough"><feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" result="n" seed="7"/><feDisplacementMap in="SourceGraphic" in2="n" scale="2.5"/></filter>
           <linearGradient id="flameG" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stop-color="#f6d9b8"/><stop offset="0.45" stop-color="#e8a25c"/><stop offset="1" stop-color="#c4602f" stop-opacity="0.85"/>
           </linearGradient>
         </defs>
-        <g filter="url(#rough)" stroke="#3a4550" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
+        <g stroke="#3a4550" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round">
           <!-- 酸素側（上段） -->
           <rect x="30" y="22" width="78" height="52" rx="10" fill="#eef4ed"/>
           <path d="M108,48 H140"/>
@@ -183,26 +184,27 @@
     <div id="lanes"></div>
     <button class="morebtn" id="btnMore">ぜんぶ見る（温度・混合比・弁・酸素ポンプ）</button>
 
-    <p class="body">見どころを3つ。①点火の前から、ポンプは<b>タンクの圧だけでそっと回りはじめて</b>います（タンクヘッドスタート）。②点火のあとの加速は、誰かが踏むアクセルではなく、<b>回る→流れる→温まる→もっと回る</b>という自励の輪（ブートストラップ）。③主段化の直後、<b>吸込余裕がいちばん苦しい</b>——回転は定格なのに、タンクの加圧がまだ追いついていないからです。</p>
+    <p class="body">見どころを3つ。①点火の前から、ポンプは<b>タンクの圧だけでそっと回りはじめて</b>います（外部の高圧ガスに頼らないタンクヘッドスタート。点火器や弁を動かす電気は別です）。②点火のあとの加速は、誰かが踏むアクセルではなく、<b>回る→流れる→温まる→もっと回る</b>という自励の輪（ブートストラップ）。③回転が定格へ近づくほど、<b>吸込余裕比が細っていく</b>——必要な余裕は回転の2乗で膨らむのに、追加のタンク加圧はゆっくりだからです。</p>
 
     <details class="side">
       <summary><span class="badge">よりみち</span>この映画の正体（模型の中身）</summary>
       <div class="inner">
         <p>この波形はリアルタイム計算ではなく、集中定数系の簡約モデルを50Hzで事前に解いた録画です。骨組みは4本だけ——</p>
         <p style="font-family:Georgia,serif; text-align:center; padding:8px 0">dN/dt ∝ (P<sub>タービン</sub> − P<sub>ポンプ</sub>)/N</p>
-        <p>タービン出力は「流量 × ジャケットで拾った熱 × 圧力比の効き」。低回転では膨張比が取れないので弱く、回るほど強くなる——これがS字加速の正体です。ポンプ所要は回転数の3乗。壁温は火の強さを追いかけ、拾える熱を決める。定格では TCV が2〜3割ブリードを絞った状態で、タービンとポンプの力がちょうど釣り合います。定数はすべて教材値です（notes/lab-mezame-plan.md に全式）。</p>
+        <p>タービン出力は「ブリード流量 × ジャケットで拾った熱 × 駆動立ち上がり係数」。最後の係数は、タンク圧起点の有限な圧力比・低回転域のタービン効率・立ち上がりの損をひとまとめにした教材係数で、回るほど1に近づきます——S字加速の正体はこれと壁加熱の掛け算です。ポンプ所要は回転数の3乗。定格では TCV がブリードを3割弱絞った状態で、タービンとポンプの力が釣り合います。エネルギー収支は桁で整合させてあります（燃料12kg/s・酸素56.5kg/s・ポンプ水力≈タービン仕事≈2.3MW）。定数はすべて教材値です（notes/lab-mezame-plan.md に全式）。</p>
       </div>
     </details>
 
     <details class="side note">
       <summary><span class="badge" style="border-color:#4e6b49; color:#4e6b49">🌀 流体屋のためのノート</span>どこまでが「本物の形」か</summary>
       <div class="inner">
-        <p>本物の形: タンクヘッド自己始動→燃料リッチ点火→ブートストラップ→ガバナ整定という因果の順番。吸込余裕（NPSHa/NPSHr）が「回転の2乗で減り、タンク加圧で戻る」構図。混合比が薄い側から定格へ登る道筋。</p>
-        <p>省いたもの: 二相流とチャギング、点火遷移の圧力スパイク、弁の水撃、タービン側の温度応力、POGOとの連成。つまり<b>始動を難しくしている当のものたち</b>は、まだこの映画に出演していません。外乱編（冷やし不足・タンク圧低め・点火遅れ）で順に登場予定です。</p>
+        <p>本物の形: タンクヘッド始動→燃料リッチ点火→ブートストラップ→回転数連動の絞りで整定、という因果の順番。吸込余裕比が「必要側は回転の2乗で膨らみ、供給側は加圧でしか増えない」構図。混合比が薄い側から定格へ登る道筋。</p>
+        <p>ことわり書き: NPSHrは「規定のヘッド低下を起こす点」という教材基準で、比1.0は絶対の境界ではありません（実物はそれより上でも泡が出はじめます）。壁温は冷却側の実効金属節点で、一般の燃焼室壁温ではありません。流量がほぼゼロの間のジャケット出口温度は参考表示です。OTPは駆動力追従の一次遅れで代用しています（直列ブリードの作動流体履歴の階段近似）。</p>
+        <p>外乱3本での再現はいずれも「らしさ」重視の簡略です: 冷やし不足の泡は流量係数の低下として、キャビテーションの震えは4Hzの流量変調として、ハードスタートは減衰リンギングとして描いています。実物の二相流・旋回キャビテーション・点火遷移はこれよりずっと意地悪です。弁の水撃、タービン側の温度応力、POGO連成は未出演のまま。</p>
       </div>
     </details>
 
-    <div class="next"><b>これは試作品です。</b>さわってみて、車線の増減・速度・説明の深さなど、注文をください。次の拡張は「もしもスイッチ」——同じ映画の失敗テイク3本（冷やしが足りない朝・タンク圧低めの朝・点火が遅れた朝）です。</div>
+    <div class="next"><b>4本の朝、そろいました。</b>おすすめの見かたは「きほんの朝」を1回通してから、失敗テイク3本を同じ場面で止めて見比べること。車線の増減・速度・説明の深さなど、注文があればいつでも。</div>
 
     <div class="src">
       <b>形の出典</b>（数値は教材値。実機の始動はこちらで）<br>
@@ -221,7 +223,8 @@
 
 <script src="mezame-data.js"></script>
 <script>
-const S = MEZAME.scenarios.nominal;
+let scKey = "nominal";
+let S = MEZAME.scenarios[scKey];
 const T0 = S.t0, DT = S.dt, NPT = S.t.length, TEND = S.t[NPT-1];
 
 function val(key, t){
@@ -231,30 +234,62 @@ function val(key, t){
   return S[key][i]*(1-f) + S[key][i+1]*f;
 }
 
-// ---- 章と因果カード ----
-const CHAPTERS = [
-  {t:0.0, label:"弁ひらく"},
-  {t:1.0, label:"点火"},
-  {t:1.7, label:"ブートストラップ"},
-  {t:4.0, label:"主段化"},
-];
-const CARDS = [
-  {t0:-0.5, t1:0.0, name:"しずかな朝", text:"まだ何も動いていません。チルダウン（予冷）は済んでいて、配管も金属も液体水素の温度まで冷やし込まれています。急いで冷やすとどうなるかは、07話のとおり。"},
-  {t0:0.0, t1:0.5, name:"弁がひらく", text:"燃料の弁（MFV）がひらきました。ポンプはまだ仕事をしていないのに、タンクの圧だけで水素が流れはじめ、通り道の残り熱でほんのり温まったガスがタービンをそっと回します。外からのガスは一切借りない——タンクヘッドスタートです。"},
-  {t0:0.5, t1:1.0, name:"点火のしたく", text:"点火器が火花を切りはじめ、酸素の弁（MOV）が2割だけひらきます。まだ火はありません。回転計だけが、静かに数字を増やしていきます。"},
-  {t0:1.0, t1:1.7, name:"小さな火", text:"点火。燃料リッチ（混合比0.6ほど）のやわらかい火が、燃焼室の壁を内側から温めはじめます。壁が温まると、ジャケットの水素が拾える熱が増える——自励の輪の、最初のひと回りです。"},
-  {t0:1.7, t1:2.6, name:"ブートストラップ", text:"回る→流れる→温まる→もっと回る。誰もアクセルを踏んでいないのに、輪が自分で速くなっていきます。タービンは回転が上がるほど膨張比が取れて力が出るので、加速はS字を描きます。"},
-  {t0:2.6, t1:3.4, name:"酸素、全開", text:"MOVが全開へ。火が本気になり、混合比が0.6から5.5へ登っていきます。室圧と推力が立ち上がり、壁温は500Kへ。"},
-  {t0:3.4, t1:4.0, name:"手綱をしめる", text:"回転が定格に近づくと、TCVがタービンへのブリードを絞りはじめます。時計ではなく回転数を見て働く、ガバナ（調速機）です。"},
-  {t0:4.0, t1:5.01, name:"主段化", text:"点火からおよそ3秒。回転45,000rpm・室圧6MPa・推力300kN——定格の朝です。ただし下の「吸込余裕」を見てください。回転が定格なのにタンク加圧が追いつくまでの間が、いちばん余裕のない時間帯です。"},
-];
+// ---- シナリオごとの章と因果カード ----
+const CHAPSETS = {
+  nominal: [
+    {t:0.0, label:"弁ひらく"}, {t:1.0, label:"点火"}, {t:1.7, label:"ブートストラップ"}, {t:4.2, label:"主段化"},
+  ],
+  chill: [
+    {t:0.0, label:"弁ひらく"}, {t:1.0, label:"点火"}, {t:3.0, label:"中止"}, {t:3.6, label:"片づけ"},
+  ],
+  tank: [
+    {t:0.0, label:"弁ひらく"}, {t:2.6, label:"削れはじめ"}, {t:3.8, label:"悲鳴"}, {t:4.6, label:"回復"},
+  ],
+  ign: [
+    {t:0.5, label:"火花"}, {t:1.8, label:"ハードスタート"}, {t:2.4, label:"立ちなおり"}, {t:4.4, label:"主段化ちかく"},
+  ],
+};
+const CARDSETS = {
+  nominal: [
+    {t0:-0.5, t1:0.0, name:"しずかな朝", text:"まだ何も動いていません。チルダウン（予冷）は済んでいて、配管も金属も液体水素の温度まで冷やし込まれています。急いで冷やすとどうなるかは、07話のとおり。"},
+    {t0:0.0, t1:0.5, name:"弁がひらく", text:"燃料の弁（MFV）がひらきました。ポンプはまだ仕事をしていないのに、タンクの圧だけで水素が流れはじめ、通り道の残り熱でほんのり温まったガスがタービンをそっと回します。外の高圧ガスは借りない——タンクヘッドスタートです。"},
+    {t0:0.5, t1:1.0, name:"点火のしたく", text:"点火器が火花を切りはじめ、酸素の弁（MOV）が2割だけひらきます。まだ火はありません。回転計だけが、静かに数字を増やしていきます。"},
+    {t0:1.0, t1:1.7, name:"小さな火", text:"点火。酸素はまだ2割の弁ぶんだけ——全体としてかなり燃料リッチの、やわらかい火が壁を内側から温めはじめます。壁が温まると、ジャケットの水素が拾える熱が増える——自励の輪の、最初のひと回りです。"},
+    {t0:1.7, t1:2.6, name:"ブートストラップ", text:"回る→流れる→温まる→もっと回る。誰もアクセルを踏んでいないのに、輪が自分で速くなっていきます。回転が上がるほどタービンの取り分（教材モデルでは駆動立ち上がり係数）が育つので、加速はS字を描きます。"},
+    {t0:2.6, t1:3.6, name:"酸素、全開", text:"MOVが全開へ。火が本気になり、混合比が薄い側から5.5へ登っていきます。室圧と推力が立ち上がり、壁の実効温度は500K台へ。"},
+    {t0:3.6, t1:4.2, name:"手綱をしめる", text:"回転が38,000rpmを超えると、TCVがタービンへのブリードを絞りはじめます。時計ではなく回転数に連動する弁スケジュール——この教材では「ガバナ」と呼びます。"},
+    {t0:4.2, t1:5.01, name:"主段化", text:"点火からおよそ3秒で定格の約9割——主段化です。残りはゆっくり整定していきます。下の「吸込余裕比」も見てください。必要な余裕は回転の2乗で膨らむので、追加加圧が済むまで、余裕比は1.7あたりまで細っていきます。"},
+  ],
+  chill: [
+    {t0:-0.5, t1:0.0, name:"急いだ朝", text:"今日はチルダウンを途中で切り上げました。配管の見た目は同じ静けさ。でもポンプ入口の金属は、まだ液体水素の温度まで冷え切っていません。"},
+    {t0:0.0, t1:1.0, name:"出だしから鈍い", text:"弁は開いたのに、流れがいつもより細い。ぬるい入口で水素が沸き、ポンプは泡まじりの流体を掴まされています。回転の伸びも普段より鈍い——液体を運ぶはずの羽根が、半分は蒸気を運んでいるからです。"},
+    {t0:1.0, t1:2.2, name:"回るのに、押せない", text:"点火はしました。でも泡まじりのポンプは液を押し込めず、室圧が立ちません。回る→流れる→温まる、の輪のうち「流れる」が欠けたまま。"},
+    {t0:2.2, t1:3.0, name:"届かない", text:"入口は流れ自身の冷たさで少しずつ冷えていきます。でも間に合わない。所定の時刻が迫るのに、室圧は定格の2割弱です。"},
+    {t0:3.0, t1:3.6, name:"中止", text:"レッドラインの宣告——「この時刻までに室圧が届かなければ止める」。始動前に決めてあった約束どおり、弁を閉じます（この止め方の順序・時刻は演出です。実機の停止シーケンスは機種ごとに厳密に設計されます）。"},
+    {t0:3.6, t1:5.01, name:"静かな片づけ", text:"羽根が惰性でゆっくり止まっていきます。何も壊さず止まれたこと——それが今日いちばんの成果です。チルダウンをやり直して、朝はまた来ます。"},
+  ],
+  tank: [
+    {t0:-0.5, t1:0.0, name:"元手の薄い朝", text:"今日はタンクの加圧が渋く、吸込余裕の元手が薄い。最初は何も起きません——問題は、回転が上がってから来ます。"},
+    {t0:0.0, t1:2.6, name:"いつもどおりの前半", text:"出だしは普段と同じです。必要な余裕（NPSHr）は回転の2乗でしか増えないので、低回転のうちは薄い元手でも十分に足りています。"},
+    {t0:2.6, t1:3.8, name:"余裕が削れる", text:"回転が伸びるほど必要余裕が2乗で膨らみ、手持ちがみるみる薄くなる。余裕比の車線が崖を下っていきます。"},
+    {t0:3.8, t1:4.6, name:"静かな悲鳴", text:"余裕比1.2。酸素ポンプの吸い込みで泡が生まれては潰れ、流量が痩せて室圧と推力が目減りし、細かく震えます（この震えは様式化した演出です。実物の旋回キャビテーションはもっと意地悪）。壊れてはいない。でも約束の性能が出ていない——キャビテーションはこういう顔で来ます。"},
+    {t0:4.6, t1:5.01, name:"ぎりぎりの回復", text:"追加加圧が追いつき、震えが収まって定格へ。今日の教訓: 余裕は「あるかないか」ではなく「いつ薄いか」。いちばん薄い瞬間は、たいてい一番忙しい瞬間に重なります。"},
+  ],
+  ign: [
+    {t0:-0.5, t1:0.5, name:"ふつうの朝のはず", text:"弁が開き、水素が流れ、ポンプがそっと回りはじめる。ここまでは、何も違いません。"},
+    {t0:0.5, t1:1.8, name:"火花だけが飛ぶ", text:"点火器は働いているのに、火がつきません。その間も酸素の弁は2割開いたまま——燃えなかった相手が、部屋に溜まり続けています。"},
+    {t0:1.8, t1:2.4, name:"乱暴な目覚め", text:"溜まった推進剤にまとめて火がつきました——ハードスタート。室圧が一瞬、この時点としては桁違いの高さへ跳ね、鐘のように鳴って収まります（このパルスは合成の危険演出です。実物の点火遅れは「必ずこうなる」ではなく「こうなる危険を溜め込む」）。"},
+    {t0:2.4, t1:4.0, name:"何事もなかったように", text:"輪は回りはじめ、波形は普段の顔に戻っていきます。でも設計者は忘れません。さっきの一撃が噴射器や壁をどれだけ痛めたか、外からは見えないことを。"},
+    {t0:4.0, t1:5.01, name:"遅れて届く朝", text:"立ち上がりは約0.8秒遅れのまま。5秒の時点でまだ定格の95%です。実機なら、点火確認の窓を過ぎた時点で中止します——溜めてから点けるより、点かないなら止めるほうが、いつでも安い。"},
+  ],
+};
 
 // ---- 車線 ----
 const LANES = [
   {key:"N",     label:"回転数（燃料ポンプ）", unit:" rpm", max:50000, fmt:v=>Math.round(v).toLocaleString("ja-JP")},
   {key:"pc",    label:"燃焼室圧", unit:" MPa", max:7,     fmt:v=>v.toFixed(2)},
   {key:"F",     label:"推力", unit:" kN", max:330,       fmt:v=>v.toFixed(0)},
-  {key:"npshm", label:"吸込余裕（酸素側 NPSHa/NPSHr）", unit:" 倍", max:5.3, warn:1.3, fmt:v=>v.toFixed(2)},
+  {key:"npshm", label:"吸込余裕比（酸素側 NPSHa/NPSHr・教材基準）", unit:" 倍", max:5.3, warn:1.3, fmt:v=>v.toFixed(2)},
   {key:"Th",    label:"ジャケット出口温度", unit:" K", max:270, extra:true, fmt:v=>v.toFixed(0)},
   {key:"Twall", label:"燃焼室の壁温", unit:" K", max:620, extra:true, fmt:v=>v.toFixed(0)},
   {key:"MR",    label:"混合比 O/F", unit:"", max:8, ref:5.5, extra:true, fmt:v=>v.toFixed(1)},
@@ -306,14 +341,38 @@ function drawLane(ln, t){
   document.getElementById("lv-"+ln.key).textContent = ln.fmt(val(ln.key,t)) + ln.unit;
 }
 
-// ---- 章チップ ----
+// ---- 章チップ（シナリオごとに組み直し） ----
+let CHAPTERS = CHAPSETS[scKey], CARDS = CARDSETS[scKey];
 const chapDiv = document.getElementById("chapters");
-CHAPTERS.forEach(c=>{
+function buildChapters(){
+  chapDiv.innerHTML = "";
+  CHAPTERS.forEach(c=>{
+    const s = document.createElement("span");
+    s.className = "chip"; s.textContent = c.label;
+    s.onclick = ()=>{ setT(c.t); pause(); };
+    chapDiv.appendChild(s); c.el = s;
+  });
+}
+buildChapters();
+
+// ---- シナリオ切替 ----
+const SCENLIST = [["nominal","きほんの朝"],["chill","冷やしが足りない"],["tank","タンク圧低め"],["ign","点火が遅れた"]];
+const scenDiv = document.getElementById("scens");
+SCENLIST.forEach(([k,label])=>{
   const s = document.createElement("span");
-  s.className = "chip"; s.textContent = c.label;
-  s.onclick = ()=>{ setT(c.t); pause(); };
-  chapDiv.appendChild(s); c.el = s;
+  s.className = "chip" + (k===scKey ? " sel" : ""); s.textContent = label;
+  s.onclick = ()=>{ setScenario(k); };
+  scenDiv.appendChild(s); s.dataset.k = k;
 });
+function setScenario(k){
+  if(k === scKey) return;
+  scKey = k; S = MEZAME.scenarios[k];
+  CHAPTERS = CHAPSETS[k]; CARDS = CARDSETS[k];
+  buildChapters();
+  scenDiv.querySelectorAll(".chip").forEach(c=>c.classList.toggle("sel", c.dataset.k===k));
+  document.getElementById("card-name").textContent = "";
+  pause(); setT(T0);
+}
 
 // ---- 描画本体 ----
 const tempColor = th => {
@@ -335,7 +394,7 @@ function render(t){
   document.getElementById("jkt2").setAttribute("stroke", tempColor(Th));
   const fs = 0.02 + 0.98*Math.min(pc/6, 1.05);
   document.getElementById("flameS").setAttribute("transform", "scale("+fs.toFixed(3)+","+(0.1+0.9*Math.min(pc/6,1)).toFixed(3)+")");
-  document.getElementById("ign").setAttribute("opacity", (t>=0.5 && t<=1.5) ? "1" : "0");
+  document.getElementById("ign").setAttribute("opacity", (t>=0.5 && t<=S.tIgn+0.5) ? "1" : "0");
   document.getElementById("roN").textContent = Math.round(N).toLocaleString("ja-JP")+" rpm";
   document.getElementById("roNox").textContent = Math.round(Nox).toLocaleString("ja-JP")+" rpm";
   document.getElementById("roPc").textContent = pc.toFixed(2)+" MPa";
@@ -393,8 +452,10 @@ document.getElementById("btnMore").onclick = ()=>{
 };
 window.addEventListener("resize", ()=>render(t));
 
-// 初期位置（?t=2.5 で頭出し可能・検証用）
-const q = new URLSearchParams(location.search).get("t");
+// 初期位置（?s=tank&t=4.2 のように頭出し可能）
+const qs = new URLSearchParams(location.search);
+if(qs.get("s") && MEZAME.scenarios[qs.get("s")]) setScenario(qs.get("s"));
+const q = qs.get("t");
 setT(q !== null ? parseFloat(q) : T0);
 </script>
 </body>

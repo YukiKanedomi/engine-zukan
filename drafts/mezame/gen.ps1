@@ -1,72 +1,113 @@
-﻿# 教材エンジン「あさひ」始動遷移ジェネレータ（集中定数系・Euler 50Hz）
+﻿# 教材エンジン「あさひ」始動遷移ジェネレータ v2（集中定数系・Euler 50Hz・4シナリオ）
 # 出力: site/lab/mezame-data.js  仕様: notes/lab-mezame-plan.md
-param([double]$kN = 500.0, [switch]$Emit)
+# v2: 2026-07-28 Codex物理レビュー反映（エネルギー収支・質量保存・OTP独立・チル物理・ハードスタート演出化）
+param([double]$kN = 700.0, [switch]$Emit)
 
 function Clamp([double]$x,[double]$a,[double]$b){ [Math]::Min($b,[Math]::Max($a,$x)) }
 function Ramp([double]$t,[double]$t0,[double]$t1){ Clamp (($t-$t0)/($t1-$t0)) 0 1 }
 
 $dt = 0.02; $tStart = -0.5; $tEnd = 5.0
-$kt = 76000.0; $Pp_rated = 7e6; $kpc = 0.181
+# 定格の釣り合い（教材値・オーダー整合）:
+#   燃料 12 kg/s（うちブリード 0.2*TCV → 定格1.73 kg/s）、酸素 56.5 kg/s、MR 5.5
+#   ポンプ水力 P_p = mdot*Δp/(ρ*η) ≈ 12*8.7e6/(70*0.65) ≈ 2.3 MW
+#   タービン: 1.73 kg/s * ~1.3 MJ/kg（H2、圧力比~10・η~0.65級）≈ 2.3 MW → 閉じる
+$kt = 9180.0; $Pp_rated = 2.3e6; $kpc = 0.0898; $kF = 49.0
 
-# 状態
-$N = 0.0; $Nox = 0.0; $Twall = 120.0; $pc = 0.0
+$SCEN = @(
+  @{ key="nominal"; name="きほんの朝";        alpha0=0.0;  npshaBase=50.0; npshaRise=25.0; npT0=3.0; npT1=4.6; tIgn=1.0; hard=$false; cav=$false; abortT=-1.0 },
+  @{ key="chill";   name="冷やしが足りない朝"; alpha0=0.55; npshaBase=50.0; npshaRise=25.0; npT0=3.0; npT1=4.6; tIgn=1.0; hard=$false; cav=$false; abortT=3.0 },
+  @{ key="tank";    name="タンク圧低めの朝";   alpha0=0.0;  npshaBase=33.0; npshaRise=24.0; npT0=3.6; npT1=4.8; tIgn=1.0; hard=$false; cav=$true;  abortT=-1.0 },
+  @{ key="ign";     name="点火が遅れた朝";     alpha0=0.0;  npshaBase=50.0; npshaRise=25.0; npT0=3.0; npT1=4.6; tIgn=1.8; hard=$true;  cav=$false; abortT=-1.0 }
+)
 
-$rows = New-Object System.Collections.Generic.List[object]
-$t = $tStart
-while($t -le $tEnd + 1e-9){
-  $mfv = Ramp $t 0.0 0.3
-  $mov = (Ramp $t 0.8 1.0)*0.2 + (Ramp $t 2.2 2.6)*0.8
-  $tcv = 1.0 - 0.28*(Ramp $N 38000.0 45000.0)   # ガバナ: 回転で手綱を締める
-  $ignited = ($t -ge 1.0)
+$ALL = @{}
+foreach($sc in $SCEN){
+  $N = 0.0; $Nox = 0.0; $Twall = 120.0; $pc = 0.0
+  $alpha = [double]$sc.alpha0   # ポンプ入口ボイド率（チル不足のみ>0）
+  $marg = 5.0
+  $rows = New-Object System.Collections.Generic.List[object]
+  $t = $tStart
+  while($t -le $tEnd + 1e-9){
+    $shut = if($sc.abortT -gt 0){ Ramp $t $sc.abortT ($sc.abortT+0.3) } else { 0.0 }
+    $mfv = (Ramp $t 0.0 0.3) * (1.0-$shut)
+    $mov = ((Ramp $t 0.8 1.0)*0.2 + (Ramp $t 2.2 2.6)*0.8) * (1.0-$shut)
+    $tcv = 1.0 - 0.28*(Ramp $N 38000.0 45000.0)   # 回転数連動の弁スケジュール（教材の「ガバナ」）
+    $ignited = ($t -ge $sc.tIgn) -and ($mov -gt 0.05)
 
-  $mdot_f = $mfv * (0.6 + 5.4*$N/45000.0)
-  $w = 0.85/(1.0 + $mdot_f/3.0)
-  $Th = 50.0 + ($Twall-50.0)*$w
-  $pr = 0.06 + 0.94*[Math]::Pow($N/45000.0, 1.5)   # タービン圧力比の効き
-  $Pt = $tcv * $kt * (0.15*$mdot_f) * [Math]::Max($Th-45.0, 0) * $pr
-  $Pp = $Pp_rated * [Math]::Pow($N/45000.0, 3)
-  $mdot_o = $mov * (1.5 + 26.5*$Nox/16500.0)
-  if($ignited){
-    $eta = 0.6 + 0.4*(Ramp $t 1.0 1.8)
-    $pcT = $kpc * (0.85*$mdot_f + $mdot_o) * $eta
-  } else {
-    $pcT = 0.05*$mdot_f
+    # 入口二相による有効液流量の低下（チル不足シナリオ）
+    $phi = 1.0 - $alpha
+    $mdot_f = $mfv * (1.2 + 10.8*$N/45000.0) * $phi
+    $mdot_bleed = 0.2 * $tcv * $mdot_f          # TCVはブリード枝を絞る（質量保存）
+    $mdot_core = $mdot_f - $mdot_bleed
+    $w = 0.85/(1.0 + $mdot_f/6.0)
+    $Th = 50.0 + ($Twall-50.0)*$w
+    # 駆動立ち上がり係数: タンク圧起点の有限圧力比+低速タービンマップ+立ち上がり損をまとめた教材係数
+    $drv = 0.25 + 0.75*[Math]::Pow($N/45000.0, 1.5)
+    $Pt = $kt * $mdot_bleed * [Math]::Max($Th-45.0, 0.0) * $drv
+    $Pp = $Pp_rated * [Math]::Pow($N/45000.0, 3)
+    # OTP: 作動流体（タービン駆動力）に応答する一次遅れ（FTP回転数への直接従属をやめた）
+    $NoxCmd = 16500.0 * (Clamp ($Pt/2.3e6) 0 1)
+    $mdot_o = $mov * (2.5 + 54.0*$Nox/16500.0)
+    if($sc.cav -and $marg -lt 1.25){
+      $red = Clamp (($marg-0.9)/0.35) 0.55 1.0
+      $osc = 1.0 + 0.06*[Math]::Sin(2*[Math]::PI*4.0*$t)*((1.25-$marg)/0.35)
+      $mdot_o = $mdot_o * $red * $osc            # 様式化した信号演出（因果モデルではない）
+    }
+    if($ignited){
+      $eta = 0.6 + 0.4*(Ramp $t $sc.tIgn ($sc.tIgn+0.8))
+      $pcT = $kpc * ($mdot_core + $mdot_o) * $eta
+    } else {
+      $pcT = 0.05*$mdot_f
+    }
+    $MR = (Clamp ($mdot_o/([Math]::Max($mdot_core, 0.05))) 0 8)
+    $NPSHa = $sc.npshaBase + $sc.npshaRise*(Ramp $t $sc.npT0 $sc.npT1)
+    $NPSHr = 45.0*[Math]::Pow($Nox/16500.0, 2)
+    $marg = if($NPSHr -gt 1.0){ Clamp ($NPSHa/$NPSHr) 0 5 } else { 5.0 }
+    # ハードスタート: 正の圧力パルス+小さな減衰リップル（合成の危険演出。モデル予測ではない）
+    $pcRec = $pc
+    if($sc.hard -and $ignited -and $t -le ($sc.tIgn+0.7)){
+      $x = $t - $sc.tIgn
+      $pulse = 1.7*($x/0.08)*[Math]::Exp(1.0-$x/0.08)
+      $ripple = 0.2*[Math]::Exp(-$x/0.18)*[Math]::Sin(2*[Math]::PI*8.0*$x)
+      $pcRec = [Math]::Max(0.02, [double]($pc + $pulse + $ripple))
+    }
+    $F = if($ignited){ $kF*$pcRec } else { 0.0 }   # 点火前の冷流推力は表示しない
+
+    $rows.Add([pscustomobject]@{ t=$t; N=$N; Nox=$Nox; pc=$pcRec; F=$F; Th=$Th; Twall=$Twall; MR=$MR; npshm=$marg; mfv=$mfv; mov=$mov; tcv=$tcv })
+
+    $N = [Math]::Max(0.0, $N + $kN*($Pt-$Pp)/($N+2000.0)*$dt)
+    $Nox = $Nox + ($NoxCmd - $Nox)*$dt/0.3
+    if($ignited){ $Twall = $Twall + 1.6*((150.0+450.0*$pc/($pc+0.8)) - $Twall)*$dt }
+    else { $Twall = $Twall - ($Twall-90.0)*0.15*(0.5+$mdot_f)*$dt }
+    $pc = $pc + ($pcT-$pc)*$dt/0.12
+    $alpha = [Math]::Max(0.0, $alpha - 0.10*$alpha*(0.3+$mdot_f)*$dt)
+    $t = [Math]::Round($t + $dt, 4)
   }
-  $MR = (Clamp ($mdot_o/([Math]::Max(0.85*$mdot_f, 0.05))) 0 8)
-  $NPSHa = 50.0 + 25.0*(Ramp $t 3.0 4.6)
-  $NPSHr = 45.0*[Math]::Pow($Nox/16500.0, 2)
-  $marg = if($NPSHr -gt 1.0){ Clamp ($NPSHa/$NPSHr) 0 5 } else { 5.0 }
-  $F = 50.0*$pc
+  $ALL[$sc.key] = @{ sc=$sc; rows=$rows }
 
-  $rows.Add([pscustomobject]@{ t=$t; N=$N; Nox=$Nox; pc=$pc; F=$F; Th=$Th; Twall=$Twall; MR=$MR; npshm=$marg; mfv=$mfv; mov=$mov; tcv=$tcv })
-
-  # 状態更新
-  $N = [Math]::Max(0, $N + $kN*($Pt-$Pp)/($N+2000.0)*$dt)
-  $Nox = $Nox + (16500.0*[Math]::Pow($N/45000.0,1.1) - $Nox)*$dt/0.25
-  if($ignited){ $Twall = $Twall + 1.6*((150.0+450.0*$pc/($pc+0.8)) - $Twall)*$dt }
-  else { $Twall = $Twall - ($Twall-90.0)*0.15*(0.5+$mdot_f)*$dt }
-  $pc = $pc + ($pcT-$pc)*$dt/0.12
-  $t = [Math]::Round($t + $dt, 4)
-}
-
-# チェックポイント表示（チューニング用）
-foreach($ck in @(0,0.5,1.0,1.5,2.0,2.5,3.0,3.2,3.5,4.0,4.5,5.0)){
-  $r = $rows | Where-Object { [Math]::Abs($_.t-$ck) -lt 0.011 } | Select-Object -First 1
-  if($r){ "{0,5:f1}s  N={1,6:f0}rpm  Nox={2,6:f0}  pc={3,5:f2}MPa  F={4,6:f1}kN  Th={5,5:f0}K  Twall={6,5:f0}K  MR={7,4:f1}  marg={8,4:f2}" -f $r.t,$r.N,$r.Nox,$r.pc,$r.F,$r.Th,$r.Twall,$r.MR,$r.npshm }
+  "== $($sc.key) ($($sc.name))"
+  foreach($ck in @(0,1.0,1.9,2.0,2.5,3.0,3.5,4.0,4.2,4.5,5.0)){
+    $r = $rows | Where-Object { [Math]::Abs($_.t-$ck) -lt 0.011 } | Select-Object -First 1
+    if($r){ "{0,5:f2}s  N={1,6:f0}  Nox={2,6:f0}  pc={3,5:f2}MPa  F={4,6:f1}kN  MR={5,4:f1}  marg={6,4:f2}  Twall={7,5:f0}K" -f $r.t,$r.N,$r.Nox,$r.pc,$r.F,$r.MR,$r.npshm,$r.Twall }
+  }
 }
 
 if($Emit){
   $out = "C:\Users\kanedomi\Desktop\Claude\engine-zukan\site\lab\mezame-data.js"
-  New-Item -ItemType Directory -Force (Split-Path $out) | Out-Null
   $inv = [Globalization.CultureInfo]::InvariantCulture
-  function Ser($name, $digits){
-    $vals = foreach($r in $rows){ ([Math]::Round($r.$name, $digits)).ToString($inv) }
-    return "  $name`: [" + [string]::Join(",", $vals) + "],`n"
-  }
   $js = "// generated by drafts/mezame/gen.ps1 - do not edit by hand`n"
-  $js += "const MEZAME = { scenarios: { nominal: {`n  name: `"きほんの朝`", dt: 0.02, t0: -0.5,`n"
-  $js += (Ser "t" 2) + (Ser "N" 0) + (Ser "Nox" 0) + (Ser "pc" 3) + (Ser "F" 1) + (Ser "Th" 1) + (Ser "Twall" 1) + (Ser "MR" 2) + (Ser "npshm" 2) + (Ser "mfv" 3) + (Ser "mov" 3) + (Ser "tcv" 3)
-  $js += "}}};`n"
+  $js += "const MEZAME = { scenarios: {`n"
+  foreach($sc in $SCEN){
+    $rows = $ALL[$sc.key].rows
+    $js += $sc.key + ": {`n  name: `"" + $sc.name + "`", dt: 0.02, t0: -0.5, tIgn: " + $sc.tIgn.ToString($inv) + ", abortT: " + $sc.abortT.ToString($inv) + ",`n"
+    foreach($def in @(@("t",2),@("N",0),@("Nox",0),@("pc",3),@("F",1),@("Th",1),@("Twall",1),@("MR",2),@("npshm",2),@("mfv",3),@("mov",3),@("tcv",3))){
+      $nm = $def[0]; $dg = [int]$def[1]
+      $vals = foreach($r in $rows){ ([Math]::Round($r.$nm, $dg)).ToString($inv) }
+      $js += "  $nm`: [" + [string]::Join(",", $vals) + "],`n"
+    }
+    $js += "},`n"
+  }
+  $js += "}};`n"
   [IO.File]::WriteAllText($out, $js)
   "emitted: $out (" + [int]((Get-Item $out).Length/1KB) + "KB)"
 }
