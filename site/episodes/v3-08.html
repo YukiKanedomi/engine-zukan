@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ ターボポンプ編08 — つくって、ためす" />
+<meta property="og:description" content="エンジンのなかみ 第3巻 ターボポンプ編 だい8わ「つくって、ためす」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch08.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-08.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -194,7 +195,7 @@ const PARTS = {
   "p-mon": { name:"計測 — 数字にする仕事", color:"var(--sand)",
     t:"圧力脈動、振動スペクトル、流量、温度。試験の価値は計測の設計で決まります。とくに振動スペクトルは回転機械の聴診器（第6話）——どの周波数に何が出たかで、危険速度・ホワール・キャビテーション不安定の犯人当てをします。" },
   "p-note": { name:"ノート — いちばん長持ちする部品", color:"#e8b98a",
-    t:"試験の条件、気づき、失敗の記録。H-II 8号機の教訓（第2話)も、SSMEのホワール事件（第6話）も、誰かのノートと報告書が次の世代の設計基準になったものです。あなたがこれから書く記録も、この系譜に連なります。" }
+    t:"試験の条件、気づき、失敗の記録。H-II 8号機の教訓（第2話）も、SSMEのホワール事件（第6話）も、誰かのノートと報告書が次の世代の設計基準になったものです。あなたがこれから書く記録も、この系譜に連なります。" }
 };
 let cur = "p-tunnel";
 function render(){
@@ -230,5 +231,6 @@ renderT();
 
 try { localStorage.setItem("read:v3-08", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

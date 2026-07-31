@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ ターボポンプ編04 — まわす火" />
+<meta property="og:description" content="エンジンのなかみ 第3巻 ターボポンプ編 だい4わ「まわす火」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch04.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-04.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -157,7 +158,7 @@
     <details class="side note">
       <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート</summary>
       <div class="inner">
-        <p>設計の物差しは<b>速度比 u/c₀</b>（周速÷ノズル理論噴出速度）。衝動段の最適はおよそ0.5弱ですが、ロケットではポンプ側の回転数で u が縛られ、大落差で c₀ が巨大になるため、<b>最適よりずっと低い u/c₀ で我慢して効率を捨てる</b>判断がしばしば正解になります（だから2段衝動やベロシティコンパウンドが出てくる）。駆動ガスの素性はサイクル直結: 代表的なLOX/LH₂やケロシン系のGGでは、タービン材の都合で温度を絞るためfuel-richの数百℃級を使うことが多く（酸化剤リッチという流儀もあります）、エキスパンダーブリードの水素はずっと低温で、材料も酸化の心配も軽い——LE-9の「安全なエンジン」の設計思想はタービンの部屋でいちばん分かりやすく現れます。動力の桁の再確認: HPFTPはこの小さな翼車から約77,000馬力(FPL)を引き出していました。次話は、この火と氷を隔てる国境の話。</p>
+        <p>設計の物差しは<b>速度比 u/c₀</b>（周速÷ノズル理論噴出速度）。衝動段の最適はおよそ0.5弱ですが、ロケットではポンプ側の回転数で u が縛られ、大落差で c₀ が巨大になるため、<b>最適よりずっと低い u/c₀ で我慢して効率を捨てる</b>判断がしばしば正解になります（だから2段衝動やベロシティコンパウンドが出てくる）。駆動ガスの素性はサイクル直結: 代表的なLOX/LH₂やケロシン系のGGでは、タービン材の都合で温度を絞るため燃料リッチの数百℃級を使うことが多く（酸素リッチという流儀もあります）、エキスパンダーブリードの水素はずっと低温で、材料も酸化の心配も軽い——LE-9の「安全なエンジン」の設計思想はタービンの部屋でいちばん分かりやすく現れます。動力の桁の再確認: HPFTPはこの小さな翼車から約77,000馬力(FPL)を引き出していました。次話は、この火と氷を隔てる国境の話。</p>
       </div>
     </details>
 
@@ -189,7 +190,7 @@
 <script>
 const PARTS = {
   "p-gin": { name:"入ってくるガス — サイクルからの届け物", color:"#e08a4e",
-    t:"このガスの素性が第1巻第4話の答えです。ガス発生器サイクルなら専用に燃やした燃焼ガス（多くはタービン温度を抑えるためfuel-rich）、エキスパンダーブリードなら燃焼室の壁で温めた高圧水素。温度も圧力もサイクルごとに違い、タービンの材料と設計はそこから逆算されます。" },
+    t:"このガスの素性が第1巻第4話の答えです。ガス発生器サイクルなら専用に燃やした燃焼ガス（多くはタービン温度を抑えるため燃料リッチ）、エキスパンダーブリードなら燃焼室の壁で温めた高圧水素。温度も圧力もサイクルごとに違い、タービンの材料と設計はそこから逆算されます。" },
   "p-noz": { name:"ノズル（静翼） — 落差を速度に", color:"#e8b98a",
     t:"圧力の落差をここで一気に速度へ変換します。第1巻第6話のノズルと同じ物理で、落差が大きいと噴流は超音速に。衝動タービンでは仕事の仕込みはほぼ全部ここで済ませて、回る翼車には「速い流れの向きを変える」仕事だけを残します。" },
   "p-wheel": { name:"翼車 — 運動量の受け取り係", color:"var(--blue)",
@@ -231,5 +232,6 @@ renderT();
 
 try { localStorage.setItem("read:v3-04", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

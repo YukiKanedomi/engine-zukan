@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ ターボポンプ編01 — 心臓を、ひらいてみる" />
+<meta property="og:description" content="エンジンのなかみ 第3巻 ターボポンプ編 だい1わ「心臓を、ひらいてみる」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch01.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-01.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -163,7 +164,7 @@
     <details class="side note">
       <summary><img src="../assets/icons/swirl.jpg" alt="" style="width:22px; height:22px; border-radius:50%; border:1px solid var(--note-line); flex:none">流体屋のためのノート — この巻の地図</summary>
       <div class="inner">
-        <p>この巻はあなたの母国語圏なので、以後は現場の言葉で書きます。設計空間の座標系はまず<b>比速度N<sub>s</sub></b>（形式選定）と<b>吸込比速度N<sub>ss</sub></b>（キャビテーション余裕）。LE-9のFTPは41,600rpm・吐出19.1MPa、OTPは17,000rpm・17.9MPa（IHI技報）——この運転点に流量・段揚程・NPSHを添えて初めてN<sub>s</sub>・N<sub>ss</sub>の平面に置け、設計者の選択が読めるようになります。以後の章立ては「高パワー密度の代償」を1つずつ潰す旅です: 吸い込み側の戦い（02 キャビテーション）、羽根車の仕事（03）、駆動side（04）、両端の世界の綱渡り（05 軸受・シール）、回る軸の動力学（06）、過渡（07）、そして作って試す（08）。教科書はSutton ch.10と<b>NASA SP-8107</b>、一次資料はIHI技報が最良の伴走者です。</p>
+        <p>この巻はあなたの母国語圏なので、以後は現場の言葉で書きます。設計空間の座標系はまず<b>比速度N<sub>s</sub></b>（形式選定）と<b>吸込比速度N<sub>ss</sub></b>（キャビテーション余裕）。LE-9のFTPは41,600rpm・吐出19.1MPa、OTPは17,000rpm・17.9MPa（IHI技報）——この運転点に流量・段揚程・NPSHを添えて初めてN<sub>s</sub>・N<sub>ss</sub>の平面に置け、設計者の選択が読めるようになります。以後の章立ては「高パワー密度の代償」を1つずつ潰す旅です: 吸い込み側の戦い（02 キャビテーション）、羽根車の仕事（03）、駆動側（04）、両端の世界の綱渡り（05 軸受・シール）、回る軸の動力学（06）、過渡（07）、そして作って試す（08）。教科書はSutton ch.10と<b>NASA SP-8107</b>、一次資料はIHI技報が最良の伴走者です。</p>
       </div>
     </details>
 
@@ -240,5 +241,6 @@ renderT();
 
 try { localStorage.setItem("read:v3-01", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

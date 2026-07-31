@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ 特別編 — めざめの3秒 ぜんぶ同時に見る" />
+<meta property="og:description" content="エンジン始動の数秒間を、読む速さで進む映画に。架空の教材エンジン「あさひ」の朝、うまくいく1本と、うまくいかない3本。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch07.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/lab/mezame.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -322,7 +323,8 @@ function drawMini(st, i, t){
   const def = SIGDEFS[st.sig];
   const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio||1;
   if(w === 0) return;
-  if(cv.width !== w*dpr){ cv.width = w*dpr; cv.height = h*dpr; }
+  const bw = Math.max(1, Math.round(w*dpr)), bh = Math.max(1, Math.round(h*dpr));
+  if(cv.width !== bw || cv.height !== bh){ cv.width = bw; cv.height = bh; }
   const g = cv.getContext("2d");
   g.setTransform(dpr,0,0,dpr,0,0);
   g.clearRect(0,0,w,h);
@@ -342,6 +344,7 @@ function drawMini(st, i, t){
     const x = X(S.t[k]), y = Y(Math.min(S[st.sig][k], def.max));
     if(k===0) g.moveTo(x,y); else g.lineTo(x,y);
   }
+  g.lineTo(X(S.t[NPT-1]), Y(Math.min(S[st.sig][NPT-1], def.max)));
   g.stroke();
   // 現在点
   const cx = X(t), cy = Y(Math.min(val(st.sig,t), def.max));
@@ -368,7 +371,8 @@ function drawLane(k, t){
   const def = SIGDEFS[k];
   const w = cv.clientWidth, h = cv.clientHeight, dpr = window.devicePixelRatio||1;
   if(w === 0) return;
-  if(cv.width !== w*dpr){ cv.width = w*dpr; cv.height = h*dpr; }
+  const bw = Math.max(1, Math.round(w*dpr)), bh = Math.max(1, Math.round(h*dpr));
+  if(cv.width !== bw || cv.height !== bh){ cv.width = bw; cv.height = bh; }
   const g = cv.getContext("2d");
   g.setTransform(dpr,0,0,dpr,0,0);
   g.clearRect(0,0,w,h);
@@ -385,6 +389,7 @@ function drawLane(k, t){
     const x = X(S.t[k2]), y = Y(Math.min(S[k][k2], def.max));
     if(k2===0) g.moveTo(x,y); else g.lineTo(x,y);
   }
+  g.lineTo(X(S.t[NPT-1]), Y(Math.min(S[k][NPT-1], def.max)));
   g.stroke();
   g.strokeStyle = "#3a4550"; g.lineWidth = 1.4;
   g.beginPath(); g.moveTo(X(t),0); g.lineTo(X(t),h); g.stroke();
@@ -429,7 +434,7 @@ function render(t){
 
 // ---- スクロール→時間 ----
 let t = -0.5, mode = "scroll";
-function setT(x){ t = Math.max(T0, Math.min(TEND, x)); render(t); }
+function setT(x){ if(!Number.isFinite(x)) return; t = Math.max(T0, Math.min(TEND, x)); render(t); }
 function onScroll(){
   if(mode !== "scroll") return;
   const refY = window.innerHeight * 0.72;
@@ -458,17 +463,26 @@ window.addEventListener("scroll", ()=>{
 // 自由セクションに入ったら scroll 駆動をやめる
 const freeTitle = document.getElementById("free-title");
 new IntersectionObserver(es=>{
-  es.forEach(e=>{ mode = e.isIntersecting || e.boundingClientRect.top < 0 ? "free" : "scroll"; if(mode==="free") render(t); });
+  es.forEach(e=>{
+    const m = (e.isIntersecting || e.boundingClientRect.top < 0) ? "free" : "scroll";
+    if(m === mode) return;
+    mode = m;
+    if(mode === "scroll"){ pause(); requestAnimationFrame(onScroll); }
+    else { render(t); }
+  });
 }, {rootMargin:"0px 0px -60% 0px"}).observe(freeTitle);
 
 // ---- 羽根の回転（常時） ----
 let angF = 0, angO = 0, lastSpin = null;
 function spin(ts){
+  if(document.hidden){ lastSpin = null; return; }
   const now = performance.now();
   if(lastSpin !== null){
     const dts = Math.min((now-lastSpin)/1000, 0.1);
-    angF += Math.min(val("N",t),45000)/45000*540*dts;
-    angO += Math.min(val("Nox",t),16500)/16500*400*dts;
+    const nF = Math.min(val("N",t),45000), nO = Math.min(val("Nox",t),16500);
+    if(nF < 1 && nO < 1){ lastSpin = now; return; }
+    angF += nF/45000*540*dts;
+    angO += nO/16500*400*dts;
     document.getElementById("ftpG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 205 220)");
     document.getElementById("turbG").setAttribute("transform","rotate("+ (angF%360).toFixed(1) +" 277 90)");
     document.getElementById("otpG").setAttribute("transform","rotate("+ (angO%360).toFixed(1) +" 205 48)");
@@ -484,6 +498,7 @@ let spdIdx = 1;
 function pause(){ playing = false; document.getElementById("btnPlay").textContent = "▶"; }
 function loop(ts){
   if(!playing) return;
+  if(mode !== "free"){ pause(); return; }
   if(lastFrame !== null){
     t += Math.min((ts-lastFrame)/1000, 0.1)*speed;
     if(t >= TEND){ t = TEND; render(t); pause(); return; }
@@ -540,9 +555,11 @@ const qs = new URLSearchParams(location.search);
 if(qs.get("flat")) document.body.classList.add("flat");   // 検証用: 場面の高さを詰める
 if(qs.get("s") && MEZAME.scenarios[qs.get("s")]) setScenario(qs.get("s"), false);
 const q = qs.get("t");
-if(q !== null){ mode = "free"; setT(parseFloat(q)); } else { setT(T0); }
+const tq = (q === null) ? NaN : Number(q);
+if(Number.isFinite(tq)){ mode = "free"; setT(tq); freeTitle.scrollIntoView(); } else { setT(T0); }
 drawAllMinis();
 try{ localStorage.setItem("read:lab-mezame","1"); }catch(e){}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

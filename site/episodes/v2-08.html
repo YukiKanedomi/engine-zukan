@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ 飛行機編08 — うたうエンジン、ふるえる はね" />
+<meta property="og:description" content="エンジンのなかみ 第2巻 飛行機編 だい8わ「うたうエンジン、ふるえる はね」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v2-ch08.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v2-08.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -219,7 +220,7 @@ const VB = {
   "vb-reso": { name:"共振 — ノックが重なる日", scene:"sc-reso",
     t:"回るブレードは、上流の構造物の後流を1回転に枚数ぶんだけ「ノック」として受けます。回転数×枚数の周波数が翼の固有振動数と交差する回転数が、危険な待ち合わせ場所——設計はこの交差（キャンベル線図の交点）を常用域から外し、外せない交差は応力とダンピングで耐えます。" },
   "vb-unbal": { name:"不釣り合い — 欠けた日のふるえ", scene:"sc-unbal",
-    t:"第5話のブレードオフの後日談です。1枚欠けたロータは重心がずれ、回転のたびに機体を揺すります。エンジンを止めても風で回され続けることが多く（ウィンドミル）、その間は不釣り合いの揺れが降りるまで続く——マウントも機体も、想定される回転数と継続時間でこの持続荷重に耐えることを評価されています。壊れたあとの世界まで設計図に入っているのです。" }
+    t:"第5話のブレードオフの後日談です。1枚欠けたロータは重心がずれ、回転のたびに機体を揺すります。エンジンを止めても風で回され続けることが多く（ウィンドミル）、その間、不釣り合いの揺れは着陸して降りるまで続く——マウントも機体も、想定される回転数と継続時間でこの持続荷重に耐えることを評価されています。壊れたあとの世界まで設計図に入っているのです。" }
 };
 let curV = "vb-flutter";
 function renderV(){
@@ -236,5 +237,6 @@ renderV();
 
 try { localStorage.setItem("read:v2-08", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

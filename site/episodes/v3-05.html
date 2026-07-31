@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ ターボポンプ編05 — -253℃と火のあいだ" />
+<meta property="og:description" content="エンジンのなかみ 第3巻 ターボポンプ編 だい5わ「-253℃と火のあいだ」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/v3-ch05.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/v3-05.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -194,7 +195,7 @@ const PARTS = {
   "p-sealpk": { name:"シールとパージ — 国境の検問所", color:"#e8b98a",
     t:"数枚のシールを重ね、あいだに不活性ガス（ヘリウム）のパージを吹く多重の検問所です。左の推進剤も右の駆動ガスも、漏れたぶんはパージに押し流されて安全な排出路へ——漏れをゼロにするのではなく、漏れの行き先を設計する場所。差圧の監視までがこの設計の一部で、酸素ポンプでは文字どおり生命線です。" },
   "p-hot": { name:"火の世界 — タービン側", color:"#e08a4e",
-    t:"駆動ガスの世界。GGサイクルなら数百℃のfuel-richガス、エキスパンダーブリード（LE-9）なら温めた水素でずっと穏やか。ここの温度がシール束と軸を伝う熱の上流条件になり、国境全体の熱設計を左右します。サイクル選択は、この部屋の平和度の選択でもあります。" }
+    t:"駆動ガスの世界。GGサイクルなら数百℃の燃料リッチガス、エキスパンダーブリード（LE-9）なら温めた水素でずっと穏やか。ここの温度がシール束と軸を伝う熱の上流条件になり、国境全体の熱設計を左右します。サイクル選択は、この部屋の平和度の選択でもあります。" }
 };
 let cur = "p-sealpk";
 function render(){
@@ -230,5 +231,6 @@ renderS();
 
 try { localStorage.setItem("read:v3-05", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>

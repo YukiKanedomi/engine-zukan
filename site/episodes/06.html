@@ -11,6 +11,7 @@
 <link rel="manifest" href="../manifest.webmanifest" />
 <meta property="og:type" content="article" />
 <meta property="og:title" content="エンジンのなかみ 06 — しぼって、ひろげて、はやくする" />
+<meta property="og:description" content="エンジンのなかみ 第1巻 ロケット編 だい6わ「しぼって、ひろげて、はやくする」。タップで探検できる水彩の機械図鑑。" />
 <meta property="og:image" content="https://yukikanedomi.github.io/engine-zukan/assets/ch/ch06.jpg" />
 <meta property="og:url" content="https://yukikanedomi.github.io/engine-zukan/episodes/06.html" />
 <meta name="twitter:card" content="summary_large_image" />
@@ -106,7 +107,7 @@
     <div class="ep" style="display:flex; align-items:center; gap:9px"><img src="../assets/icons/ep06.jpg" alt="" style="width:30px; height:30px; border-radius:50%; border:1.5px solid var(--line); flex:none">第1巻 だい6わ ── ノズルと燃焼室の章</div>
     <h1 class="kyoka">しぼって、ひろげて、はやくする</h1>
 
-    <p class="body">ターボポンプ（第5話）が全力で送り込んだ推進剤の終着点が、ここです。燃焼室の中は<b>約3,000℃・100気圧超</b>——鉄の沸点に迫り、たいていの構造金属が融けてしまう温度です。それなのにエンジンは何分も平気で燃え続ける。今回は「速さを作る形」と「溶けない工夫」の話です。</p>
+    <p class="body">ターボポンプ（第5話）が全力で送り込んだ推進剤の終着点が、ここです。燃焼室の中は<b>約3,000℃・100気圧超</b>——鉄の沸点に迫り、たいていの構造金属が溶けてしまう温度です。それなのにエンジンは何分も平気で燃え続ける。今回は「速さを作る形」と「溶けない工夫」の話です。</p>
 
     <div class="fig">
       <svg width="340" height="360" viewBox="0 0 340 360">
@@ -260,7 +261,7 @@
 <script>
 const PARTS = {
   "p-inj": { name:"噴射器（インジェクタ）", color:"#e8b98a",
-    t:"燃焼室の天井にある、精密なシャワーヘッドです。燃料と酸化剤を何百もの小さな穴から吹き出し、素早く混ぜて燃やします。混ざりが悪ければ性能が落ち、混ざり方にムラがあると燃焼が暴れる（第8話の燃焼振動の入口）。エンジンの「味」はここで決まると言われる急所です。" },
+    t:"燃焼室の天井にある、精密なシャワーヘッドです。燃料と酸化剤を何百もの小さな穴から吹き出し、素早く混ぜて燃やします。混ざりが悪ければ性能が落ち、混ざり方にムラがあると燃焼が暴れる（第8話の燃焼不安定の入口）。エンジンの「味」はここで決まると言われる急所です。" },
   "p-wall": { name:"壁と冷却溝", color:"var(--sand)",
     t:"壁の中には細い溝が何百本も彫られ、極低温の燃料が流れています（再生冷却）。内側は3,000℃、溝の中は氷点下——数ミリの金属がその間に立ちます。燃料は壁を守りながら予熱され、エキスパンダーサイクルならその熱がタービンを回す動力になる。第4話の「沸かして回す」の熱源はこの壁です。" },
   "p-throat": { name:"スロート", color:"var(--blue)",
@@ -346,5 +347,6 @@ renderNz();
 
 try { localStorage.setItem("read:06", "1"); } catch(e) {}
 </script>
+<script>if("serviceWorker" in navigator){ navigator.serviceWorker.register("../sw.js").catch(function(){}); }</script>
 </body>
 </html>
