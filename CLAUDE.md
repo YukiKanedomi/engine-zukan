@@ -26,7 +26,7 @@
 ## 構成と運用
 
 ```
-site/            公開物（GitHub Pages）。現状 index.html=第1話。話が増えたら index=目次+episodes/へ分割
+site/            公開物（GitHub Pages）。index.html=目次、episodes/ に各話。正版は index が参照する v3- 版（同フォルダの 01-〜09-・v2- は旧版の残置。扱いは未整理）
 notes/           設計記録（design-decisions.md）
 ehon/            絵本ライン工房（原画・テンプレ・レシピ。正典=ehon/HANDOFF.md。公開はsite/ex/へJPEGのみ）
 BACKLOG.md       連載の進行と拡張アイデア

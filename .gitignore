@@ -2,3 +2,7 @@
 ehon/art/**/*.png
 ehon/output/*.png
 ehon/**/*.log
+
+# 公開済み site/ex/ のJPEGと同一の複製（2026-10-15 整理）と、保全済みの図解実験画像（約25MB）はローカル保管のみ
+ehon/output/ex*_book_p*.jpg
+drafts/*-exp/
